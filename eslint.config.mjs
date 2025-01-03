@@ -5,6 +5,18 @@ import prettier from "eslint-config-prettier";
 import vitest from "@vitest/eslint-plugin"; // Add Vitest plugin
 
 export default [
+    {
+        ignores: [
+            "**/node_modules/*",
+            "**/coverage/*",
+            "**/dist/*",
+            "**/types/*",
+            "**/scripts/concatenated-output.ts",
+            "rollup.config.js",
+            "jest.config.js",
+            "docs/",
+        ],
+    },
     // JavaScript and TypeScript files
     {
         files: ["src/**/*.js", "src/**/*.cjs", "src/**/*.mjs", "src/**/*.ts"],

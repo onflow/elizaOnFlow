@@ -8,5 +8,9 @@
         "forceConsistentCasingInFileNames": true
     },
     "files": [],
-    "references": [{ "path": "deps/eliza/packages/core" }]
+    "references": [
+        {
+            "path": "packages/core"
+        },
+    ]
 }

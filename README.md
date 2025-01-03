@@ -8,7 +8,15 @@ Flow-dedicated Autonomous Agents powered by [Eliza](https://github.com/elizaOs/e
 
 ## ✨ Features & Use Cases
 
+| Basic Features
+
 Check out the [Eliza README](https://github.com/elizaOS/eliza/tree/main?tab=readme-ov-file#-features)
+
+| Extra Features
+
+- Use [InversifyJS](https://github.com/inversify/InversifyJS) for dependency injection
+- Use shared `flow.json` for all Flow Cadence contracts dependencies
+- Add dynamic plugin / action injection
 
 ## 🚀 Quick Start
 
@@ -17,6 +25,7 @@ Check out the [Eliza README](https://github.com/elizaOS/eliza/tree/main?tab=read
 - [Python 2.7+](https://www.python.org/downloads/)
 - [Node.js 23+](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [pnpm](https://pnpm.io/installation)
+- [Flow-cli](https://developers.flow.com/tools/flow-cli)
 
 > **Note for Windows Users:** [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install-manual) is required.
 
@@ -67,6 +76,21 @@ You may need to install Sharp. If you see an error when starting up, try install
 
 ```bash
 pnpm install --include=optional sharp
+```
+
+#### Install / Add new Flow Cadence contracts dependencies
+
+All Flow Cadence contracts dependencies should be installed to `flow.json` file.
+To ensure development and deployment, you need to install all dependencies.
+
+```bash
+flow deps install
+```
+
+And if you want to add a new contract dependency, you can use the following command:
+
+```bash
+flow deps add mainnet://0xAddress.ContractName
 ```
 
 ### Community & contact
