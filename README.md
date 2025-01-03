@@ -1,10 +1,14 @@
 # Eliza 🤖 on Flow Blockchain
 
-Flow-dedicated Autonomous Agents powered by [Eliza](./deps/eliza/README.md).
+Flow-dedicated Autonomous Agents powered by [Eliza](https://github.com/elizaOs/eliza).
 
 <div align="center">
-  <img src="./deps/eliza/docs/static/img/eliza_banner.jpg" alt="Eliza Banner" width="100%" />
+  <img src="https://github.com/elizaOS/eliza/blob/main/docs/static/img/eliza_banner.jpg?raw=true" alt="Eliza Banner" width="100%" />
 </div>
+
+## ✨ Features & Use Cases
+
+Check out the [Eliza README](https://github.com/elizaOS/eliza/tree/main?tab=readme-ov-file#-features)
 
 ## 🚀 Quick Start
 
@@ -69,5 +73,5 @@ pnpm install --include=optional sharp
 
 - [GitHub Issues](https://github.com/fixes-world/elizaOnFlow/issues). Best for: bugs you encounter using ElizaOnFlow, and feature proposals.
 - [Fixes Telegram](https://t.me/fixes_world). Best for: sharing your applications and hanging out with the Fixes community.
-- [Eliza Discord](https://discord.gg/ai16z). Best for: hanging out with the Ai16z community.
-- [Flow Discord](https://discord.gg/flow). Best for: asking questions about Flow Blockchain and hanging out with the Flow community.
+- [Eliza Discord](https://discord.gg/ai16z)
+- [Flow Discord](https://discord.gg/flow)
