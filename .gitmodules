@@ -1,0 +1,3 @@
+[submodule "deps/eliza"]
+	path = deps/eliza
+	url = https://github.com/elizaOS/eliza.git
