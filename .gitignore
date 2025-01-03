@@ -160,6 +160,7 @@ timeline_cache.json
 
 *.sqlite
 
+imports/
 characters/
 
 deps/eliza/packages/core/src/providers/cache
