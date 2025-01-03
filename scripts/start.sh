@@ -1,0 +1,1 @@
+../deps/eliza/scripts/start.sh
