@@ -1,0 +1,38 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "tasks": {
+        "check-types": {
+            "dependsOn": [
+                "build"
+            ]
+        },
+        "dev": {
+            "persistent": true,
+            "cache": false
+        },
+        "build": {
+            "outputs": [
+                "dist/**"
+            ],
+            "dependsOn": [
+                "^@elizaos/core#build"
+            ]
+        },
+        "@elizaos/plugin-solana#build": {
+            "outputs": [
+                "dist/**"
+            ],
+            "dependsOn": [
+                "@elizaos/plugin-trustdb#build"
+            ]
+        },
+        "@elizaos/plugin-nft-generation#build": {
+            "outputs": [
+                "dist/**"
+            ],
+            "dependsOn": [
+                "@elizaos/plugin-node#build"
+            ]
+        }
+    }
+}

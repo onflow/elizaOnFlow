@@ -1,0 +1,5 @@
+packages:
+    - "deps/eliza/packages/*"
+    - "packages/*"
+    - "client"
+    - "agent"
