@@ -6,11 +6,5 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true
-    },
-    "files": [],
-    "references": [
-        {
-            "path": "packages/core"
-        },
-    ]
+    }
 }
