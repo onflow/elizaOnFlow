@@ -3,7 +3,7 @@
 Flow-dedicated Autonomous Agents powered by [Eliza](https://github.com/elizaOs/eliza).
 
 <div align="center">
-  <img src="https://github.com/elizaOS/eliza/blob/main/docs/static/img/eliza_banner.jpg?raw=true" alt="Eliza Banner" width="100%" />
+  <img src="./docs/static/img/elizaOnFlow_banner.png" alt="ElizaOnFlow Banner" width="100%" />
 </div>
 
 ## ✨ Features & Use Cases
@@ -16,7 +16,7 @@ Check out the [Eliza README](https://github.com/elizaOS/eliza/tree/main?tab=read
 
 - Use [InversifyJS](https://github.com/inversify/InversifyJS) for dependency injection
 - Use shared `flow.json` for all Flow Cadence contracts dependencies
-- Add dynamic plugin / action injection
+- Dynamic plugin / action injection
 
 ## 🚀 Quick Start
 
