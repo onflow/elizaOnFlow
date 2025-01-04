@@ -19,6 +19,6 @@ globalContainer
 
 // Bind to Types
 globalContainer.bind(ConnectorProvider).toSelf().inSingletonScope();
-globalContainer.bind(WalletProvider).toSelf().inRequestScope();
+globalContainer.bind(WalletProvider).toSelf().inSingletonScope();
 
 export { globalContainer };
