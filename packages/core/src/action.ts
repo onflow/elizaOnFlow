@@ -15,10 +15,10 @@ import {
 import { TransactionResponse, validateFlowConfig } from "@elizaos/plugin-flow";
 import { ConnectorProvider, WalletProvider } from "./providers";
 
-@injectable()
 /**
  * Base abstract class for injectable actions
- */
+*/
+@injectable()
 export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
     /** -------- Injects -------- */
     // Inject the connector provider
