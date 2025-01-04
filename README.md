@@ -8,15 +8,16 @@ Flow-dedicated Autonomous Agents powered by [Eliza](https://github.com/elizaOs/e
 
 ## ✨ Features & Use Cases
 
-| Basic Features
+> Basic Features
 
-Check out the [Eliza README](https://github.com/elizaOS/eliza/tree/main?tab=readme-ov-file#-features)
+Check out the [Eliza's README](https://github.com/elizaOS/eliza/tree/main?tab=readme-ov-file#-features)
 
-| Extra Features
+> Extra Features
 
-- Use [InversifyJS](https://github.com/inversify/InversifyJS) for dependency injection
+- Provide Flow-dedicated Agent without other extra blockchain dependencies in runtime
 - Use shared `flow.json` for all Flow Cadence contracts dependencies
-- Dynamic plugin / action injection
+- Use [InversifyJS](https://github.com/inversify/InversifyJS) for dependency injection
+  - Support dynamic plugins / actions injection
 
 ## 🚀 Quick Start
 
