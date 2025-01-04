@@ -4,11 +4,9 @@ import {
     Evaluator,
     HandlerCallback,
     IAgentRuntime,
-    Memory,
     Plugin,
     Provider,
     Service,
-    State,
 } from "@elizaos/core";
 import { TransactionResponse } from "@elizaos/plugin-flow";
 
@@ -45,19 +43,6 @@ export type InjectableProviderClass<T = any, Args extends any[] = any[]> = new (
  * Interface of Injectable Action
  */
 export interface InjactableAction<T> extends Action {
-    /**
-     * Get the instance of the action related to Eliza runtime
-     * @param runtime The runtime object from Eliza framework
-     * @param message The message object from Eliza framework
-     * @param state The state object from Eliza framework
-     * @returns The generated content from AI based on the message
-     */
-    processMessages(
-        runtime: IAgentRuntime,
-        message: Memory,
-        state: State
-    ): Promise<T | null>;
-
     /**
      * Execute the action
      * @param content The content from processMessages

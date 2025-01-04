@@ -1,11 +1,15 @@
 import { inject, injectable, unmanaged } from "inversify";
+import { ZodSchema } from "zod";
 import { InjactableAction, ScriptQueryResponse } from "./interfaces";
 import {
     ActionExample,
+    composeContext,
     elizaLogger,
+    generateObjectArray,
     HandlerCallback,
     IAgentRuntime,
     Memory,
+    ModelClass,
     State,
 } from "@elizaos/core";
 import { TransactionResponse, validateFlowConfig } from "@elizaos/plugin-flow";
@@ -32,16 +36,19 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         @unmanaged() public similes: string[],
         @unmanaged() public description: string,
         @unmanaged() public examples: ActionExample[][],
+        /**
+         * The template for processing messages
+         */
+        @unmanaged() private template: string,
+        /**
+         * The schema of processed content from the template
+         */
+        @unmanaged() private contentSchema: ZodSchema<T>,
         @unmanaged() public suppressInitialMessage: boolean = false
     ) {}
 
-    /**  -------- Abstract methods to be implemented -------- */
+    /**  -------- Abstract methods to be implemented by the child class -------- */
 
-    abstract processMessages(
-        runtime: IAgentRuntime,
-        message: Memory,
-        state: State
-    ): Promise<T | null>;
     abstract execute(
         content: T,
         callback?: HandlerCallback
@@ -75,6 +82,74 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Default implementation of the preparation of action context
+     * You can override this method to add custom logic
+     */
+    protected async prepareActionContext(
+        runtime: IAgentRuntime,
+        message: Memory,
+        state: State
+    ): Promise<string> {
+        // Initialize or update state
+        if (!state) {
+            state = (await runtime.composeState(message)) as State;
+        } else {
+            state = await runtime.updateRecentMessageState(state);
+        }
+
+        // Compose context
+        return composeContext({
+            state,
+            template: this.template,
+        });
+    }
+
+    /**
+     * Default method for processing messages
+     * You can override this method to add custom logic
+     *
+     * @param runtime The runtime object from Eliza framework
+     * @param message The message object from Eliza framework
+     * @param state The state object from Eliza framework
+     * @returns The generated content from AI based on the message
+     */
+    protected async processMessages(
+        runtime: IAgentRuntime,
+        message: Memory,
+        state: State
+    ): Promise<T | null> {
+        const actionContext = await this.prepareActionContext(
+            runtime,
+            message,
+            state
+        );
+
+        // Generate transfer content
+        const recommendations = await generateObjectArray({
+            runtime,
+            context: actionContext,
+            modelClass: ModelClass.MEDIUM,
+        });
+
+        elizaLogger.debug("Recommendations", recommendations);
+
+        // Convert array to object
+        const content = recommendations[recommendations.length - 1];
+
+        // Validate content
+        const parsedObj = await this.contentSchema.safeParseAsync(content);
+        if (!parsedObj.success) {
+            elizaLogger.error(
+                "Failed to parse content: ",
+                JSON.stringify(parsedObj.error?.flatten())
+            );
+            return null;
+        } else {
+            return parsedObj.data;
+        }
     }
 
     /**
