@@ -16,7 +16,7 @@ globalContainer
     .bind<Record<string, unknown>>(CONSTANTS.FlowJSON)
     .toDynamicValue(async () => {
         const filePath = path.resolve(__dirname, "../../../flow.json");
-        return await import(filePath, { assert: { type: "json" } });
+        return await import(filePath, { with: { type: "json" } });
     });
 
 // Bind to Types
