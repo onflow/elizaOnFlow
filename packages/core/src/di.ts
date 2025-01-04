@@ -1,8 +1,10 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import { Container } from "inversify";
-import { CONSTANTS } from "./symbols";
+import { CONSTANTS, FACTORIES } from "./symbols";
 import { ConnectorProvider, WalletProvider } from "./providers";
+import { PluginFactory } from "./interfaces";
+import { createPlugin } from "./factories";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +20,18 @@ globalContainer
     });
 
 // Bind to Types
-globalContainer.bind(ConnectorProvider).toSelf().inSingletonScope();
-globalContainer.bind(WalletProvider).toSelf().inSingletonScope();
+globalContainer
+    .bind<ConnectorProvider>(ConnectorProvider)
+    .toSelf()
+    .inSingletonScope();
+globalContainer
+    .bind<WalletProvider>(WalletProvider)
+    .toSelf()
+    .inSingletonScope();
+
+// Bind to factory
+globalContainer
+    .bind<PluginFactory>(FACTORIES.PluginFactory)
+    .toFactory(createPlugin);
 
 export { globalContainer };

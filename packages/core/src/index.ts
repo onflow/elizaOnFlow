@@ -4,4 +4,5 @@ import "./config"; // Add this line first
 export * from "./symbols";
 export * from "./interfaces";
 export * from "./providers";
+export * from "./factories";
 export * from "./di";
