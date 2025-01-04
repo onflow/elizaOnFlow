@@ -13,6 +13,7 @@ import type {
     InjectableProviderClass,
     PluginFactory,
 } from "../interfaces";
+import { WalletProvider } from "../providers";
 
 /**
  * Create a plugin factory
@@ -54,12 +55,20 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         // For class constructors (functions), get instance from container
         // For regular providers, use as-is
         if (typeof providers !== "undefined") {
-            plugin.providers = providers.map(
-                (provider) =>
-                    typeof provider === "function"
-                        ? ctx.container.get(provider) // Get instance from DI container
-                        : provider // Use provider directly
-            );
+            plugin.providers = providers.map((provider) => {
+                if (typeof provider === "function") {
+                    return ctx.container.get(provider); // Get instance from DI container
+                }
+                return provider; // Use provider directly
+            });
+            // Add WalletProvider if not already present
+            if (
+                !plugin.providers.some(
+                    (provider) => provider instanceof WalletProvider
+                )
+            ) {
+                plugin.providers.unshift(ctx.container.get(WalletProvider));
+            }
         }
 
         // Handle evaluators - if provided, map through them
