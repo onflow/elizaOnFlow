@@ -16,7 +16,7 @@ import { TransactionResponse } from "@elizaos/plugin-flow";
 
 export interface ScriptQueryResponse {
     ok: boolean;
-    data: any;
+    data?: any;
     error?: any;
     errorMessage?: string;
 }
