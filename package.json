@@ -3,7 +3,7 @@
     "private": true,
     "scripts": {
         "preinstall": "npx only-allow pnpm",
-        "build": "turbo run build --filter=!@elizaos/plugin-story --filter=!@elizaos/plugin-coinbase",
+        "build": "turbo run build $(sed 's/^/--filter=!/' turbo.excludes | tr '\n' ' ')",
         "cleanstart": "if [ -f agent/data/db.sqlite ]; then rm agent/data/db.sqlite; fi && pnpm --filter \"@fixes-ai/agent\" start --isRoot",
         "cleanstart:debug": "if [ -f agent/data/db.sqlite ]; then rm agent/data/db.sqlite; fi && cross-env NODE_ENV=development VERBOSE=true DEBUG=eliza:* pnpm --filter \"@fixes-ai/agent\" start --isRoot",
         "start": "pnpm --filter \"@fixes-ai/agent\" start --isRoot",
