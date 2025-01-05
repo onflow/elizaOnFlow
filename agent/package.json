@@ -1,0 +1,46 @@
+{
+    "name": "@fixes-ai/agent",
+    "version": "0.1.7",
+    "main": "src/index.ts",
+    "type": "module",
+    "scripts": {
+        "start": "node --loader ts-node/esm src/index.ts",
+        "dev": "node --loader ts-node/esm src/index.ts",
+        "check-types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@elizaos/adapter-postgres": "workspace:*",
+        "@elizaos/adapter-redis": "workspace:*",
+        "@elizaos/adapter-sqlite": "workspace:*",
+        "@elizaos/client-auto": "workspace:*",
+        "@elizaos/client-direct": "workspace:*",
+        "@elizaos/client-discord": "workspace:*",
+        "@elizaos/client-farcaster": "workspace:*",
+        "@elizaos/client-lens": "workspace:*",
+        "@elizaos/client-telegram": "workspace:*",
+        "@elizaos/client-twitter": "workspace:*",
+        "@elizaos/client-slack": "workspace:*",
+        "@elizaos/core": "workspace:*",
+        "@elizaos/plugin-0g": "workspace:*",
+        "@elizaos/plugin-bootstrap": "workspace:*",
+        "@elizaos/plugin-intiface": "workspace:*",
+        "@elizaos/plugin-echochambers": "workspace:*",
+        "@elizaos/plugin-gitbook": "workspace:*",
+        "@elizaos/plugin-goat": "workspace:*",
+        "@elizaos/plugin-image-generation": "workspace:*",
+        "@elizaos/plugin-node": "workspace:*",
+        "@elizaos/plugin-tee": "workspace:*",
+        "@elizaos/plugin-twitter": "workspace:*",
+        "@elizaos/plugin-3d-generation": "workspace:*",
+        "@elizaos/plugin-web-search": "workspace:*",
+        "@fixes-ai/core": "workspace:*",
+        "@fixes-ai/common": "workspace:*",
+        "readline": "1.3.0",
+        "ws": "8.18.0",
+        "yargs": "17.7.2"
+    },
+    "devDependencies": {
+        "ts-node": "10.9.2",
+        "tsup": "8.3.5"
+    }
+}

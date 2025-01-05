@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "src",
+        "../core/dist"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+        "src/**/*.spec.ts"
+    ],
+    "exec": "node --enable-source-maps --loader ts-node/esm src/index.ts"
+}
