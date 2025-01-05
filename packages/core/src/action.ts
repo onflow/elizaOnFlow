@@ -2,6 +2,7 @@ import { inject, injectable, unmanaged } from "inversify";
 import { ZodSchema } from "zod";
 import { InjactableAction, ScriptQueryResponse } from "./interfaces";
 import {
+    Action,
     ActionExample,
     composeContext,
     elizaLogger,
@@ -22,40 +23,65 @@ import {
 import { buildContentOutputTemplate } from "./templates";
 
 /**
+ * Action options
+ */
+export type ActionOptions<T> = Pick<
+    Action,
+    "name" | "similes" | "description" | "examples" | "suppressInitialMessage"
+> & {
+    contentClass: ContentClass<T>;
+    template?: string;
+    contentSchema?: ZodSchema<T>;
+};
+
+/**
  * Base abstract class for injectable actions
  */
 @injectable()
 export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
-    /** -------- Injects -------- */
+    // -------- Injects --------
+
     // Inject the connector provider
     @inject(ConnectorProvider) protected connector: ConnectorProvider;
     // Inject the wallet provider
     @inject(WalletProvider) protected wallet: WalletProvider;
 
-    /** -------- Properties -------- */
+    // -------- Properties --------
+
+    public name: string;
+    public similes: string[];
+    public description: string;
+    public examples: ActionExample[][];
+    public suppressInitialMessage: boolean;
+
+    /**
+     * The content class for the action
+     */
+    private readonly contentClass: ContentClass<T>;
+    /**
+     * Optional template for the action, if not provided, it will be generated from the content class
+     */
+    private readonly template: string;
+    /**
+     * Optional content schema for the action, if not provided, it will be generated from the content class
+     */
+    private readonly contentSchema: ZodSchema<T>;
 
     /**
      * Constructor for the base injectable action
      */
-    constructor(
-        @unmanaged() public name: string,
-        @unmanaged() public similes: string[],
-        @unmanaged() public description: string,
-        @unmanaged() public examples: ActionExample[][],
-        /**
-         * The content class for the action
-         */
-        @unmanaged() private readonly contentClass: ContentClass<T>,
-        @unmanaged() public suppressInitialMessage: boolean = false,
-        /**
-         * Optional template for the action, if not provided, it will be generated from the content class
-         */
-        @unmanaged() private readonly template: string = undefined,
-        /**
-         * Optional content schema for the action, if not provided, it will be generated from the content class
-         */
-        @unmanaged() private readonly contentSchema: ZodSchema<T> = undefined
-    ) {
+    constructor(@unmanaged() opts: ActionOptions<T>) {
+        // Set the action properties
+        this.name = opts.name;
+        this.similes = opts.similes;
+        this.description = opts.description;
+        this.examples = opts.examples;
+        this.suppressInitialMessage = opts.suppressInitialMessage ?? false; // Default to false
+        // Set the content class, template and content schema
+        this.contentClass = opts.contentClass;
+        this.template = opts.template;
+        this.contentSchema = opts.contentSchema;
+
         if (this.contentClass !== undefined) {
             if (this.contentSchema === undefined) {
                 this.contentSchema = createZodSchema(this.contentClass);
@@ -70,14 +96,19 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         }
     }
 
-    /**  -------- Abstract methods to be implemented by the child class -------- */
+    // -------- Abstract methods to be implemented by the child class --------
 
+    /**
+     * Abstract method to execute the action
+     * @param content The content object
+     * @param callback The callback function to pass the result to Eliza runtime
+     */
     abstract execute(
         content: T,
         callback?: HandlerCallback
     ): Promise<TransactionResponse | ScriptQueryResponse | null>;
 
-    /** -------- Implemented methods for Eliza runtime -------- */
+    // -------- Implemented methods for Eliza runtime --------
 
     /**
      * Default implementation of the validate method

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ContentPropertyDescription } from "./interfaces";
+import { stringArrayFooter } from "@elizaos/core";
 
 /**
  * build the content output template
@@ -12,7 +13,12 @@ export function buildContentOutputTemplate(
 ): string {
     let propDesc = "";
     Object.entries(properties).forEach(([key, { description, examples }]) => {
-        propDesc += `- Field "${key}": ${description}\n`;
+        propDesc += `- Field "${key}": ${description}.`;
+        if (examples.length > 0) {
+            propDesc += " Examples for this field:\n";
+        } else {
+            propDesc += "\n";
+        }
         examples.forEach((example, index) => {
             propDesc += `    ${index + 1}. ${example}\n`;
         });
@@ -22,15 +28,16 @@ export function buildContentOutputTemplate(
 
 {{walletInfo}}
 
-Extract the following information about the requested action:
+TASK: Extract the following information about the requested action:
 ${propDesc}
 
-Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
-
-Example:
+Use null for any values that cannot be determined.
+Respond with a JSON markdown block containing only the extracted values with this structure:
 \`\`\`json
 ${zodSchemaToJson(schema)}
 \`\`\`
+
+${stringArrayFooter}
 `;
 }
 

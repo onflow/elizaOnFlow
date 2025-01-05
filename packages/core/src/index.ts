@@ -6,5 +6,6 @@ export * from "./decorators";
 export * from "./interfaces";
 export * from "./providers";
 export * from "./factories";
+export * from "./templates";
 export * from "./action";
 export * from "./di";

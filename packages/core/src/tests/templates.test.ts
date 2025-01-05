@@ -7,35 +7,62 @@ describe("templates", () => {
     describe("buildContentOutputTemplate", () => {
         it("should generate correct template with properties and examples", () => {
             const properties = {
+                token: {
+                    description: "The token to transfer",
+                    examples: [
+                        "A.1654653399040a61.FlowToken",
+                        "0xe6ffc15a5bde7dd33c127670ba2b9fcb82db971a",
+                    ],
+                },
                 amount: {
                     description: "The amount to transfer",
                     examples: ["100", "0.5"],
                 },
-                recipient: {
+                to: {
                     description: "The recipient address",
-                    examples: ["0x123...", "0x456..."],
+                    examples: [
+                        "0x1654653399040a61",
+                        "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+                    ],
+                },
+                matched: {
+                    description:
+                        "Whether token and recipient address types match",
+                    examples: ["true", "false"],
                 },
             };
 
             const schema = z.object({
-                amount: z.number(),
-                recipient: z.string(),
+                token: z.string().nullable(),
+                amount: z.union([z.string(), z.number()]),
+                to: z.string(),
+                matched: z.boolean(),
             });
 
             const result = buildContentOutputTemplate(properties, schema);
 
+            expect(result).toContain('- Field "token": The token to transfer');
+            expect(result).toContain("1. A.1654653399040a61.FlowToken");
+            expect(result).toContain(
+                "2. 0xe6ffc15a5bde7dd33c127670ba2b9fcb82db971a"
+            );
             expect(result).toContain(
                 '- Field "amount": The amount to transfer'
             );
             expect(result).toContain("1. 100");
             expect(result).toContain("2. 0.5");
+            expect(result).toContain('- Field "to": The recipient address');
+            expect(result).toContain("1. 0x1654653399040a61");
             expect(result).toContain(
-                '- Field "recipient": The recipient address'
+                "2. 0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
             );
-            expect(result).toContain("1. 0x123...");
-            expect(result).toContain("2. 0x456...");
             expect(result).toContain(
-                '```json\n{\n"amount": number,\n"recipient": string\n}\n```'
+                '- Field "matched": Whether token and recipient address types match'
+            );
+            expect(result).toContain("1. true");
+            expect(result).toContain("2. false");
+            expect(result).toContain(
+                '```json\n{\n"token": string | null,\n"amount": string | number,\n"to": string,\n"matched": boolean\n}\n```'
             );
         });
     });
