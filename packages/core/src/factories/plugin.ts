@@ -1,49 +1,24 @@
 import { interfaces } from "inversify";
-import {
-    Action,
-    Client,
-    Evaluator,
-    Plugin,
-    Provider,
-    Service,
-} from "@elizaos/core";
-import type {
-    InjectableActionClass,
-    InjectableEvaluatorClass,
-    InjectableProviderClass,
-    PluginFactory,
-} from "../interfaces";
+import { Plugin } from "@elizaos/core";
+import type { PluginFactory, PluginOptions } from "../interfaces";
 import { WalletProvider } from "../providers";
 
 /**
  * Create a plugin factory
  */
 export function createPlugin(ctx: interfaces.Context): PluginFactory {
-    return (
-        name: string,
-        description: string,
-        /** Optional actions */
-        actions?: (Action | InjectableActionClass)[],
-        /** Optional providers */
-        providers?: (Provider | InjectableProviderClass)[],
-        /** Optional evaluators */
-        evaluators?: (Evaluator | InjectableEvaluatorClass)[],
-        /** Optional services */
-        services?: Service[],
-        /** Optional clients */
-        clients?: Client[]
-    ): Plugin => {
+    return (opts: PluginOptions): Plugin => {
         // Create a new plugin object
         const plugin: Plugin = {
-            name,
-            description,
+            name: opts.name,
+            description: opts.description,
         };
 
         // Handle actions - if provided, map through them
         // For class constructors (functions), get instance from container
         // For regular actions, use as-is
-        if (typeof actions !== "undefined") {
-            plugin.actions = actions.map(
+        if (typeof opts.actions !== "undefined") {
+            plugin.actions = opts.actions.map(
                 (action) =>
                     typeof action === "function"
                         ? ctx.container.get(action) // Get instance from DI container
@@ -54,8 +29,8 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         // Handle providers - if provided, map through them
         // For class constructors (functions), get instance from container
         // For regular providers, use as-is
-        if (typeof providers !== "undefined") {
-            plugin.providers = providers.map((provider) => {
+        if (typeof opts.providers !== "undefined") {
+            plugin.providers = opts.providers.map((provider) => {
                 if (typeof provider === "function") {
                     return ctx.container.get(provider); // Get instance from DI container
                 }
@@ -74,8 +49,8 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         // Handle evaluators - if provided, map through them
         // For class constructors (functions), get instance from container
         // For regular evaluators, use as-is
-        if (typeof evaluators !== "undefined") {
-            plugin.evaluators = evaluators.map(
+        if (typeof opts.evaluators !== "undefined") {
+            plugin.evaluators = opts.evaluators.map(
                 (evaluator) =>
                     typeof evaluator === "function"
                         ? ctx.container.get(evaluator) // Get instance from DI container
@@ -84,13 +59,13 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         }
 
         // Handle services - if provided, assign directly
-        if (typeof services !== "undefined") {
-            plugin.services = services;
+        if (typeof opts.services !== "undefined") {
+            plugin.services = opts.services;
         }
 
         // Handle clients - if provided, assign directly
-        if (typeof clients !== "undefined") {
-            plugin.clients = clients;
+        if (typeof opts.clients !== "undefined") {
+            plugin.clients = opts.clients;
         }
         return plugin;
     };

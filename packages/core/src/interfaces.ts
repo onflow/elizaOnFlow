@@ -1,13 +1,11 @@
 import {
     Action,
-    Client,
     Evaluator,
     HandlerCallback,
     IAgentRuntime,
     Memory,
     Plugin,
     Provider,
-    Service,
     State,
 } from "@elizaos/core";
 import { TransactionResponse } from "@elizaos/plugin-flow";
@@ -78,23 +76,27 @@ export type InjectableEvaluatorClass<Args extends any[] = any[]> = new (
     ...args: Args
 ) => InjactableEvaluator;
 
+// ----------- Interfaces for Plugin -----------
+
+/**
+ * Plugin options
+ */
+export type PluginOptions = Pick<
+    Plugin,
+    "name" | "description" | "services" | "clients"
+> & {
+    /** Optional actions */
+    actions?: (Action | InjectableActionClass)[];
+    /** Optional providers */
+    providers?: (Provider | InjectableProviderClass)[];
+    /** Optional evaluators */
+    evaluators?: (Evaluator | InjectableEvaluatorClass)[];
+};
+
 /**
  * Factory type for creating a plugin
  */
-export type PluginFactory = (
-    name: string,
-    description: string,
-    /** Optional actions */
-    actions?: (Action | InjectableActionClass)[],
-    /** Optional providers */
-    providers?: (Provider | InjectableProviderClass)[],
-    /** Optional evaluators */
-    evaluators?: (Evaluator | InjectableEvaluatorClass)[],
-    /** Optional services */
-    services?: Service[],
-    /** Optional clients */
-    clients?: Client[]
-) => Plugin;
+export type PluginFactory = (opts: PluginOptions) => Plugin;
 
 // ----------- Interfaces for Content Properties or actions -----------
 
