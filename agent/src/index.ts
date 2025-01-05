@@ -1,5 +1,3 @@
-import { PostgresDatabaseAdapter } from "@elizaos/adapter-postgres";
-import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
 import { AutoClientInterface } from "@elizaos/client-auto";
 import { DiscordClientInterface } from "@elizaos/client-discord";
 import { FarcasterAgentClient } from "@elizaos/client-farcaster";
@@ -9,12 +7,9 @@ import { TelegramClientInterface } from "@elizaos/client-telegram";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
 import {
     AgentRuntime,
-    CacheManager,
     Character,
     Clients,
-    DbCacheAdapter,
     elizaLogger,
-    FsCacheAdapter,
     IAgentRuntime,
     IDatabaseAdapter,
     IDatabaseCacheAdapter,
@@ -24,7 +19,6 @@ import {
     Client,
     ICacheManager,
 } from "@elizaos/core";
-import { RedisClient } from "@elizaos/adapter-redis";
 import { zgPlugin } from "@elizaos/plugin-0g";
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
 import createGoatPlugin from "@elizaos/plugin-goat";
@@ -35,7 +29,6 @@ import { createNodePlugin } from "@elizaos/plugin-node";
 import { TEEMode, teePlugin } from "@elizaos/plugin-tee";
 import { webSearchPlugin } from "@elizaos/plugin-web-search";
 import { echoChamberPlugin } from "@elizaos/plugin-echochambers";
-import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -43,7 +36,12 @@ import yargs from "yargs";
 import net from "net";
 
 import { defaultCharacter } from "./character";
-import { getTokenForProvider, loadCharacters } from "./utils";
+import {
+    getTokenForProvider,
+    initializeCache,
+    initializeDatabase,
+    loadCharacters,
+} from "./utils";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -80,35 +78,6 @@ export function parseArguments(): {
     } catch (error) {
         elizaLogger.error("Error parsing arguments:", error);
         return {};
-    }
-}
-
-function initializeDatabase(dataDir: string) {
-    if (process.env.POSTGRES_URL) {
-        elizaLogger.info("Initializing PostgreSQL connection...");
-        const db = new PostgresDatabaseAdapter({
-            connectionString: process.env.POSTGRES_URL,
-            parseInputs: true,
-        });
-
-        // Test the connection
-        db.init()
-            .then(() => {
-                elizaLogger.success(
-                    "Successfully connected to PostgreSQL database"
-                );
-            })
-            .catch((error) => {
-                elizaLogger.error("Failed to connect to PostgreSQL:", error);
-            });
-
-        return db;
-    } else {
-        const filePath =
-            process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
-        // ":memory:";
-        const db = new SqliteDatabaseAdapter(new Database(filePath));
-        return db;
     }
 }
 
@@ -279,57 +248,6 @@ export async function createAgent(
     });
 }
 
-function initializeFsCache(baseDir: string, character: Character) {
-    const cacheDir = path.resolve(baseDir, character.id, "cache");
-
-    const cache = new CacheManager(new FsCacheAdapter(cacheDir));
-    return cache;
-}
-
-function initializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
-    const cache = new CacheManager(new DbCacheAdapter(db, character.id));
-    return cache;
-}
-
-function initializeCache(
-    cacheStore: string,
-    character: Character,
-    baseDir?: string,
-    db?: IDatabaseCacheAdapter
-) {
-    switch (cacheStore) {
-        case CacheStore.REDIS:
-            if (process.env.REDIS_URL) {
-                elizaLogger.info("Connecting to Redis...");
-                const redisClient = new RedisClient(process.env.REDIS_URL);
-                return new CacheManager(
-                    new DbCacheAdapter(redisClient, character.id) // Using DbCacheAdapter since RedisClient also implements IDatabaseCacheAdapter
-                );
-            } else {
-                throw new Error("REDIS_URL environment variable is not set.");
-            }
-
-        case CacheStore.DATABASE:
-            if (db) {
-                elizaLogger.info("Using Database Cache...");
-                return initializeDbCache(character, db);
-            } else {
-                throw new Error(
-                    "Database adapter is not provided for CacheStore.Database."
-                );
-            }
-
-        case CacheStore.FILESYSTEM:
-            elizaLogger.info("Using File System Cache...");
-            return initializeFsCache(baseDir, character);
-
-        default:
-            throw new Error(
-                `Invalid cache store: ${cacheStore} or required configuration missing.`
-            );
-    }
-}
-
 async function startAgent(
     character: Character,
     directClient: DirectClient
@@ -357,6 +275,7 @@ async function startAgent(
             "",
             db
         ); // "" should be replaced with dir for file system caching. THOUGHTS: might probably make this into an env
+
         const runtime: AgentRuntime = await createAgent(
             character,
             db,

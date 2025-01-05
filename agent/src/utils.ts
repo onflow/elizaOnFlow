@@ -1,12 +1,25 @@
+import PostgresDatabaseAdapter from "@elizaos/adapter-postgres";
+import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
+import { RedisClient } from "@elizaos/adapter-redis";
 import {
+    CacheManager,
+    CacheStore,
     Character,
+    DbCacheAdapter,
     elizaLogger,
+    FsCacheAdapter,
+    IDatabaseCacheAdapter,
     ModelProviderName,
     settings,
     validateCharacterConfig,
 } from "@elizaos/core";
+import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 
 function tryLoadFile(filePath: string): string | null {
     try {
@@ -253,5 +266,85 @@ export function getTokenForProvider(
             const errorMessage = `Failed to get token - unsupported model provider: ${provider}`;
             elizaLogger.error(errorMessage);
             throw new Error(errorMessage);
+    }
+}
+
+function initializeFsCache(baseDir: string, character: Character) {
+    const cacheDir = path.resolve(baseDir, character.id, "cache");
+
+    const cache = new CacheManager(new FsCacheAdapter(cacheDir));
+    return cache;
+}
+
+function initializeDbCache(character: Character, db: IDatabaseCacheAdapter) {
+    const cache = new CacheManager(new DbCacheAdapter(db, character.id));
+    return cache;
+}
+
+export function initializeCache(
+    cacheStore: string,
+    character: Character,
+    baseDir?: string,
+    db?: IDatabaseCacheAdapter
+) {
+    switch (cacheStore) {
+        case CacheStore.REDIS:
+            if (process.env.REDIS_URL) {
+                elizaLogger.info("Connecting to Redis...");
+                const redisClient = new RedisClient(process.env.REDIS_URL);
+                return new CacheManager(
+                    new DbCacheAdapter(redisClient, character.id) // Using DbCacheAdapter since RedisClient also implements IDatabaseCacheAdapter
+                );
+            } else {
+                throw new Error("REDIS_URL environment variable is not set.");
+            }
+
+        case CacheStore.DATABASE:
+            if (db) {
+                elizaLogger.info("Using Database Cache...");
+                return initializeDbCache(character, db);
+            } else {
+                throw new Error(
+                    "Database adapter is not provided for CacheStore.Database."
+                );
+            }
+
+        case CacheStore.FILESYSTEM:
+            elizaLogger.info("Using File System Cache...");
+            return initializeFsCache(baseDir, character);
+
+        default:
+            throw new Error(
+                `Invalid cache store: ${cacheStore} or required configuration missing.`
+            );
+    }
+}
+
+export function initializeDatabase(dataDir: string) {
+    if (process.env.POSTGRES_URL) {
+        elizaLogger.info("Initializing PostgreSQL connection...");
+        const db = new PostgresDatabaseAdapter({
+            connectionString: process.env.POSTGRES_URL,
+            parseInputs: true,
+        });
+
+        // Test the connection
+        db.init()
+            .then(() => {
+                elizaLogger.success(
+                    "Successfully connected to PostgreSQL database"
+                );
+            })
+            .catch((error) => {
+                elizaLogger.error("Failed to connect to PostgreSQL:", error);
+            });
+
+        return db;
+    } else {
+        const filePath =
+            process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
+        // ":memory:";
+        const db = new SqliteDatabaseAdapter(new Database(filePath));
+        return db;
     }
 }
