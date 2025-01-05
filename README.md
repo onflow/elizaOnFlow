@@ -18,8 +18,9 @@ Check out the [Eliza's README](https://github.com/elizaOS/eliza/tree/main?tab=re
 - Use shared `flow.json` for all Flow Cadence contracts dependencies in plugins.
 - Use [InversifyJS](https://github.com/inversify/InversifyJS) for dependency injection.
   - Share the same instances of providers across the application and plugins.
-  - Provide standard plugins / actions wrapper for Flow ecosystem projects.
-  - All actions / evaluators / providers for plugins are injectable, that means they can be dynamically loaded and injected.
+  - All actions / evaluators / providers for plugins can be dynamically loaded and injected.
+  - Provide standard action / evaluator wrapper for plugins.
+  - Let develoeprs focus on the business logic of actions / evaluators.
 - Both Flow EVM and Flow Cadence projects will be supported.
 
 ## 🚀 Quick Start

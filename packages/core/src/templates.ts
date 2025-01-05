@@ -39,7 +39,7 @@ ${zodSchemaToJson(schema)}
  * @param schema Zod schema
  * @returns JSON string
  */
-function zodSchemaToJson(schema: z.ZodType<any>): string {
+export function zodSchemaToJson(schema: z.ZodType<any>): string {
     if (schema instanceof z.ZodObject) {
         const shape = schema.shape;
         const properties = Object.entries(shape).map(([key, value]) => {
@@ -55,7 +55,7 @@ function zodSchemaToJson(schema: z.ZodType<any>): string {
  * @param schema Zod type
  */
 function zodTypeToJson(schema: z.ZodType<any>): string {
-    if (schema instanceof z.ZodNullable) {
+    if (schema instanceof z.ZodNullable || schema instanceof z.ZodOptional) {
         return `${zodTypeToJson(schema._def.innerType)} | null`;
     }
     if (schema instanceof z.ZodUnion) {
