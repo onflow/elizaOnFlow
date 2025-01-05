@@ -61,8 +61,18 @@ export class ConnectorProvider
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
-        _state?: State
+        state?: State
     ): Promise<string | null> {
+        // For one session, only inject the wallet info once
+        if (state) {
+            const CONNECTOR_PROVIDER_SESSION_FLAG =
+                "connector-provider-session";
+            if (state[CONNECTOR_PROVIDER_SESSION_FLAG]) {
+                return null;
+            }
+            state[CONNECTOR_PROVIDER_SESSION_FLAG] = true;
+        }
+
         try {
             return await this.getConnectorStatus(runtime);
         } catch (error) {

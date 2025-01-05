@@ -43,8 +43,17 @@ export class WalletProvider
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
-        _state?: State
+        state?: State
     ): Promise<string | null> {
+        // For one session, only inject the wallet info once
+        if (state) {
+            const WALLET_PROVIDER_SESSION_FLAG = "wallet-provider-session";
+            if (state[WALLET_PROVIDER_SESSION_FLAG]) {
+                return null;
+            }
+            state[WALLET_PROVIDER_SESSION_FLAG] = true;
+        }
+
         // Check if the user has an Flow wallet
         if (
             !runtime.getSetting("FLOW_ADDRESS") ||
