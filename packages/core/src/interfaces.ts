@@ -4,9 +4,11 @@ import {
     Evaluator,
     HandlerCallback,
     IAgentRuntime,
+    Memory,
     Plugin,
     Provider,
     Service,
+    State,
 } from "@elizaos/core";
 import { TransactionResponse } from "@elizaos/plugin-flow";
 
@@ -50,6 +52,9 @@ export interface InjactableAction<T> extends Action {
      */
     execute(
         content: T,
+        runtime: IAgentRuntime,
+        message: Memory,
+        state?: State,
         callback?: HandlerCallback
     ): Promise<TransactionResponse | ScriptQueryResponse | null>;
 }

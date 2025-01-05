@@ -105,6 +105,9 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
      */
     abstract execute(
         content: T,
+        runtime: IAgentRuntime,
+        message: Memory,
+        state?: State,
         callback?: HandlerCallback
     ): Promise<TransactionResponse | ScriptQueryResponse | null>;
 
@@ -256,7 +259,13 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         }
 
         try {
-            const res = await this.execute(content, callback);
+            const res = await this.execute(
+                content,
+                runtime,
+                message,
+                state,
+                callback
+            );
             if (res) {
                 if (isScriptQueryResponse(res)) {
                     if (res.ok) {
