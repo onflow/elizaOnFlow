@@ -15,7 +15,7 @@ import {
 import { TransactionResponse, validateFlowConfig } from "@elizaos/plugin-flow";
 import { ConnectorProvider, WalletProvider } from "./providers";
 import {
-    ContentClass,
+    type ContentClass,
     createZodSchema,
     loadPropertyDescriptions,
 } from "./decorators";
