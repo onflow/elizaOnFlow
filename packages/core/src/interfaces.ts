@@ -90,3 +90,10 @@ export type PluginFactory = (
     /** Optional clients */
     clients?: Client[]
 ) => Plugin;
+
+// ----------- Interfaces for Content Properties or actions -----------
+
+export interface ContentPropertyDescription {
+    description: string;
+    examples?: string[];
+}

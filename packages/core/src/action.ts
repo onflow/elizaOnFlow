@@ -14,10 +14,16 @@ import {
 } from "@elizaos/core";
 import { TransactionResponse, validateFlowConfig } from "@elizaos/plugin-flow";
 import { ConnectorProvider, WalletProvider } from "./providers";
+import {
+    ContentClass,
+    createZodSchema,
+    loadPropertyDescriptions,
+} from "./decorators";
+import { buildContentOutputTemplate } from "./templates";
 
 /**
  * Base abstract class for injectable actions
-*/
+ */
 @injectable()
 export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
     /** -------- Injects -------- */
@@ -37,15 +43,32 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         @unmanaged() public description: string,
         @unmanaged() public examples: ActionExample[][],
         /**
-         * The template for processing messages
+         * The content class for the action
          */
-        @unmanaged() private template: string,
+        @unmanaged() private readonly contentClass: ContentClass<T>,
+        @unmanaged() public suppressInitialMessage: boolean = false,
         /**
-         * The schema of processed content from the template
+         * Optional template for the action, if not provided, it will be generated from the content class
          */
-        @unmanaged() private contentSchema: ZodSchema<T>,
-        @unmanaged() public suppressInitialMessage: boolean = false
-    ) {}
+        @unmanaged() private readonly template: string = undefined,
+        /**
+         * Optional content schema for the action, if not provided, it will be generated from the content class
+         */
+        @unmanaged() private readonly contentSchema: ZodSchema<T> = undefined
+    ) {
+        if (this.contentClass !== undefined) {
+            if (this.contentSchema === undefined) {
+                this.contentSchema = createZodSchema(this.contentClass);
+            }
+            if (this.template === undefined) {
+                const properties = loadPropertyDescriptions(this.contentClass);
+                this.template = buildContentOutputTemplate(
+                    properties,
+                    this.contentSchema
+                );
+            }
+        }
+    }
 
     /**  -------- Abstract methods to be implemented by the child class -------- */
 
@@ -105,10 +128,7 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         }
 
         // Compose context
-        return composeContext({
-            state,
-            template: this.template,
-        });
+        return composeContext({ state, template: this.template });
     }
 
     /**
@@ -130,6 +150,11 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
             message,
             state
         );
+
+        if (!actionContext) {
+            elizaLogger.error("Failed to prepare action context");
+            return null;
+        }
 
         // Generate transfer content
         const recommendations = await generateObjectArray({
