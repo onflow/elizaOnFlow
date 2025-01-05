@@ -93,6 +93,10 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         message: Memory,
         state: State
     ): Promise<string> {
+        // Get wallet info for context
+        const walletInfo = await this.wallet.get(runtime, message, state);
+        state.walletInfo = walletInfo;
+
         // Initialize or update state
         if (!state) {
             state = (await runtime.composeState(message)) as State;
