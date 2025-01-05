@@ -1,10 +1,11 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import { Container } from "inversify";
+import { Plugin } from "@elizaos/core";
+import { Container, interfaces } from "inversify";
 import { CONSTANTS, FACTORIES } from "./symbols";
 import { ConnectorProvider, WalletProvider } from "./providers";
-import { PluginFactory } from "./interfaces";
 import { createPlugin } from "./factories";
+import { PluginOptions } from "./interfaces";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,7 +32,7 @@ globalContainer
 
 // Bind to factory
 globalContainer
-    .bind<PluginFactory>(FACTORIES.PluginFactory)
-    .toFactory(createPlugin);
+    .bind<interfaces.Factory<Plugin>>(FACTORIES.PluginFactory)
+    .toFactory<Plugin, [PluginOptions]>(createPlugin);
 
 export { globalContainer };
