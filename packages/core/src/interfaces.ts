@@ -98,6 +98,16 @@ export type PluginOptions = Pick<
  */
 export type PluginFactory = (opts: PluginOptions) => Plugin;
 
+/**
+ * Interface of Injectable Plugin
+ */
+export interface InjectablePlugin {
+    /**
+     * Get the instance of the plugin
+     */
+    get(): Plugin;
+}
+
 // ----------- Interfaces for Content Properties or actions -----------
 
 export interface ContentPropertyDescription {

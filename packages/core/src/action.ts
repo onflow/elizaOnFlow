@@ -42,9 +42,11 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
     // -------- Injects --------
 
     // Inject the connector provider
-    @inject(ConnectorProvider) protected connector: ConnectorProvider;
+    @inject(ConnectorProvider)
+    public readonly connector: ConnectorProvider;
     // Inject the wallet provider
-    @inject(WalletProvider) protected wallet: WalletProvider;
+    @inject(WalletProvider)
+    public readonly wallet: WalletProvider;
 
     // -------- Properties --------
 
