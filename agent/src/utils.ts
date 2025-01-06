@@ -13,13 +13,37 @@ import {
     settings,
     validateCharacterConfig,
 } from "@elizaos/core";
+import { globalContainer, symbols, PluginFactory } from "@fixes-ai/core";
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import yargs from "yargs";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
+
+export function parseArguments(): {
+    character?: string;
+    characters?: string;
+} {
+    try {
+        return yargs(process.argv.slice(3))
+            .option("character", {
+                type: "string",
+                description: "Path to the character JSON file",
+            })
+            .option("characters", {
+                type: "string",
+                description:
+                    "Comma separated list of paths to character JSON files",
+            })
+            .parseSync();
+    } catch (error) {
+        elizaLogger.error("Error parsing arguments:", error);
+        return {};
+    }
+}
 
 function tryLoadFile(filePath: string): string | null {
     try {
@@ -121,10 +145,24 @@ export async function loadCharacters(
                 // Handle plugins
                 if (isAllStrings(character.plugins)) {
                     elizaLogger.info("Plugins are: ", character.plugins);
+
+                    // Use the PluginFactory to import the plugins within the same request
+                    const createPlugin = globalContainer.get<PluginFactory>(
+                        symbols.FACTORIES.PluginFactory
+                    );
+
                     const importedPlugins = await Promise.all(
                         character.plugins.map(async (plugin) => {
                             const importedPlugin = await import(plugin);
-                            return importedPlugin.default;
+                            const opts = importedPlugin.default;
+                            if (
+                                typeof opts.name === "string" &&
+                                typeof opts.description === "string"
+                            ) {
+                                return createPlugin(opts);
+                            } else {
+                                return undefined;
+                            }
                         })
                     );
                     character.plugins = importedPlugins;

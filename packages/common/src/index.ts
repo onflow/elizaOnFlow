@@ -1,6 +1,6 @@
 export * from "./actions";
 export * from "./plugin";
 
-import { BasicFlowPlugin } from "./plugin";
+import { basicFlowPluginOptions } from "./plugin";
 
-export default BasicFlowPlugin;
+export default basicFlowPluginOptions;

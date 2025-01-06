@@ -19,20 +19,16 @@ import {
     Client,
     ICacheManager,
 } from "@elizaos/core";
-import { zgPlugin } from "@elizaos/plugin-0g";
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
-import createGoatPlugin from "@elizaos/plugin-goat";
 import { DirectClient } from "@elizaos/client-direct";
 import { imageGenerationPlugin } from "@elizaos/plugin-image-generation";
 import { ThreeDGenerationPlugin } from "@elizaos/plugin-3d-generation";
 import { createNodePlugin } from "@elizaos/plugin-node";
 import { TEEMode, teePlugin } from "@elizaos/plugin-tee";
 import { webSearchPlugin } from "@elizaos/plugin-web-search";
-import { echoChamberPlugin } from "@elizaos/plugin-echochambers";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import yargs from "yargs";
 import net from "net";
 
 import { defaultCharacter } from "./character";
@@ -41,6 +37,7 @@ import {
     initializeCache,
     initializeDatabase,
     loadCharacters,
+    parseArguments,
 } from "./utils";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -58,28 +55,6 @@ const logFetch = async (url: string, options: any) => {
     // elizaLogger.debug(JSON.stringify(options, null, 2));
     return fetch(url, options);
 };
-
-export function parseArguments(): {
-    character?: string;
-    characters?: string;
-} {
-    try {
-        return yargs(process.argv.slice(3))
-            .option("character", {
-                type: "string",
-                description: "Path to the character JSON file",
-            })
-            .option("characters", {
-                type: "string",
-                description:
-                    "Comma separated list of paths to character JSON files",
-            })
-            .parseSync();
-    } catch (error) {
-        elizaLogger.error("Error parsing arguments:", error);
-        return {};
-    }
-}
 
 // also adds plugins from character file into the runtime
 export async function initializeClients(
@@ -204,14 +179,6 @@ export async function createAgent(
         throw new Error("Invalid TEE configuration");
     }
 
-    let goatPlugin: any | undefined;
-
-    if (getSecret(character, "EVM_PRIVATE_KEY")) {
-        goatPlugin = await createGoatPlugin((secret) =>
-            getSecret(character, secret)
-        );
-    }
-
     return new AgentRuntime({
         databaseAdapter: db,
         token,
@@ -223,7 +190,6 @@ export async function createAgent(
             bootstrapPlugin,
             nodePlugin,
             getSecret(character, "TAVILY_API_KEY") ? webSearchPlugin : null,
-            getSecret(character, "ZEROG_PRIVATE_KEY") ? zgPlugin : null,
             getSecret(character, "FAL_API_KEY") ||
             getSecret(character, "OPENAI_API_KEY") ||
             getSecret(character, "VENICE_API_KEY") ||
@@ -233,11 +199,6 @@ export async function createAgent(
                 : null,
             getSecret(character, "FAL_API_KEY") ? ThreeDGenerationPlugin : null,
             ...(teeMode !== TEEMode.OFF && walletSecretSalt ? [teePlugin] : []),
-            goatPlugin,
-            getSecret(character, "ECHOCHAMBERS_API_URL") &&
-            getSecret(character, "ECHOCHAMBERS_API_KEY")
-                ? echoChamberPlugin
-                : null,
         ].filter(Boolean),
         providers: [],
         actions: [],

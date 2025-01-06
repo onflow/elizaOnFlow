@@ -19,7 +19,7 @@ export abstract class BaseInjactablePlugin implements InjectablePlugin {
 
     constructor(
         @unmanaged()
-        protected readonly opts: PluginOptions
+        public readonly opts: PluginOptions
     ) {}
 
     // -------- Methods --------
