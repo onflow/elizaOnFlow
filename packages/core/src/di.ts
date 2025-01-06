@@ -33,7 +33,7 @@ globalContainer.bind<WalletProvider>(WalletProvider).toSelf().inRequestScope();
 // ----- Bind to factory functions -----
 
 globalContainer
-    .bind<interfaces.Factory<Plugin>>(FACTORIES.PluginFactory)
-    .toFactory<Plugin, [PluginOptions]>(createPlugin);
+    .bind<interfaces.Factory<Promise<Plugin>>>(FACTORIES.PluginFactory)
+    .toFactory<Promise<Plugin>, [PluginOptions]>(createPlugin);
 
 export { globalContainer };

@@ -7,7 +7,7 @@ import { WalletProvider } from "../providers";
  * Create a plugin factory
  */
 export function createPlugin(ctx: interfaces.Context): PluginFactory {
-    return (opts: PluginOptions): Plugin => {
+    return async (opts: PluginOptions): Promise<Plugin> => {
         // Create a new plugin object
         const plugin: Plugin = {
             name: opts.name,
@@ -18,11 +18,13 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         // For class constructors (functions), get instance from container
         // For regular actions, use as-is
         if (typeof opts.actions !== "undefined") {
-            plugin.actions = opts.actions.map(
-                (action) =>
-                    typeof action === "function"
-                        ? ctx.container.get(action) // Get instance from DI container
-                        : action // Use action directly
+            plugin.actions = await Promise.all(
+                opts.actions.map(
+                    async (action) =>
+                        typeof action === "function"
+                            ? await ctx.container.getAsync(action) // Get instance from DI container
+                            : action // Use action directly
+                )
             );
         }
 
@@ -30,19 +32,23 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         // For class constructors (functions), get instance from container
         // For regular providers, use as-is
         if (typeof opts.providers !== "undefined") {
-            plugin.providers = opts.providers.map((provider) => {
-                if (typeof provider === "function") {
-                    return ctx.container.get(provider); // Get instance from DI container
-                }
-                return provider; // Use provider directly
-            });
+            plugin.providers = await Promise.all(
+                opts.providers.map(async (provider) => {
+                    if (typeof provider === "function") {
+                        return await ctx.container.getAsync(provider); // Get instance from DI container
+                    }
+                    return provider; // Use provider directly
+                })
+            );
             // Add WalletProvider if not already present
             if (
                 !plugin.providers.some(
                     (provider) => provider instanceof WalletProvider
                 )
             ) {
-                plugin.providers.unshift(ctx.container.get(WalletProvider));
+                plugin.providers.unshift(
+                    await ctx.container.getAsync(WalletProvider)
+                );
             }
         }
 
@@ -50,11 +56,13 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
         // For class constructors (functions), get instance from container
         // For regular evaluators, use as-is
         if (typeof opts.evaluators !== "undefined") {
-            plugin.evaluators = opts.evaluators.map(
-                (evaluator) =>
-                    typeof evaluator === "function"
-                        ? ctx.container.get(evaluator) // Get instance from DI container
-                        : evaluator // Use evaluator directly
+            plugin.evaluators = await Promise.all(
+                opts.evaluators.map(
+                    async (evaluator) =>
+                        typeof evaluator === "function"
+                            ? await ctx.container.getAsync(evaluator) // Get instance from DI container
+                            : evaluator // Use evaluator directly
+                )
             );
         }
 

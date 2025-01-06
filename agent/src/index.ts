@@ -37,6 +37,7 @@ import {
     initializeCache,
     initializeDatabase,
     loadCharacters,
+    normalizeCharacters,
     parseArguments,
 } from "./utils";
 
@@ -299,6 +300,9 @@ const startAgents = async () => {
     if (charactersArg) {
         characters = await loadCharacters(charactersArg, defaultCharacter);
     }
+
+    // Normalize characters
+    characters = await normalizeCharacters(characters);
 
     try {
         for (const character of characters) {

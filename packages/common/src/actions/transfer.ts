@@ -14,7 +14,12 @@ import {
     transactions,
     TransactionResponse,
 } from "@elizaos/plugin-flow";
-import { ActionOptions, BaseInjactableAction, property } from "@fixes-ai/core";
+import {
+    ActionOptions,
+    BaseInjactableAction,
+    globalContainer,
+    property,
+} from "@fixes-ai/core";
 
 /**
  * The generated content for the transfer action
@@ -297,3 +302,6 @@ export class TransferAction extends BaseInjactableAction<TransferContent> {
         return resp;
     }
 }
+
+// Register the transfer action
+globalContainer.bind(TransferAction).toSelf();

@@ -96,17 +96,7 @@ export type PluginOptions = Pick<
 /**
  * Factory type for creating a plugin
  */
-export type PluginFactory = (opts: PluginOptions) => Plugin;
-
-/**
- * Interface of Injectable Plugin
- */
-export interface InjectablePlugin {
-    /**
-     * Get the instance of the plugin
-     */
-    get(): Plugin;
-}
+export type PluginFactory = (opts: PluginOptions) => Promise<Plugin>;
 
 // ----------- Interfaces for Content Properties or actions -----------
 

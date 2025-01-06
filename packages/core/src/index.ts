@@ -9,4 +9,3 @@ export * from "./factories";
 export * from "./templates";
 export * from "./di";
 export * from "./action";
-export * from "./plugin";
