@@ -20,17 +20,18 @@ globalContainer
         return await import(filePath, { with: { type: "json" } });
     });
 
-// Bind to Types
+// ----- Bind to Types -----
+
+// Connector provider is bound to singleton scope
 globalContainer
     .bind<ConnectorProvider>(ConnectorProvider)
     .toSelf()
     .inSingletonScope();
-globalContainer
-    .bind<WalletProvider>(WalletProvider)
-    .toSelf()
-    .inSingletonScope();
+// Wallet provider is bound to request scope
+globalContainer.bind<WalletProvider>(WalletProvider).toSelf().inRequestScope();
 
-// Bind to factory
+// ----- Bind to factory functions -----
+
 globalContainer
     .bind<interfaces.Factory<Plugin>>(FACTORIES.PluginFactory)
     .toFactory<Plugin, [PluginOptions]>(createPlugin);

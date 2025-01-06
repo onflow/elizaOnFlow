@@ -8,6 +8,8 @@ import { stringArrayFooter } from "@elizaos/core";
  * @param schema The Zod schema of the content
  */
 export function buildContentOutputTemplate(
+    actionName: string,
+    actionDesc: string,
     properties: Record<string, ContentPropertyDescription>,
     schema: z.ZodType<any>
 ): string {
@@ -28,7 +30,12 @@ export function buildContentOutputTemplate(
 
 {{walletInfo}}
 
-TASK: Extract the following information about the requested action:
+### ${actionName}
+
+${actionDesc}
+
+### TASK: Extract the following information about the requested action
+
 ${propDesc}
 
 Use null for any values that cannot be determined.

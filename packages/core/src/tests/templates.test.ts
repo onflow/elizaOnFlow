@@ -39,7 +39,12 @@ describe("templates", () => {
                 matched: z.boolean(),
             });
 
-            const result = buildContentOutputTemplate(properties, schema);
+            const result = buildContentOutputTemplate(
+                "transfer",
+                "transfer token to recipient",
+                properties,
+                schema
+            );
 
             expect(result).toContain('- Field "token": The token to transfer');
             expect(result).toContain("1. A.1654653399040a61.FlowToken");

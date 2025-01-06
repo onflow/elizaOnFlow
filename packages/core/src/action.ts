@@ -89,6 +89,8 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
             if (this.template === undefined) {
                 const properties = loadPropertyDescriptions(this.contentClass);
                 this.template = buildContentOutputTemplate(
+                    this.name,
+                    this.description,
                     properties,
                     this.contentSchema
                 );
