@@ -10,6 +10,7 @@ import {
     FsCacheAdapter,
     IDatabaseCacheAdapter,
     ModelProviderName,
+    Plugin,
     settings,
     validateCharacterConfig,
 } from "@elizaos/core";
@@ -146,23 +147,10 @@ export async function loadCharacters(
                 if (isAllStrings(character.plugins)) {
                     elizaLogger.info("Plugins are: ", character.plugins);
 
-                    // Use the PluginFactory to import the plugins within the same request
-                    const createPlugin = globalContainer.get<PluginFactory>(
-                        symbols.FACTORIES.PluginFactory
-                    );
-
                     const importedPlugins = await Promise.all(
                         character.plugins.map(async (plugin) => {
                             const importedPlugin = await import(plugin);
-                            const opts = importedPlugin.default;
-                            if (
-                                typeof opts.name === "string" &&
-                                typeof opts.description === "string"
-                            ) {
-                                return createPlugin(opts);
-                            } else {
-                                return undefined;
-                            }
+                            return importedPlugin.default;
                         })
                     );
                     character.plugins = importedPlugins;
@@ -186,6 +174,28 @@ export async function loadCharacters(
         loadedCharacters.push(defaultCharacter);
     }
 
+    // Initialize all plugins with factory
+    loadedCharacters.forEach((character) => {
+        // Use the PluginFactory to import the plugins within the same request for each character
+        const createPlugin = globalContainer.get<PluginFactory>(
+            symbols.FACTORIES.PluginFactory
+        );
+
+        if (character.plugins?.length > 0) {
+            character.plugins = character.plugins
+                .map((plugin) => {
+                    if (
+                        typeof plugin.name === "string" &&
+                        typeof plugin.description === "string"
+                    ) {
+                        return createPlugin(plugin) as Plugin;
+                    } else {
+                        return undefined;
+                    }
+                })
+                .filter((plugin) => plugin !== undefined) as Plugin[];
+        }
+    });
     return loadedCharacters;
 }
 
