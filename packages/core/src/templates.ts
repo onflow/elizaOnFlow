@@ -30,9 +30,9 @@ export function buildContentOutputTemplate(
 
 {{walletInfo}}
 
-### ${actionName}
+We want to perform the action: "${actionName}".
 
-${actionDesc}
+Action description is ${actionDesc}
 
 ### TASK: Extract the following information about the requested action
 
