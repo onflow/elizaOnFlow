@@ -43,11 +43,14 @@ git clone --recurse-submodules https://github.com/fixes-world/elizaOnFlow.git
 
 # If you already cloned without submodules, run:
 git submodule update --init --recursive
-
-# Checkout the latest release
-# This project iterates fast, so we recommend checking out the latest release
-git checkout $(git describe --tags --abbrev=0)
 ```
+<!--
+This project iterates fast, so we recommend checking out the latest release.
+
+```bash
+# Checkout the latest release
+git checkout $(git describe --tags --abbrev=0)
+``` -->
 
 ### Automatically Start ElizaOnFlow
 
