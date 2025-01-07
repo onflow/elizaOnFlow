@@ -14,13 +14,14 @@ Check out the [Eliza's README](https://github.com/elizaOS/eliza/tree/main?tab=re
 
 > Extra Features
 
-- Provide Flow-dedicated Agent without other extra blockchain dependencies in runtime.
-- Use shared `flow.json` for all Flow Cadence contracts dependencies in plugins.
+- Provide Flow-dedicated Agent without other extra blockchain dependencies runtime(by default).
+  - You can still use other blockchains if you want.
 - Use [InversifyJS](https://github.com/inversify/InversifyJS) for dependency injection.
   - Share the same instances of providers across the application and plugins.
   - All actions / evaluators / providers for plugins can be dynamically loaded and injected.
   - Provide standard action / evaluator wrapper for plugins.
   - Let develoeprs focus on the business logic of actions / evaluators.
+- Use shared `flow.json` for all Flow Cadence contracts dependencies in Flow relevant plugins.
 - Both Flow EVM and Flow Cadence projects will be supported.
 
 ## 🚀 Quick Start
