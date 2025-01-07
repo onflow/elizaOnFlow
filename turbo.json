@@ -17,6 +17,11 @@
             "dependsOn": [
                 "^@elizaos/core#build"
             ]
+        },
+        "@fixes-ai/core#build": {
+            "dependsOn": [
+                "@elizaos/plugin-flow#build"
+            ]
         }
     }
 }
