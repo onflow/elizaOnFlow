@@ -100,6 +100,11 @@ flow deps add mainnet://0xAddress.ContractName
 Plugins from ElizaOnFlow is compatible with the original Eliza framework but you need to apply dependency injection when you use them.
 You can use the following code to use the plugins from ElizaOnFlow in the original Eliza framework.
 
+```bash
+# Import packages from ElizaOnFlow to your Eliza project
+pnpm add @fixes-ai/core @fixes-ai/common
+```
+
 Open the `agent/src/index.ts` file and add the following code:
 
 ```typescript
