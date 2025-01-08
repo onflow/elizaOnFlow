@@ -1,5 +1,3 @@
-import "./config"; // Add this line first
-
 // Export all files for Eliza on Flow
 export * as "symbols" from "./symbols";
 export * from "./decorators";

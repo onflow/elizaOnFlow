@@ -1,14 +1,11 @@
+import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
-import { Plugin } from "@elizaos/core";
+import { elizaLogger, Plugin } from "@elizaos/core";
 import { Container, interfaces } from "inversify";
 import { CONSTANTS, FACTORIES } from "./symbols";
 import { ConnectorProvider, WalletProvider } from "./providers";
 import { createPlugin } from "./factories";
 import { PluginOptions } from "./interfaces";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const globalContainer = new Container();
 
@@ -16,8 +13,43 @@ const globalContainer = new Container();
 globalContainer
     .bind<Record<string, unknown>>(CONSTANTS.FlowJSON)
     .toDynamicValue(async () => {
-        const filePath = path.resolve(__dirname, "../../../flow.json");
-        return await import(filePath, { with: { type: "json" } });
+        // Search `flow.json` from the runtime
+        const cwd = process.cwd();
+        // Try different path resolutions in order
+        const pathsToTry = [
+            path.resolve(cwd, "flow.json"), // relative to cwd
+            path.resolve(cwd, "agent", "flow.json"), // Add this
+            path.resolve(cwd, "../flow.json"),
+            path.resolve(cwd, "../../flow.json"),
+            path.resolve(cwd, "../../../flow.json"),
+        ];
+        elizaLogger.info(
+            "Trying loading 'flow.json' paths:",
+            pathsToTry.map((p) => ({
+                path: p,
+                exists: fs.existsSync(p),
+            }))
+        );
+
+        let jsonObjcet: Record<string, unknown> | null = null;
+        for (const tryPath of pathsToTry) {
+            try {
+                jsonObjcet = await import(tryPath, { with: { type: "json" } });
+                if (jsonObjcet) {
+                    elizaLogger.info(
+                        `Successfully loaded character from: ${tryPath}`
+                    );
+                    break;
+                }
+            } catch {
+                continue;
+            }
+        }
+        if (!jsonObjcet) {
+            elizaLogger.error("Cannot find 'flow.json' file");
+            throw new Error("Cannot find 'flow.json' file");
+        }
+        return jsonObjcet;
     });
 
 // ----- Bind to Types -----
