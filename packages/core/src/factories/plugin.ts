@@ -1,17 +1,21 @@
 import { interfaces } from "inversify";
-import { Plugin } from "@elizaos/core";
-import type { PluginFactory, PluginOptions } from "../interfaces";
+import type {
+    ExtendedPlugin,
+    PluginFactory,
+    PluginOptions,
+} from "../interfaces";
 import { WalletProvider } from "../providers";
 
 /**
  * Create a plugin factory
  */
 export function createPlugin(ctx: interfaces.Context): PluginFactory {
-    return async (opts: PluginOptions): Promise<Plugin> => {
+    return async (opts: PluginOptions): Promise<ExtendedPlugin> => {
         // Create a new plugin object
-        const plugin: Plugin = {
+        const plugin: ExtendedPlugin = {
             name: opts.name,
             description: opts.description,
+            options: opts,
         };
 
         // Handle actions - if provided, map through them

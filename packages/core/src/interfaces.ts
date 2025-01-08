@@ -94,6 +94,13 @@ export type PluginOptions = Pick<
 };
 
 /**
+ * Extended plugin interface
+ */
+export type ExtendedPlugin = Plugin & {
+    options: PluginOptions;
+};
+
+/**
  * Factory type for creating a plugin
  */
 export type PluginFactory = (opts: PluginOptions) => Promise<Plugin>;
