@@ -26,6 +26,7 @@ import { ThreeDGenerationPlugin } from "@elizaos/plugin-3d-generation";
 import { createNodePlugin } from "@elizaos/plugin-node";
 import { TEEMode, teePlugin } from "@elizaos/plugin-tee";
 import { webSearchPlugin } from "@elizaos/plugin-web-search";
+import { normalizeCharacter } from "@fixes-ai/core";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -37,7 +38,6 @@ import {
     initializeCache,
     initializeDatabase,
     loadCharacters,
-    normalizeCharacters,
     parseArguments,
 } from "./utils";
 
@@ -302,7 +302,7 @@ const startAgents = async () => {
     }
 
     // Normalize characters
-    characters = await normalizeCharacters(characters);
+    characters = await Promise.all(characters.map(normalizeCharacter));
 
     try {
         for (const character of characters) {
