@@ -62,10 +62,11 @@ sh scripts/start.sh
 
 ### Edit the character file
 
-1. To load custom characters:
+1. Open `agent/src/character.ts` to apply modifications on the default character.
+2. To load custom characters:
     - Use `pnpm start --characters="path/to/your/character.json"`
     - Multiple character files can be loaded simultaneously
-2. Connect with X (Twitter)
+3. Connect with X (Twitter)
     - change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
 
 ### Manually Start ElizaOnFlow
@@ -77,14 +78,6 @@ pnpm start
 
 # The project iterates fast, sometimes you need to clean the project if you are coming back to the project
 pnpm clean
-```
-
-#### Additional Requirements
-
-You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
-
-```bash
-pnpm install --include=optional sharp
 ```
 
 #### Install / Add new Flow Cadence contracts dependencies
@@ -100,6 +93,40 @@ And if you want to add a new contract dependency, you can use the following comm
 
 ```bash
 flow deps add mainnet://0xAddress.ContractName
+```
+
+#### How to use plugins from ElizaOnFlow in original Eliza framework?
+
+Plugins from ElizaOnFlow is compatible with the original Eliza framework but you need to apply dependency injection when you use them.
+You can use the following code to use the plugins from ElizaOnFlow in the original Eliza framework.
+
+Open the `agent/src/index.ts` file and add the following code:
+
+```typescript
+// Import the normalizeCharacter function from the core package
+import { normalizeCharacter } from "@fixes-ai/core";
+
+// Load the character file
+const startAgents = async () => {
+    // ... existing code
+    if (charactersArg) {
+        characters = await loadCharacters(charactersArg, defaultCharacter);
+    }
+
+    // Right after loading the characters
+    // Add this line to apply dependency injection and normalize characters, all dependencies will be injected
+    characters = await Promise.all(characters.map(normalizeCharacter));
+
+    // ... existing code
+}
+```
+
+#### Additional Requirements
+
+You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
+
+```bash
+pnpm install --include=optional sharp
 ```
 
 ### Community & contact
