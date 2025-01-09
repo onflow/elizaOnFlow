@@ -1,5 +1,13 @@
 {
 	"dependencies": {
+		"AddressUtils": {
+			"source": "mainnet://a340dc0a4ec828ab.AddressUtils",
+			"hash": "1723f0954ef25e083483b7c84f93fd159d5cc553746ea1532a79fbbbe4450487",
+			"aliases": {
+				"mainnet": "a340dc0a4ec828ab",
+				"testnet": "31ad40c07a2a9788"
+			}
+		},
 		"ArrayUtils": {
 			"source": "mainnet://a340dc0a4ec828ab.ArrayUtils",
 			"hash": "9e8f2d3e35be82da42b685045af834e16d23bcef1f322603ff91cedd1c9bbad9",
@@ -84,7 +92,7 @@
 		},
 		"FlowEVMBridgeConfig": {
 			"source": "mainnet://1e4aa0b87d10b141.FlowEVMBridgeConfig",
-			"hash": "1fb2fae2030f8e613bc2e59009b8a7241b5ff4d54add0b43dcc3a6329f5afe28",
+			"hash": "46bed1800c572ea9e4d9335fab73511fd7039889355da0f96b16f63bfc77f6f6",
 			"aliases": {
 				"mainnet": "1e4aa0b87d10b141",
 				"testnet": "dfc20aee650fcbdf"
@@ -330,7 +338,7 @@
 		},
 		"SwapFactory": {
 			"source": "mainnet://b063c16cac85dbd1.SwapFactory",
-			"hash": "6d319e77f5eed0c49c960b1ef887c01dd7c2cce8a0b39f7e31fb2af0113eedc5",
+			"hash": "1142e0102c8597e405e24ed2c6e5579b0faeca41f656818db10f3142a83493d2",
 			"aliases": {
 				"mainnet": "b063c16cac85dbd1",
 				"testnet": "cbed4c301441ded2"

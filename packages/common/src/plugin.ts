@@ -1,5 +1,5 @@
 import { type PluginOptions } from "@fixes-ai/core";
-import { TransferAction } from "./actions";
+import { TransferAction, GetPriceAction } from "./actions";
 
 /**
  * Basic Flow Plugin Options
@@ -8,7 +8,7 @@ import { TransferAction } from "./actions";
 export const basicFlowPluginOptions: PluginOptions = {
     name: "flow-basic",
     description: "Flow Plugin for Eliza, with basic actions like transfer",
-    actions: [TransferAction],
+    actions: [TransferAction, GetPriceAction],
     providers: [],
     evaluators: [],
     services: [],
