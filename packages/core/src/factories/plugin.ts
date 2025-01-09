@@ -4,7 +4,7 @@ import type {
     PluginFactory,
     PluginOptions,
 } from "../interfaces";
-import { WalletProvider } from "../providers";
+import { CacheProvider, WalletProvider } from "../providers";
 
 /**
  * Create a plugin factory
@@ -52,6 +52,16 @@ export function createPlugin(ctx: interfaces.Context): PluginFactory {
             ) {
                 plugin.providers.unshift(
                     await ctx.container.getAsync(WalletProvider)
+                );
+            }
+            // Add CacheProvider by default
+            if (
+                !plugin.providers.some(
+                    (provider) => provider instanceof CacheProvider
+                )
+            ) {
+                plugin.providers.unshift(
+                    await ctx.container.getAsync(CacheProvider)
                 );
             }
         }
