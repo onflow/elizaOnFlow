@@ -145,6 +145,24 @@ export class TransferAction extends BaseInjactableAction<TransferContent> {
     }
 
     /**
+     * Validate the transfer action
+     * @param runtime the runtime instance
+     * @param message the message content
+     * @param state the state object
+     */
+    async validate(
+        runtime: IAgentRuntime,
+        message: Memory,
+        state?: State
+    ): Promise<boolean> {
+        if (await super.validate(runtime, message, state)) {
+            // TODO: Add custom validation logic here to ensure the transfer does not come from unauthorized sources
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Execute the transfer action
      *
      * @param content the content from processMessages
