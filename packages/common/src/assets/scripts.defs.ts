@@ -6,8 +6,10 @@
 // Scripts for prices
 import getFlowPrice from "./cadence/scripts/get-flow-price.cdc?raw";
 import getStFlowPrice from "./cadence/scripts/get-stflow-price.cdc?raw";
+import getTokenInfoCadence from "./cadence/scripts/get-flow-token-info.cdc?raw";
 
 export const scripts = {
     getFlowPrice,
     getStFlowPrice,
+    getTokenInfoCadence,
 };

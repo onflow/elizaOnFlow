@@ -42,7 +42,7 @@ const actionOpts: ActionOptions<GetPriceContent> = {
         "GET_STFLOW_TOKEN_PRICE",
     ],
     description:
-        "Call this action to obtain the current price of FLOW token or stFLOW token",
+        "Call this action to obtain the current price in USD of FLOW token or stFLOW token",
     examples: [
         [
             {
@@ -107,7 +107,7 @@ export class GetPriceAction extends BaseInjactableAction<GetPriceContent> {
         _state?: State,
         callback?: HandlerCallback
     ): Promise<ScriptQueryResponse | null> {
-        elizaLogger.log("Starting Flow Plugin's SEND_COIN handler...");
+        elizaLogger.log("Starting GET_FLOW_PRICE handler...");
 
         // Use shared wallet instance
         const walletIns = await this.wallet.getInstance(runtime);
@@ -143,7 +143,7 @@ export class GetPriceAction extends BaseInjactableAction<GetPriceContent> {
 
         if (resp.ok) {
             callback?.({
-                text: this.formatPrice(resp.data, targetToken),
+                text: format(resp.data, targetToken),
                 content: {
                     success: true,
                     token: content.token,
@@ -166,18 +166,18 @@ export class GetPriceAction extends BaseInjactableAction<GetPriceContent> {
 
         return resp;
     }
-
-    /**
-     * Format the price data
-     *
-     * @param price the price data
-     * @param token the token name
-     * @returns the formatted price string
-     */
-    formatPrice(price: number, token: string): string {
-        return `The current price of ${token} token is $${price.toFixed(8)}`;
-    }
 }
+
+/**
+ * Format the price data
+ *
+ * @param price the price data
+ * @param token the token name
+ * @returns the formatted price string
+ */
+const format = (price: number, token: string): string => {
+    return `The current price of ${token} token is $${price.toFixed(8)}`;
+};
 
 // Register the transfer action
 globalContainer.bind(GetPriceAction).toSelf();
