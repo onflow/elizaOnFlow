@@ -194,6 +194,7 @@ export class GetTokenInfoAction extends BaseInjactableAction<GetTokenInfoContent
                 tokenInfo = {
                     symbol: tokenDetails.symbol,
                     name: tokenDetails.name,
+                    description: tokenDetails.description,
                     decimals: tokenDetails.decimals,
                     addressEVM: tokenDetails.evmAddress,
                     identifierCadence: `A.${tokenDetails.flowAddress.slice(2)}.${tokenDetails.contractName}`,
@@ -206,6 +207,7 @@ export class GetTokenInfoAction extends BaseInjactableAction<GetTokenInfoContent
                 tokenInfo = {
                     symbol: content.symbol,
                     name: "Unknown",
+                    description: "",
                     decimals: 0,
                     addressEVM: undefined,
                     identifierCadence: undefined,
@@ -244,20 +246,58 @@ export class GetTokenInfoAction extends BaseInjactableAction<GetTokenInfoContent
                             );
                             tokenInfo.mcapValueInFLOW =
                                 tokenInfo.totalSupply * tokenInfo.priceInFLOW;
+
+                            resp.ok = true;
+                            resp.data = tokenInfo;
                         }
                     } catch (err) {
                         resp.error = `Failed to get token info for $${content.symbol}: ${err.message}`;
                     }
                 }
-            } else {
+            } else if (/^0x[0-9a-fA-F]{40}$/.test(content.token ?? "")) {
                 // if content.vm is evm, query token info from the blockchain using evm DEX
-                // TODO: implement this part
+                try {
+                    const info = await walletIns.executeScript(
+                        scripts.getTokenInfoEVM,
+                        (arg, t) => [arg(content.token, t.String)],
+                        undefined
+                    );
+                    if (
+                        info &&
+                        info.address?.toLowerCase() ===
+                            content.token.toLowerCase()
+                    ) {
+                        tokenInfo.name = info.name;
+                        tokenInfo.symbol = info.symbol;
+                        tokenInfo.decimals = parseInt(info.decimals);
+                        tokenInfo.totalSupply =
+                            parseInt(info.totalSupply) /
+                            Math.pow(10, tokenInfo.decimals);
+                        const reservedTokenInPair = parseInt(
+                            info.reservedTokenInPair
+                        );
+                        const reservedFlowInPair = parseInt(
+                            info.reservedFlowInPair
+                        );
+                        tokenInfo.priceInFLOW =
+                            reservedFlowInPair / reservedTokenInPair;
+                        tokenInfo.mcapValueInFLOW =
+                            tokenInfo.totalSupply * tokenInfo.priceInFLOW;
+
+                        resp.ok = true;
+                        resp.data = tokenInfo;
+                    }
+                } catch (err) {
+                    resp.error = `Failed to get token info for $${content.symbol}: ${err.message}`;
+                }
+            } else {
+                resp.error = `Invalid token address or identifier: ${content.token}`;
             }
         }
 
-        if (resp.ok) {
+        if (resp.ok && resp.data) {
             callback?.({
-                text: format(tokenInfo),
+                text: format(resp.data as TokenInfo),
                 content: {
                     success: true,
                     tokenInfo,
@@ -265,12 +305,11 @@ export class GetTokenInfoAction extends BaseInjactableAction<GetTokenInfoContent
                 source: "FlowBlockchain",
             });
         } else {
-            elizaLogger.error("Error:", resp.error);
+            const errMsg = resp.error ?? resp.errorMessage ?? "Unknown error";
+            elizaLogger.error("Error:", errMsg);
             callback?.({
                 text: `Failed to get token info of $${content.symbol ?? "UKN"} - ${content.token}(${content.vm}): ${resp.error}`,
-                content: {
-                    error: resp.error ?? "Unknown error",
-                },
+                content: { error: errMsg },
                 source: "FlowBlockchain",
             });
         }
