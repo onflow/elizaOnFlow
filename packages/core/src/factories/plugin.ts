@@ -1,18 +1,17 @@
 import { interfaces } from "inversify";
-import { elizaLogger } from "@elizaos/core";
-import type { ExtendedPlugin, PluginFactory, PluginOptions } from "../types";
+import { elizaLogger, Plugin } from "@elizaos/core";
+import type { PluginFactory, PluginOptions } from "../types";
 import { CacheProvider, WalletProvider } from "../providers";
 
 /**
  * Create a plugin factory
  */
 export function createPlugin(ctx: interfaces.Context): PluginFactory {
-    return async (opts: PluginOptions): Promise<ExtendedPlugin> => {
+    return async (opts: PluginOptions): Promise<Plugin> => {
         // Create a new plugin object
-        const plugin: ExtendedPlugin = {
+        const plugin: Plugin = {
             name: opts.name,
             description: opts.description,
-            options: opts,
         };
 
         // Handle providers - if provided, map through them
