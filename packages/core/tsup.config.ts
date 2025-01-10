@@ -22,5 +22,9 @@ export default defineConfig({
         "https", // Externalize https to use Node.js built-in module
         "http", // Externalize http to use Node.js built-in module
         // Add other modules you want to externalize
+        "inversify",
+        "reflect-metadata",
+        "zod",
+        "node-cache",
     ],
 });
