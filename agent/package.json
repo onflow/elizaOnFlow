@@ -1,6 +1,6 @@
 {
     "name": "@fixes-ai/agent",
-    "version": "0.1.7",
+    "version": "0.1.0-alpha.0",
     "main": "src/index.ts",
     "type": "module",
     "scripts": {
