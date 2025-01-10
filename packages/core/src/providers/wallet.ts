@@ -7,7 +7,7 @@ import {
     State,
 } from "@elizaos/core";
 import { FlowWalletProvider } from "@elizaos/plugin-flow";
-import { InjectableProvider } from "../interfaces";
+import { InjectableProvider } from "../types";
 import { ConnectorProvider } from "./connector";
 
 /**

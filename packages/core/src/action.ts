@@ -1,12 +1,15 @@
 import { inject, injectable, unmanaged } from "inversify";
 import { ZodSchema } from "zod";
-import { InjactableAction, ScriptQueryResponse } from "./interfaces";
+import type {
+    ActionOptions,
+    InjactableAction,
+    ScriptQueryResponse,
+} from "./types";
 import {
-    Action,
     ActionExample,
     composeContext,
     elizaLogger,
-    generateObjectArray,
+    generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
@@ -21,18 +24,6 @@ import {
     loadPropertyDescriptions,
 } from "./decorators";
 import { buildContentOutputTemplate } from "./templates";
-
-/**
- * Action options
- */
-export type ActionOptions<T> = Pick<
-    Action,
-    "name" | "similes" | "description" | "examples" | "suppressInitialMessage"
-> & {
-    contentClass: ContentClass<T>;
-    template?: string;
-    contentSchema?: ZodSchema<T>;
-};
 
 /**
  * Base abstract class for injectable actions
@@ -108,7 +99,7 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
      * @param callback The callback function to pass the result to Eliza runtime
      */
     abstract execute(
-        content: T,
+        content: T | null,
         runtime: IAgentRuntime,
         message: Memory,
         state?: State,
@@ -195,19 +186,19 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         }
 
         // Generate transfer content
-        const recommendations = await generateObjectArray({
+        const resourceDetails = await generateObject({
             runtime,
             context: actionContext,
-            modelClass: ModelClass.MEDIUM,
+            modelClass: ModelClass.SMALL,
+            schema: this.contentSchema as any,
         });
 
-        elizaLogger.debug("Recommendations", recommendations);
-
-        // Convert array to object
-        const content = recommendations[recommendations.length - 1];
+        elizaLogger.debug("Response: ", resourceDetails.object);
 
         // Validate content
-        const parsedObj = await this.contentSchema.safeParseAsync(content);
+        const parsedObj = await this.contentSchema.safeParseAsync(
+            resourceDetails.object
+        );
         if (!parsedObj.success) {
             elizaLogger.error(
                 "Failed to parse content: ",
@@ -233,9 +224,7 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         runtime: IAgentRuntime,
         message: Memory,
         state?: State,
-        options?: {
-            [key: string]: unknown;
-        },
+        _options?: Record<string, unknown>,
         callback?: HandlerCallback
     ): Promise<void> {
         let content: T;
@@ -254,11 +243,6 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
                     },
                 });
             }
-            return;
-        }
-
-        if (!content) {
-            elizaLogger.warn("No content generated");
             return;
         }
 

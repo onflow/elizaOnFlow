@@ -8,7 +8,7 @@ import {
 } from "@elizaos/core";
 import { FlowConnector, getFlowConnectorInstance } from "@elizaos/plugin-flow";
 import { CONSTANTS } from "../symbols";
-import { InjectableProvider } from "../interfaces";
+import { InjectableProvider } from "../types";
 
 /**
  * Connector provider

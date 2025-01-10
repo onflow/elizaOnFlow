@@ -101,12 +101,17 @@ export class GetPriceAction extends BaseInjactableAction<GetPriceContent> {
      * @returns the transaction response
      */
     async execute(
-        content: GetPriceContent,
+        content: GetPriceContent | null,
         runtime: IAgentRuntime,
         _message: Memory,
         _state?: State,
         callback?: HandlerCallback
     ): Promise<ScriptQueryResponse | null> {
+        if (!content) {
+            elizaLogger.warn("No content generated");
+            return;
+        }
+
         elizaLogger.log("Starting GET_FLOW_PRICE handler...");
 
         // Use shared wallet instance

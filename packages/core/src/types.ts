@@ -8,7 +8,8 @@ import {
     Provider,
     State,
 } from "@elizaos/core";
-import { TransactionResponse } from "@elizaos/plugin-flow";
+import { ContentClass } from "./decorators";
+import { z } from "zod";
 
 // ----------- General Definitions -----------
 
@@ -40,6 +41,18 @@ export type InjectableProviderClass<T = any, Args extends any[] = any[]> = new (
 ) => InjectableProvider<T>;
 
 /**
+ * Action options
+ */
+export type ActionOptions<T> = Pick<
+    Action,
+    "name" | "similes" | "description" | "examples" | "suppressInitialMessage"
+> & {
+    contentClass: ContentClass<T>;
+    template?: string;
+    contentSchema?: z.ZodSchema<T>;
+};
+
+/**
  * Interface of Injectable Action
  */
 export interface InjactableAction<T> extends Action {
@@ -49,12 +62,12 @@ export interface InjactableAction<T> extends Action {
      * @param callback The callback function to pass the result to Eliza runtime
      */
     execute(
-        content: T,
+        content: T | null,
         runtime: IAgentRuntime,
         message: Memory,
         state?: State,
         callback?: HandlerCallback
-    ): Promise<TransactionResponse | ScriptQueryResponse | null>;
+    ): Promise<any | null>;
 }
 
 /**
@@ -63,6 +76,14 @@ export interface InjactableAction<T> extends Action {
 export type InjectableActionClass<T = any, Args extends any[] = any[]> = new (
     ...args: Args
 ) => InjactableAction<T>;
+
+/**
+ * Evaluator options
+ */
+export type EvaluatorOptions = Pick<
+    Evaluator,
+    "name" | "similes" | "description" | "examples" | "alwaysRun"
+>;
 
 /**
  * Interface of Injectable Evaluator

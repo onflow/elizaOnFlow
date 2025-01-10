@@ -5,7 +5,7 @@ import { Container, interfaces } from "inversify";
 import { CONSTANTS, FACTORIES } from "./symbols";
 import { ConnectorProvider, WalletProvider, CacheProvider } from "./providers";
 import { createPlugin } from "./factories";
-import { PluginOptions } from "./interfaces";
+import { PluginOptions } from "./types";
 
 const globalContainer = new Container();
 

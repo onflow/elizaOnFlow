@@ -170,12 +170,17 @@ export class TransferAction extends BaseInjactableAction<TransferContent> {
      * @returns the transaction response
      */
     async execute(
-        content: TransferContent,
+        content: TransferContent | null,
         runtime: IAgentRuntime,
         _message: Memory,
         _state?: State,
         callback?: HandlerCallback
     ): Promise<TransactionResponse | null> {
+        if (!content) {
+            elizaLogger.warn("No content generated");
+            return;
+        }
+
         elizaLogger.log("Starting Flow Plugin's SEND_COIN handler...");
 
         // Use shared wallet instance

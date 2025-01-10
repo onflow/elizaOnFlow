@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { ContentPropertyDescription } from "./interfaces";
-import { stringArrayFooter } from "@elizaos/core";
+import { ContentPropertyDescription } from "./types";
 
 /**
  * build the content output template
@@ -15,36 +14,35 @@ export function buildContentOutputTemplate(
 ): string {
     let propDesc = "";
     Object.entries(properties).forEach(([key, { description, examples }]) => {
-        propDesc += `- Field "${key}": ${description}.`;
-        if (examples.length > 0) {
+        propDesc += `- Field **"${key}"**: ${description}.`;
+        if (examples?.length > 0) {
             propDesc += " Examples or Rules for this field:\n";
         } else {
             propDesc += "\n";
         }
-        examples.forEach((example, index) => {
+        examples?.forEach((example, index) => {
             propDesc += `    ${index + 1}. ${example}\n`;
         });
     });
-    return `Given the recent messages and wallet information below:
-{{recentMessages}}
-
-{{walletInfo}}
-
-Now I want to perform the action: "${actionName}".
-
+    return `Perform the action: "${actionName}".
 Action description is "${actionDesc}".
 
-### TASK: Extract the following information about the requested action
+### TASK: Extract the following details about the requested action
 
 ${propDesc}
 
 Use null for any values that cannot be determined.
+
 Respond with a JSON markdown block containing only the extracted values with this structure:
+
 \`\`\`json
 ${zodSchemaToJson(schema)}
 \`\`\`
 
-${stringArrayFooter}
+Here are the recent messages and wallet information for context:
+{{recentMessages}}
+
+{{walletInfo}}
 `;
 }
 
@@ -83,6 +81,12 @@ function zodTypeToJson(schema: z.ZodType<any>): string {
     }
     if (schema instanceof z.ZodBoolean) {
         return "boolean";
+    }
+    if (schema instanceof z.ZodArray) {
+        return `${zodTypeToJson(schema._def.type)}[]`;
+    }
+    if (schema instanceof z.ZodObject) {
+        return zodSchemaToJson(schema);
     }
     return "any";
 }

@@ -145,12 +145,17 @@ export class GetTokenInfoAction extends BaseInjactableAction<GetTokenInfoContent
      * @returns the transaction response
      */
     async execute(
-        content: GetTokenInfoContent,
+        content: GetTokenInfoContent | null,
         runtime: IAgentRuntime,
         _message: Memory,
         _state?: State,
         callback?: HandlerCallback
     ): Promise<ScriptQueryResponse | null> {
+        if (!content) {
+            elizaLogger.warn("No content generated");
+            return;
+        }
+
         elizaLogger.log("Starting GET_TOKEN_INFO handler...");
 
         // Get token list from cache
