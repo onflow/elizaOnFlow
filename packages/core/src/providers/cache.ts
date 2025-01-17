@@ -9,7 +9,7 @@ import {
     State,
 } from "@elizaos/core";
 import NodeCache from "node-cache";
-import { InjectableProvider } from "../types";
+import { InjectableProvider } from "@elizaos/plugin-di";
 
 /**
  * Cache provider

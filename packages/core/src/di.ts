@@ -1,13 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { elizaLogger, Plugin } from "@elizaos/core";
-import { Container, interfaces } from "inversify";
-import { CONSTANTS, FACTORIES } from "./symbols";
+import { elizaLogger } from "@elizaos/core";
+import { globalContainer } from "@elizaos/plugin-di";
+import { CONSTANTS } from "./symbols";
 import { ConnectorProvider, WalletProvider, CacheProvider } from "./providers";
-import { createPlugin } from "./factories";
-import { PluginOptions } from "./types";
-
-const globalContainer = new Container();
 
 // Load flow.json file and bind it to the container
 globalContainer
@@ -63,11 +59,3 @@ globalContainer
 globalContainer.bind<WalletProvider>(WalletProvider).toSelf().inRequestScope();
 // Cache provider is bound to request scope
 globalContainer.bind<CacheProvider>(CacheProvider).toSelf().inRequestScope();
-
-// ----- Bind to factory functions -----
-
-globalContainer
-    .bind<interfaces.Factory<Promise<Plugin>>>(FACTORIES.PluginFactory)
-    .toFactory<Promise<Plugin>, [PluginOptions]>(createPlugin);
-
-export { globalContainer };

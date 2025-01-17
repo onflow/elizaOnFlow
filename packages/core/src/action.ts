@@ -1,35 +1,24 @@
 import { inject, injectable, unmanaged } from "inversify";
-import { ZodSchema } from "zod";
-import type {
-    ActionOptions,
-    InjactableAction,
-    ScriptQueryResponse,
-} from "./types";
+import type { ScriptQueryResponse } from "./types";
 import {
-    ActionExample,
     composeContext,
     elizaLogger,
-    generateObject,
     HandlerCallback,
     IAgentRuntime,
     Memory,
-    ModelClass,
     State,
 } from "@elizaos/core";
 import { TransactionResponse, validateFlowConfig } from "@elizaos/plugin-flow";
+import { ActionOptions, BaseInjectableAction } from "@elizaos/plugin-di";
 import { ConnectorProvider, WalletProvider } from "./providers";
-import {
-    type ContentClass,
-    createZodSchema,
-    loadPropertyDescriptions,
-} from "./decorators";
-import { buildContentOutputTemplate } from "./templates";
 
 /**
  * Base abstract class for injectable actions
  */
 @injectable()
-export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
+export abstract class BaseFlowInjactableAction<
+    T,
+> extends BaseInjectableAction<T> {
     // -------- Injects --------
 
     // Inject the connector provider
@@ -39,56 +28,11 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
     @inject(WalletProvider)
     public readonly wallet: WalletProvider;
 
-    // -------- Properties --------
-
-    public name: string;
-    public similes: string[];
-    public description: string;
-    public examples: ActionExample[][];
-    public suppressInitialMessage: boolean;
-
-    /**
-     * The content class for the action
-     */
-    private readonly contentClass: ContentClass<T>;
-    /**
-     * Optional template for the action, if not provided, it will be generated from the content class
-     */
-    private readonly template: string;
-    /**
-     * Optional content schema for the action, if not provided, it will be generated from the content class
-     */
-    private readonly contentSchema: ZodSchema<T>;
-
     /**
      * Constructor for the base injectable action
      */
     constructor(@unmanaged() opts: ActionOptions<T>) {
-        // Set the action properties
-        this.name = opts.name;
-        this.similes = opts.similes;
-        this.description = opts.description;
-        this.examples = opts.examples;
-        this.suppressInitialMessage = opts.suppressInitialMessage ?? false; // Default to false
-        // Set the content class, template and content schema
-        this.contentClass = opts.contentClass;
-        this.template = opts.template;
-        this.contentSchema = opts.contentSchema;
-
-        if (this.contentClass !== undefined) {
-            if (this.contentSchema === undefined) {
-                this.contentSchema = createZodSchema(this.contentClass);
-            }
-            if (this.template === undefined) {
-                const properties = loadPropertyDescriptions(this.contentClass);
-                this.template = buildContentOutputTemplate(
-                    this.name,
-                    this.description,
-                    properties,
-                    this.contentSchema
-                );
-            }
-        }
+        super(opts);
     }
 
     // -------- Abstract methods to be implemented by the child class --------
@@ -161,56 +105,6 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
     }
 
     /**
-     * Default method for processing messages
-     * You can override this method to add custom logic
-     *
-     * @param runtime The runtime object from Eliza framework
-     * @param message The message object from Eliza framework
-     * @param state The state object from Eliza framework
-     * @returns The generated content from AI based on the message
-     */
-    protected async processMessages(
-        runtime: IAgentRuntime,
-        message: Memory,
-        state: State
-    ): Promise<T | null> {
-        const actionContext = await this.prepareActionContext(
-            runtime,
-            message,
-            state
-        );
-
-        if (!actionContext) {
-            elizaLogger.error("Failed to prepare action context");
-            return null;
-        }
-
-        // Generate transfer content
-        const resourceDetails = await generateObject({
-            runtime,
-            context: actionContext,
-            modelClass: ModelClass.SMALL,
-            schema: this.contentSchema as any,
-        });
-
-        elizaLogger.debug("Response: ", resourceDetails.object);
-
-        // Validate content
-        const parsedObj = await this.contentSchema.safeParseAsync(
-            resourceDetails.object
-        );
-        if (!parsedObj.success) {
-            elizaLogger.error(
-                "Failed to parse content: ",
-                JSON.stringify(parsedObj.error?.flatten())
-            );
-            return null;
-        } else {
-            return parsedObj.data;
-        }
-    }
-
-    /**
      * Default Handler function type for processing messages
      * You can override this method to add custom logic
      *
@@ -224,57 +118,34 @@ export abstract class BaseInjactableAction<T> implements InjactableAction<T> {
         runtime: IAgentRuntime,
         message: Memory,
         state?: State,
-        _options?: Record<string, unknown>,
+        options?: Record<string, unknown>,
         callback?: HandlerCallback
-    ): Promise<void> {
-        let content: T;
-        try {
-            content = await this.processMessages(runtime, message, state);
-        } catch (err) {
-            elizaLogger.error("Error in processing messages:", err.message);
-
-            if (callback) {
-                callback({
-                    text:
-                        "Unable to process transfer request. Invalid content: " +
-                        err.message,
-                    content: {
-                        error: "Invalid content",
-                    },
-                });
-            }
-            return;
-        }
-
-        try {
-            const res = await this.execute(
-                content,
-                runtime,
-                message,
-                state,
-                callback
-            );
-            if (res) {
-                if (isScriptQueryResponse(res)) {
-                    if (res.ok) {
-                        elizaLogger.log(
-                            `Action executed with script query successfully with data: `,
-                            JSON.stringify(res.data)
-                        );
-                    } else {
-                        elizaLogger.error(
-                            `Action executed with script query failed: `,
-                            res.errorMessage ?? res.error ?? "Unknown error"
-                        );
-                    }
-                } else {
+    ): Promise<any | null> {
+        const res = await super.handler(
+            runtime,
+            message,
+            state,
+            options,
+            callback
+        );
+        if (res) {
+            if (isScriptQueryResponse(res)) {
+                if (res.ok) {
                     elizaLogger.log(
-                        `Action executed with transaction: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`
+                        `Action executed with script query successfully with data: `,
+                        JSON.stringify(res.data)
+                    );
+                } else {
+                    elizaLogger.error(
+                        `Action executed with script query failed: `,
+                        res.errorMessage ?? res.error ?? "Unknown error"
                     );
                 }
+            } else {
+                elizaLogger.log(
+                    `Action executed with transaction: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`
+                );
             }
-        } catch (err) {
-            elizaLogger.error("Error in executing action:", err.message);
         }
     }
 }
