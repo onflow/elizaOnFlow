@@ -1,10 +1,17 @@
-import { Character, elizaLogger, settings } from "@elizaos/core";
+import { elizaLogger, parseBooleanFromText, settings } from "@elizaos/core";
 import { DirectClient } from "@elizaos/client-direct";
-import { normalizeCharacter } from "@fixes-ai/core";
+import { normalizeCharacter } from "@elizaos/plugin-di";
 import net from "net";
 
 import { defaultCharacter } from "./character";
-import { loadCharacters, parseArguments, startAgent } from "./index.utils";
+import {
+    handlePluginImporting,
+    hasValidRemoteUrls,
+    loadCharacterFromOnchain,
+    loadCharacters,
+    parseArguments,
+    startAgent,
+} from "./index.utils";
 
 const checkPortAvailable = (port: number): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -32,11 +39,16 @@ const startAgents = async () => {
     let charactersArg = args.characters || args.character;
     let characters = [defaultCharacter];
 
-    if (charactersArg) {
+    if (process.env.IQ_WALLET_ADDRESS && process.env.IQSOlRPC) {
+        await import("@elizaos/plugin-iq6900");
+        characters = await loadCharacterFromOnchain();
+    }
+
+    if (charactersArg || hasValidRemoteUrls()) {
         characters = await loadCharacters(charactersArg);
     }
 
-    // Normalize characters
+    // Normalize characters for injectable plugins
     characters = await Promise.all(characters.map(normalizeCharacter));
 
     try {
@@ -56,7 +68,10 @@ const startAgents = async () => {
     }
 
     // upload some agent functionality into directClient
-    directClient.startAgent = async (character: Character) => {
+    directClient.startAgent = async (character) => {
+        // Handle plugins
+        character.plugins = await handlePluginImporting(character.plugins);
+
         // wrap it so we don't have to inject directClient later
         return startAgent(character, directClient);
     };
@@ -76,3 +91,19 @@ startAgents().catch((error) => {
     elizaLogger.error("Unhandled error in startAgents:", error);
     process.exit(1);
 });
+
+// Prevent unhandled exceptions from crashing the process if desired
+if (
+    process.env.PREVENT_UNHANDLED_EXIT &&
+    parseBooleanFromText(process.env.PREVENT_UNHANDLED_EXIT)
+) {
+    // Handle uncaught exceptions to prevent the process from crashing
+    process.on("uncaughtException", function (err) {
+        console.error("uncaughtException", err);
+    });
+
+    // Handle unhandled rejections to prevent the process from crashing
+    process.on("unhandledRejection", function (err) {
+        console.error("unhandledRejection", err);
+    });
+}
