@@ -26,7 +26,7 @@ create-eliza-app
 @elizaos/plugin-nft-generation
 @elizaos/plugin-quai
 @elizaos/plugin-solana
-@elizaos/plugin-solana-agentkit
+@elizaos/plugin-solana-agent-kit
 @elizaos/plugin-starknet
 @elizaos/plugin-story
 @elizaos/plugin-sui
