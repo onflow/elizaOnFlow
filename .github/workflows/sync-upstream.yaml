@@ -1,0 +1,48 @@
+name: Sync Upstream Branches
+
+on:
+  schedule:
+    # Run every day at 00:00
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git fetch upstream
+
+      - name: Check and create develop branch if not exists
+        run: |
+          if ! git show-ref --quiet refs/heads/develop; then
+            git checkout -b develop upstream/develop
+            git push --set-upstream origin develop
+          fi
+
+      - name: Check and create main branch if not exists
+        run: |
+          if ! git show-ref --quiet refs/heads/main; then
+            git checkout -b main upstream/main
+            git push --set-upstream origin main
+          fi
+
+      - name: Sync develop branch
+        run: |
+          git checkout develop
+          git pull upstream develop
+          git push origin develop || echo "Develop branch sync failed"
+
+      - name: Sync main branch
+        run: |
+          git checkout main
+          git pull upstream main
+          git push origin main || echo "Main branch sync failed"
