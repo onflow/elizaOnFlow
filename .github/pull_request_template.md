@@ -2,7 +2,7 @@
 
 # Relates to
 
-<!-- LINK TO ISSUE OR TICKET -->
+<!-- LINK TO ISSUE OR TICKET, if none, remove this section -->
 
 <!-- This risks section is to be filled out before final review and merge. -->
 
@@ -14,7 +14,18 @@ Low, medium, large. List what kind of risks, and what could be effected.
 
 # Background
 
+<!-- If there is no linked issue, please provide some context here. -->
+
+<!-- If you pull request is related to a Hackathon submission, please fill in this section. If not just skip this section  -->
+<!--
+# Hackathon Information
+-->
+
+<!-- Please link to the hackathon event page with your team name / submission name. -->
+
 ## What does this PR do?
+
+<!-- Describe what this PR does. -->
 
 ## What kind of change is this?
 
@@ -28,14 +39,6 @@ Updates (new versions of included code)
 <!-- This "Why" section is most relevant if there is no linked issue explaining why. If there is a related issue it might make sense to skip this why section. -->
 <!--
 ## Why are we doing this? Any context or related work?
--->
-
-# Documentation changes needed?
-
-<!--
-My changes do not require a change to the project documentation.
-My changes require a change to the project documentation.
-If a docs change is needed: I have updated the documentation accordingly.
 -->
 
 <!-- Please show how you tested the PR. This will really help if the PR needs to be retested, and probably help the PR get merged quicker. -->
