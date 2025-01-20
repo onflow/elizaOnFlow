@@ -1125,8 +1125,8 @@ importers:
   deps/eliza/packages/plugin-abstract:
     dependencies:
       '@abstract-foundation/agw-client':
-        specifier: ^0.1.7
-        version: 0.1.8(abitype@1.0.8(typescript@5.7.3)(zod@3.24.1))(typescript@5.7.3)(viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1))
+        specifier: 1.0.1
+        version: 1.0.1(abitype@1.0.8(typescript@5.7.3)(zod@3.24.1))(typescript@5.7.3)(viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1))
       '@elizaos/core':
         specifier: workspace:*
         version: link:../core
@@ -1662,6 +1662,22 @@ importers:
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
+
+  deps/eliza/packages/plugin-devin:
+    dependencies:
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
+      axios:
+        specifier: ^1.0.0
+        version: 1.7.9(debug@4.4.0)
+    devDependencies:
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+      vitest:
+        specifier: ^1.0.0
+        version: 1.2.1(@types/node@22.10.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
 
   deps/eliza/packages/plugin-dexscreener:
     dependencies:
@@ -3371,8 +3387,8 @@ packages:
   '@3land/listings-sdk@0.0.4':
     resolution: {integrity: sha512-Ljq8R4e7y+wl4m8BGhiInFPCHEzHZZFz1qghnbc8B3bLEKXWM9+2gZOCAa84rdUKuLfzenEdeS2LclTKhdKTFQ==}
 
-  '@abstract-foundation/agw-client@0.1.8':
-    resolution: {integrity: sha512-MEPfFRWtEVXUuWkE43Vrqxzk7s+23cRtY2ctzqiZSiqJ+Hg4uPCymowmqPATdYgGNQXPCzUYNQN4tFxFWRMaFA==}
+  '@abstract-foundation/agw-client@1.0.1':
+    resolution: {integrity: sha512-ZJEC2siysQz9FdnWs6xFDY9vuIV+5E01nUFgv/Kvw2mRmf148T7H99SoelN2o8qCmv1r3z2iWQCLCLTa5f3FtQ==}
     peerDependencies:
       abitype: ^1.0.0
       typescript: '>=5.0.4'
@@ -20290,7 +20306,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@abstract-foundation/agw-client@0.1.8(abitype@1.0.8(typescript@5.7.3)(zod@3.24.1))(typescript@5.7.3)(viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1))':
+  '@abstract-foundation/agw-client@1.0.1(abitype@1.0.8(typescript@5.7.3)(zod@3.24.1))(typescript@5.7.3)(viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1))':
     dependencies:
       abitype: 1.0.8(typescript@5.7.3)(zod@3.24.1)
       viem: 2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1)
