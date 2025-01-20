@@ -1,6 +1,6 @@
 <!-- Use this template by filling in information and copy and pasting relevant items out of the html comments. -->
 
-# Relates to:
+# Relates to
 
 <!-- LINK TO ISSUE OR TICKET -->
 
@@ -78,7 +78,7 @@ None, automated tests are fine.
 ## Deployment instructions
 -->
 
-<!-- If you are on Discord, please join https://discord.gg/ai16z and state your Discord username here for contribute role and join us in #development-feed -->
+<!-- If you are on Discord, please join https://discord.gg/flow and state your Discord username here for contribute role -->
 <!--
 ## Discord username
 
