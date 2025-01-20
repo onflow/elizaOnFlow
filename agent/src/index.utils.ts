@@ -327,10 +327,32 @@ function commaSeparatedStringToArray(commaSeparated: string): string[] {
     return commaSeparated?.split(",").map((value) => value.trim());
 }
 
+async function readCharactersFromStorage(
+    characterPaths: string[],
+): Promise<string[]> {
+    try {
+        const uploadDir = path.join(process.cwd(), "data", "characters");
+        await fs.promises.mkdir(uploadDir, { recursive: true });
+        const fileNames = await fs.promises.readdir(uploadDir);
+        fileNames.forEach((fileName) => {
+            characterPaths.push(path.join(uploadDir, fileName));
+        });
+    } catch (err) {
+        elizaLogger.error(`Error reading directory: ${err.message}`);
+    }
+
+    return characterPaths;
+}
+
 export async function loadCharacters(
     charactersArg: string,
 ): Promise<Character[]> {
-    const characterPaths = commaSeparatedStringToArray(charactersArg);
+    let characterPaths = commaSeparatedStringToArray(charactersArg);
+
+    if (process.env.USE_CHARACTER_STORAGE === "true") {
+        characterPaths = await readCharactersFromStorage(characterPaths);
+    }
+
     const loadedCharacters: Character[] = [];
 
     if (characterPaths?.length > 0) {
