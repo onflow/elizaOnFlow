@@ -18,7 +18,7 @@ jobs:
 
       - name: Add upstream remote
         run: |
-          git remote add upstream https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          git remote add upstream https://github.com/fixes-world/elizaOnFlow.git
           git fetch upstream
 
       - name: Check and create develop branch if not exists
