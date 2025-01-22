@@ -8,8 +8,10 @@ create-eliza-app
 @elizaos/plugin-avail
 @elizaos/plugin-avalanche
 @elizaos/plugin-b2
+@elizaos/plugin-bnb
 @elizaos/plugin-coinbase
 @elizaos/plugin-conflux
+@elizaos/plugin-cronos
 @elizaos/plugin-cronoszkevm
 @elizaos/plugin-depin
 @elizaos/plugin-evm

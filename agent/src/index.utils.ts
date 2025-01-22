@@ -531,6 +531,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.NVIDIA_API_KEY ||
                 settings.NVIDIA_API_KEY
             );
+        case ModelProviderName.NVIDIA:
+            return (
+                character.settings?.secrets?.NVIDIA_API_KEY ||
+                settings.NVIDIA_API_KEY
+            );
         case ModelProviderName.AKASH_CHAT_API:
             return (
                 character.settings?.secrets?.AKASH_CHAT_API_KEY ||
