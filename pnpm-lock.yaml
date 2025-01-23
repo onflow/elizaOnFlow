@@ -225,6 +225,9 @@ importers:
       '@elizaos/plugin-goat':
         specifier: workspace:*
         version: link:../deps/eliza/packages/plugin-goat
+      '@elizaos/plugin-hyperbolic':
+        specifier: workspace:*
+        version: link:../deps/eliza/packages/plugin-hyperbolic
       '@elizaos/plugin-image-generation':
         specifier: workspace:*
         version: link:../deps/eliza/packages/plugin-image-generation
@@ -288,6 +291,9 @@ importers:
       '@elizaos/plugin-twitter':
         specifier: workspace:*
         version: link:../deps/eliza/packages/plugin-twitter
+      '@elizaos/plugin-udio':
+        specifier: workspace:*
+        version: link:../deps/eliza/packages/plugin-udio
       '@elizaos/plugin-video-generation':
         specifier: workspace:*
         version: link:../deps/eliza/packages/plugin-video-generation
@@ -741,6 +747,16 @@ importers:
       vitest:
         specifier: 1.2.1
         version: 1.2.1(@types/node@22.10.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+
+  deps/eliza/packages/client-eliza-home:
+    dependencies:
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
 
   deps/eliza/packages/client-farcaster:
     dependencies:
@@ -1226,7 +1242,7 @@ importers:
         version: 0.0.10(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)
       '@coinbase/cdp-langchain':
         specifier: ^0.0.11
-        version: 0.0.11(@coinbase/coinbase-sdk@0.13.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8))(bufferutil@4.0.9)(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))(typescript@5.7.3)(utf-8-validate@6.0.5)
+        version: 0.0.11(@coinbase/coinbase-sdk@0.15.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8))(bufferutil@4.0.9)(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))(typescript@5.7.3)(utf-8-validate@6.0.5)
       '@elizaos/core':
         specifier: workspace:*
         version: link:../core
@@ -2128,6 +2144,85 @@ importers:
         specifier: ^4.19.2
         version: 4.19.2
 
+  deps/eliza/packages/plugin-hyperbolic:
+    dependencies:
+      '@coinbase/coinbase-sdk':
+        specifier: ^0.15.0
+        version: 0.15.0(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@6.0.5)(zod@3.23.8)
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
+      axios:
+        specifier: ^1.6.5
+        version: 1.7.9(debug@4.4.0)
+      chalk:
+        specifier: ^5.3.0
+        version: 5.4.1
+      cli-table3:
+        specifier: ^0.6.3
+        version: 0.6.5
+      decimal.js:
+        specifier: ^10.4.3
+        version: 10.4.3
+      dotenv:
+        specifier: ^16.4.1
+        version: 16.4.5
+      ora:
+        specifier: ^8.0.1
+        version: 8.1.1
+      ssh2:
+        specifier: ^1.15.0
+        version: 1.16.0
+      viem:
+        specifier: ^2.0.0
+        version: 2.22.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@6.0.5)(zod@3.23.8)
+      zod:
+        specifier: ^3.22.4
+        version: 3.23.8
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
+      '@types/dotenv':
+        specifier: ^8.2.0
+        version: 8.2.3
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.14
+      '@types/node':
+        specifier: ^20.11.5
+        version: 20.17.9
+      '@types/ssh2':
+        specifier: ^1.11.18
+        version: 1.15.4
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.19.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3))(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3)
+      '@typescript-eslint/parser':
+        specifier: ^6.19.0
+        version: 6.21.0(eslint@9.18.0(jiti@2.4.2))(typescript@5.6.3)
+      '@vitest/coverage-v8':
+        specifier: ^1.2.1
+        version: 1.6.0(vitest@1.2.1)
+      '@vitest/ui':
+        specifier: ^0.34.6
+        version: 0.34.7(vitest@1.2.1)
+      tsup:
+        specifier: ^8.0.1
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.7.0)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.6.3
+      vite:
+        specifier: ^5.0.10
+        version: 5.4.11(@types/node@20.17.9)(terser@5.37.0)
+      vite-tsconfig-paths:
+        specifier: ^4.2.2
+        version: 4.3.2(typescript@5.6.3)(vite@5.4.11(@types/node@20.17.9)(terser@5.37.0))
+      vitest:
+        specifier: ^1.2.1
+        version: 1.2.1(@types/node@20.17.9)(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+
   deps/eliza/packages/plugin-hyperliquid:
     dependencies:
       '@elizaos/core':
@@ -2800,7 +2895,7 @@ importers:
         version: 5.6.3
       vitest:
         specifier: ^1.2.0
-        version: 1.2.1(@types/node@20.17.9)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+        version: 1.2.1(@types/node@20.17.9)(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
 
   deps/eliza/packages/plugin-obsidian:
     dependencies:
@@ -2816,6 +2911,54 @@ importers:
       tsup:
         specifier: 8.3.5
         version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+      whatwg-url:
+        specifier: 7.1.0
+        version: 7.1.0
+
+  deps/eliza/packages/plugin-omniflix:
+    dependencies:
+      '@coral-xyz/anchor':
+        specifier: 0.30.1
+        version: 0.30.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@cosmjs/encoding':
+        specifier: ^0.32.4
+        version: 0.32.4
+      '@cosmjs/proto-signing':
+        specifier: ^0.32.4
+        version: 0.32.4
+      '@cosmjs/stargate':
+        specifier: ^0.32.4
+        version: 0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
+      '@elizaos/plugin-tee':
+        specifier: workspace:*
+        version: link:../plugin-tee
+      '@elizaos/plugin-trustdb':
+        specifier: workspace:*
+        version: link:../plugin-trustdb
+      bech32:
+        specifier: 2.0.0
+        version: 2.0.0
+      bs58:
+        specifier: 6.0.0
+        version: 6.0.0
+      cosmjs-types:
+        specifier: ^0.8.0
+        version: 0.8.0
+      form-data:
+        specifier: 4.0.1
+        version: 4.0.1
+      node-cache:
+        specifier: 5.1.2
+        version: 5.1.2
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+      vitest:
+        specifier: 2.1.4
+        version: 2.1.4(@types/node@22.10.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.37.0)
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
@@ -3537,6 +3680,28 @@ importers:
         specifier: ^1.0.0
         version: 1.2.1(@types/node@22.10.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
 
+  deps/eliza/packages/plugin-udio:
+    dependencies:
+      '@elizaos/core':
+        specifier: ^0.1.0
+        version: 0.1.8(@google-cloud/vertexai@1.9.2(encoding@0.1.13))(@langchain/core@0.3.27(openai@4.77.0(encoding@0.1.13)(zod@3.24.1)))(@langchain/groq@0.1.3(@langchain/core@0.3.27(openai@4.77.0(encoding@0.1.13)(zod@3.24.1)))(encoding@0.1.13))(axios@1.7.9)(encoding@0.1.13)(react@19.0.0)(sswr@2.1.0(svelte@5.16.1))(svelte@5.16.1)
+    devDependencies:
+      '@types/jest':
+        specifier: ^27.0.0
+        version: 27.5.2
+      '@types/node':
+        specifier: ^16.0.0
+        version: 16.18.125
+      jest:
+        specifier: ^27.0.0
+        version: 27.5.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@16.18.125)(typescript@5.6.3))(utf-8-validate@5.0.10)
+      tsup:
+        specifier: ^7.2.0
+        version: 7.3.0(@swc/core@1.10.4(@swc/helpers@0.5.15))(postcss@8.4.49)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@16.18.125)(typescript@5.6.3))(typescript@5.6.3)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.6.3
+
   deps/eliza/packages/plugin-video-generation:
     dependencies:
       '@elizaos/core':
@@ -3590,7 +3755,7 @@ importers:
         version: 5.6.3
       vitest:
         specifier: ^1.2.1
-        version: 1.2.1(@types/node@20.17.9)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+        version: 1.2.1(@types/node@20.17.9)(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
 
   deps/eliza/packages/plugin-zksync-era:
     dependencies:
@@ -4541,6 +4706,9 @@ packages:
 
   '@coinbase/coinbase-sdk@0.13.0':
     resolution: {integrity: sha512-qYOcFwTANhiJvSTF2sn53Hkycj2UebOIzieNOkg42qWD606gCudCBuzV3PDrOQYVJBS/g10hyX10u5yPkIZ89w==}
+
+  '@coinbase/coinbase-sdk@0.15.0':
+    resolution: {integrity: sha512-i2YH/E/HcvUM+VgT+245CzcAyJ6kQg8PJDHBHsFwFdk2vAn+iQn0bjt+C9kgTWvzxUuJA4koHgkcGpdRQa2F/A==}
 
   '@coinbase/wallet-sdk@4.2.4':
     resolution: {integrity: sha512-wJ9QOXOhRdGermKAoJSr4JgGqZm/Um0m+ecywzEC9qSOu3TXuVcG3k0XXTXW11UBgjdoPRuf5kAwRX3T9BynFA==}
@@ -10384,6 +10552,9 @@ packages:
   '@types/sql.js@1.4.9':
     resolution: {integrity: sha512-ep8b36RKHlgWPqjNG9ToUrPiwkhwh0AEzy883mO5Xnd+cL6VBH1EvSjBAAuxLUFF2Vn/moE3Me6v9E1Lo+48GQ==}
 
+  '@types/ssh2@1.15.4':
+    resolution: {integrity: sha512-9JTQgVBWSgq6mAen6PVnrAmty1lqgCMvpfN+1Ck5WRUsyMYPa6qd50/vMJ0y1zkGpOEgLzm8m8Dx/Y5vRouLaA==}
+
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
 
@@ -12009,6 +12180,10 @@ packages:
     resolution: {integrity: sha512-WDtdLmJvAuNNPzByAYpRo2rF1Mmradw6gvWsQKf63476DDXmomT9zUiGypLcG4ibIM67vhAj8jJRdbmEws2Aqw==}
     engines: {node: '>=6.14.2'}
 
+  buildcheck@0.0.6:
+    resolution: {integrity: sha512-8f9ZJCUXyT1M35Jx7MkBgmBMo3oHTTBIPLiY9xyL0pl3T5RwcPEY8cUHr5LBNfu/fk6c2T4DJZuVM/8ZZT2D2A==}
+    engines: {node: '>=10.0.0'}
+
   builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
@@ -12684,6 +12859,10 @@ packages:
 
   cosmjs-types@0.9.0:
     resolution: {integrity: sha512-MN/yUe6mkJwHnCFfsNPeCfXVhyxHYW6c/xDUzrSbBycYzw++XvWDMJArXp2pLdgD6FQ8DW79vkPjeNKVrXaHeQ==}
+
+  cpu-features@0.0.10:
+    resolution: {integrity: sha512-9IkYqtX3YHPCzoVg1Py+o9057a3i0fp7S530UWokCSaFVTc7CwXPRiOjRjBQQ18ZCNafx78YfnG+HALxtVmOGA==}
+    engines: {node: '>=10.0.0'}
 
   crc-32@1.2.2:
     resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
@@ -19456,6 +19635,10 @@ packages:
   srt@0.0.3:
     resolution: {integrity: sha512-lak1bX2JSWpzar6NrXDSn1EQDfUeqKOikE+NY3EpjzH6sbqWl3oKlEWiVPFAFSFaMHjdyEXfYiwTrXhWNdeIOg==}
 
+  ssh2@1.16.0:
+    resolution: {integrity: sha512-r1X4KsBGedJqo7h8F5c4Ybpcr5RjyP+aWIG007uBPRjmdQWfEiVLzSK71Zji1B9sKxwaCvD8y8cwSkYrlLiRRg==}
+    engines: {node: '>=10.16.0'}
+
   sshpk@1.18.0:
     resolution: {integrity: sha512-2p2KJZTSqQ/I3+HX42EpYOa2l3f8Erv8MWKsy2I9uf4wA7yFIkXRffYdsx86y6z4vHtV8u7g+pPlr8/4ouAxsQ==}
     engines: {node: '>=0.10.0'}
@@ -23663,10 +23846,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@coinbase/cdp-langchain@0.0.11(@coinbase/coinbase-sdk@0.13.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8))(bufferutil@4.0.9)(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))(typescript@5.7.3)(utf-8-validate@6.0.5)':
+  '@coinbase/cdp-langchain@0.0.11(@coinbase/coinbase-sdk@0.15.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8))(bufferutil@4.0.9)(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))(typescript@5.7.3)(utf-8-validate@6.0.5)':
     dependencies:
       '@coinbase/cdp-agentkit-core': 0.0.10(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)
-      '@coinbase/coinbase-sdk': 0.13.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8)
+      '@coinbase/coinbase-sdk': 0.15.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8)
       '@langchain/core': 0.3.27(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))
       zod: 3.23.8
     transitivePeerDependencies:
@@ -23690,6 +23873,50 @@ snapshots:
       ethers: 6.13.5(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       node-jose: 2.2.0
       secp256k1: 5.0.0
+      viem: 2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@coinbase/coinbase-sdk@0.15.0(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@6.0.5)(zod@3.23.8)':
+    dependencies:
+      '@scure/bip32': 1.6.1
+      abitype: 1.0.8(typescript@5.6.3)(zod@3.23.8)
+      axios: 1.7.9(debug@4.4.0)
+      axios-mock-adapter: 1.22.0(axios@1.7.9)
+      axios-retry: 4.5.0(axios@1.7.9)
+      bip32: 4.0.0
+      bip39: 3.1.0
+      decimal.js: 10.4.3
+      dotenv: 16.4.5
+      ethers: 6.13.5(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      node-jose: 2.2.0
+      secp256k1: 5.0.1
+      viem: 2.22.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@6.0.5)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+      - zod
+
+  '@coinbase/coinbase-sdk@0.15.0(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8)':
+    dependencies:
+      '@scure/bip32': 1.6.1
+      abitype: 1.0.8(typescript@5.7.3)(zod@3.23.8)
+      axios: 1.7.9(debug@4.4.0)
+      axios-mock-adapter: 1.22.0(axios@1.7.9)
+      axios-retry: 4.5.0(axios@1.7.9)
+      bip32: 4.0.0
+      bip39: 3.1.0
+      decimal.js: 10.4.3
+      dotenv: 16.4.5
+      ethers: 6.13.5(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+      node-jose: 2.2.0
+      secp256k1: 5.0.1
       viem: 2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
@@ -33371,6 +33598,10 @@ snapshots:
       '@types/emscripten': 1.39.13
       '@types/node': 20.17.9
 
+  '@types/ssh2@1.15.4':
+    dependencies:
+      '@types/node': 18.19.69
+
   '@types/stack-utils@2.0.3': {}
 
   '@types/tar@6.1.13':
@@ -33967,6 +34198,25 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@vitest/coverage-v8@1.6.0(vitest@1.2.1)':
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@bcoe/v8-coverage': 0.2.3
+      debug: 4.4.0(supports-color@8.1.1)
+      istanbul-lib-coverage: 3.2.2
+      istanbul-lib-report: 3.0.1
+      istanbul-lib-source-maps: 5.0.6
+      istanbul-reports: 3.1.7
+      magic-string: 0.30.17
+      magicast: 0.3.5
+      picocolors: 1.1.1
+      std-env: 3.8.0
+      strip-literal: 2.1.1
+      test-exclude: 6.0.0
+      vitest: 1.2.1(@types/node@20.17.9)(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+    transitivePeerDependencies:
+      - supports-color
+
   '@vitest/coverage-v8@2.1.5(vitest@3.0.2(@types/node@22.8.4)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.37.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
@@ -34231,6 +34481,17 @@ snapshots:
       picocolors: 1.1.1
       sirv: 2.0.4
       vitest: 0.34.6(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(playwright@1.48.2)(terser@5.37.0)
+
+  '@vitest/ui@0.34.7(vitest@1.2.1)':
+    dependencies:
+      '@vitest/utils': 0.34.7
+      fast-glob: 3.3.2
+      fflate: 0.8.2
+      flatted: 3.3.2
+      pathe: 1.1.2
+      picocolors: 1.1.1
+      sirv: 2.0.4
+      vitest: 1.2.1(@types/node@20.17.9)(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
 
   '@vitest/utils@0.34.6':
     dependencies:
@@ -34869,6 +35130,11 @@ snapshots:
       typescript: 4.9.5
       zod: 3.24.1
 
+  abitype@1.0.7(typescript@5.6.3)(zod@3.23.8):
+    optionalDependencies:
+      typescript: 5.6.3
+      zod: 3.23.8
+
   abitype@1.0.7(typescript@5.6.3)(zod@3.24.1):
     optionalDependencies:
       typescript: 5.6.3
@@ -34888,6 +35154,11 @@ snapshots:
     optionalDependencies:
       typescript: 4.9.5
       zod: 3.24.1
+
+  abitype@1.0.8(typescript@5.6.3)(zod@3.23.8):
+    optionalDependencies:
+      typescript: 5.6.3
+      zod: 3.23.8
 
   abitype@1.0.8(typescript@5.6.3)(zod@3.24.1):
     optionalDependencies:
@@ -35169,7 +35440,7 @@ snapshots:
       base64url: 3.0.1
       bs58: 4.0.1
       keccak: 3.0.4
-      secp256k1: 5.0.0
+      secp256k1: 5.0.1
     optionalDependencies:
       '@randlabs/myalgo-connect': 1.4.2
       algosdk: 1.24.1(encoding@0.1.13)
@@ -36178,6 +36449,9 @@ snapshots:
     dependencies:
       node-gyp-build: 4.8.4
 
+  buildcheck@0.0.6:
+    optional: true
+
   builtin-modules@3.3.0: {}
 
   builtin-status-codes@3.0.0: {}
@@ -36946,6 +37220,12 @@ snapshots:
       protobufjs: 6.11.4
 
   cosmjs-types@0.9.0: {}
+
+  cpu-features@0.0.10:
+    dependencies:
+      buildcheck: 0.0.6
+      nan: 2.22.0
+    optional: true
 
   crc-32@1.2.2: {}
 
@@ -43921,6 +44201,20 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
+  ox@0.6.0(typescript@5.6.3)(zod@3.23.8):
+    dependencies:
+      '@adraffy/ens-normalize': 1.11.0
+      '@noble/curves': 1.8.0
+      '@noble/hashes': 1.7.0
+      '@scure/bip32': 1.6.1
+      '@scure/bip39': 1.5.1
+      abitype: 1.0.8(typescript@5.6.3)(zod@3.23.8)
+      eventemitter3: 5.0.1
+    optionalDependencies:
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - zod
+
   ox@0.6.0(typescript@5.7.3)(zod@3.23.8):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
@@ -46407,6 +46701,14 @@ snapshots:
     dependencies:
       ap: 0.1.0
 
+  ssh2@1.16.0:
+    dependencies:
+      asn1: 0.2.6
+      bcrypt-pbkdf: 1.0.2
+    optionalDependencies:
+      cpu-features: 0.0.10
+      nan: 2.22.0
+
   sshpk@1.18.0:
     dependencies:
       asn1: 0.2.6
@@ -48392,6 +48694,24 @@ snapshots:
       - utf-8-validate
       - zod
 
+  viem@2.22.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@6.0.5)(zod@3.23.8):
+    dependencies:
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.1
+      '@scure/bip32': 1.6.0
+      '@scure/bip39': 1.5.0
+      abitype: 1.0.7(typescript@5.6.3)(zod@3.23.8)
+      isows: 1.0.6(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      ox: 0.6.0(typescript@5.6.3)(zod@3.23.8)
+      webauthn-p256: 0.0.10
+      ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+    optionalDependencies:
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+
   viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.23.8):
     dependencies:
       '@noble/curves': 1.7.0
@@ -48918,6 +49238,43 @@ snapshots:
       - supports-color
       - terser
 
+  vitest@1.2.1(@types/node@20.17.9)(@vitest/ui@0.34.7)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0):
+    dependencies:
+      '@vitest/expect': 1.2.1
+      '@vitest/runner': 1.2.1
+      '@vitest/snapshot': 1.2.1
+      '@vitest/spy': 1.2.1
+      '@vitest/utils': 1.2.1
+      acorn-walk: 8.3.4
+      cac: 6.7.14
+      chai: 4.5.0
+      debug: 4.4.0(supports-color@8.1.1)
+      execa: 8.0.1
+      local-pkg: 0.5.1
+      magic-string: 0.30.17
+      pathe: 1.1.2
+      picocolors: 1.1.1
+      std-env: 3.8.0
+      strip-literal: 1.3.0
+      tinybench: 2.9.0
+      tinypool: 0.8.4
+      vite: 5.4.11(@types/node@20.17.9)(terser@5.37.0)
+      vite-node: 1.2.1(@types/node@20.17.9)(terser@5.37.0)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 20.17.9
+      '@vitest/ui': 0.34.7(vitest@1.2.1)
+      jsdom: 25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5)
+    transitivePeerDependencies:
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+
   vitest@1.2.1(@types/node@20.17.9)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.37.0):
     dependencies:
       '@vitest/expect': 1.2.1
@@ -48944,42 +49301,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.17.9
       jsdom: 25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
-  vitest@1.2.1(@types/node@20.17.9)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0):
-    dependencies:
-      '@vitest/expect': 1.2.1
-      '@vitest/runner': 1.2.1
-      '@vitest/snapshot': 1.2.1
-      '@vitest/spy': 1.2.1
-      '@vitest/utils': 1.2.1
-      acorn-walk: 8.3.4
-      cac: 6.7.14
-      chai: 4.5.0
-      debug: 4.4.0(supports-color@8.1.1)
-      execa: 8.0.1
-      local-pkg: 0.5.1
-      magic-string: 0.30.17
-      pathe: 1.1.2
-      picocolors: 1.1.1
-      std-env: 3.8.0
-      strip-literal: 1.3.0
-      tinybench: 2.9.0
-      tinypool: 0.8.4
-      vite: 5.4.11(@types/node@20.17.9)(terser@5.37.0)
-      vite-node: 1.2.1(@types/node@20.17.9)(terser@5.37.0)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 20.17.9
-      jsdom: 25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5)
     transitivePeerDependencies:
       - less
       - lightningcss

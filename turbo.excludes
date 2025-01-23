@@ -26,6 +26,7 @@ create-eliza-app
 @elizaos/plugin-near
 @elizaos/plugin-nft-collections
 @elizaos/plugin-nft-generation
+@elizaos/plugin-omniflix
 @elizaos/plugin-quai
 @elizaos/plugin-solana
 @elizaos/plugin-solana-agent-kit

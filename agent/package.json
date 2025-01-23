@@ -73,6 +73,8 @@
         "@elizaos/plugin-dkg": "workspace:*",
         "@elizaos/plugin-email": "workspace:*",
         "@elizaos/plugin-suno": "workspace:*",
+        "@elizaos/plugin-udio": "workspace:*",
+        "@elizaos/plugin-hyperbolic": "workspace:*",
         "@fixes-ai/core": "workspace:*",
         "@fixes-ai/common": "workspace:*",
         "readline": "1.3.0",
