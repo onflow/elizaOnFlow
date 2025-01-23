@@ -91,7 +91,7 @@ const transferOption: ActionOptions<TransferContent> = {
                 },
             },
             {
-                user: "{{user2}}",
+                user: "{{agentName}}",
                 content: {
                     text: "Sending 1 FLOW tokens now, pls wait...",
                     action: "SEND_COIN",
@@ -106,7 +106,7 @@ const transferOption: ActionOptions<TransferContent> = {
                 },
             },
             {
-                user: "{{user2}}",
+                user: "{{agentName}}",
                 content: {
                     text: "Sending 1 FLOW tokens now, pls wait...",
                     action: "SEND_COIN",
@@ -121,7 +121,7 @@ const transferOption: ActionOptions<TransferContent> = {
                 },
             },
             {
-                user: "{{user2}}",
+                user: "{{agentName}}",
                 content: {
                     text: "Sending 1000 FROTH tokens now, pls wait...",
                     action: "SEND_COIN",
