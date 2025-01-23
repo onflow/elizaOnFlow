@@ -6,7 +6,7 @@ import {
 import { basicFlowPluginOptions } from "@fixes-ai/common";
 
 const localDefaultCharacter: Character = {
-    modelProvider: ModelProviderName.OLLAMA,
+    modelProvider: ModelProviderName.DEEPSEEK,
     plugins: [basicFlowPluginOptions],
 } as Character;
 
