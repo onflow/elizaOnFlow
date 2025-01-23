@@ -105,6 +105,9 @@ importers:
       '@elizaos/adapter-postgres':
         specifier: workspace:*
         version: link:../deps/eliza/packages/adapter-postgres
+      '@elizaos/adapter-qdrant':
+        specifier: workspace:*
+        version: link:../deps/eliza/packages/adapter-qdrant
       '@elizaos/adapter-redis':
         specifier: workspace:*
         version: link:../deps/eliza/packages/adapter-redis
@@ -132,6 +135,9 @@ importers:
       '@elizaos/client-lens':
         specifier: workspace:*
         version: link:../deps/eliza/packages/client-lens
+      '@elizaos/client-simsai':
+        specifier: workspace:*
+        version: link:../deps/eliza/packages/client-simsai
       '@elizaos/client-slack':
         specifier: workspace:*
         version: link:../deps/eliza/packages/client-slack
@@ -497,6 +503,19 @@ importers:
         specifier: 8.3.5
         version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
 
+  deps/eliza/packages/adapter-qdrant:
+    dependencies:
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
+      '@qdrant/js-client-rest':
+        specifier: ^1.12.0
+        version: 1.13.0(typescript@5.7.3)
+    devDependencies:
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+
   deps/eliza/packages/adapter-redis:
     dependencies:
       '@elizaos/core':
@@ -811,6 +830,22 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(@types/node@22.10.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.37.0)
 
+  deps/eliza/packages/client-simsai:
+    dependencies:
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
+      glob:
+        specifier: 11.0.0
+        version: 11.0.0
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+
   deps/eliza/packages/client-slack:
     dependencies:
       '@elizaos/core':
@@ -931,14 +966,11 @@ importers:
         specifier: 0.0.3
         version: 0.0.3(zod@3.23.8)
       '@ai-sdk/mistral':
-        specifier: ^1.0.8
-        version: 1.0.8(zod@3.23.8)
+        specifier: 1.0.9
+        version: 1.0.9(zod@3.23.8)
       '@ai-sdk/openai':
         specifier: 1.0.5
         version: 1.0.5(zod@3.23.8)
-      '@anthropic-ai/sdk':
-        specifier: 0.30.1
-        version: 0.30.1(encoding@0.1.13)
       '@fal-ai/client':
         specifier: 1.2.0
         version: 1.2.0
@@ -1163,7 +1195,7 @@ importers:
     dependencies:
       '@abstract-foundation/agw-client':
         specifier: 1.0.1
-        version: 1.0.1(abitype@1.0.8(typescript@5.7.3)(zod@3.24.1))(typescript@5.7.3)(viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1))
+        version: 1.0.1(abitype@1.0.8(typescript@4.9.5)(zod@3.24.1))(typescript@4.9.5)(viem@2.22.2(bufferutil@4.0.9)(typescript@4.9.5)(utf-8-validate@6.0.5)(zod@3.24.1))
       '@elizaos/core':
         specifier: workspace:*
         version: link:../core
@@ -1173,7 +1205,10 @@ importers:
     devDependencies:
       tsup:
         specifier: 8.3.5
-        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@4.9.5)(yaml@2.7.0)
+      typescript:
+        specifier: '4.9'
+        version: 4.9.5
 
   deps/eliza/packages/plugin-agentkit:
     dependencies:
@@ -1434,6 +1469,9 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     devDependencies:
+      '@polkadot/types':
+        specifier: ^10.11.3
+        version: 10.13.1
       '@types/node':
         specifier: ^20.0.0
         version: 20.17.9
@@ -1599,6 +1637,12 @@ importers:
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
+
+  deps/eliza/packages/plugin-chainbase:
+    dependencies:
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../core
 
   deps/eliza/packages/plugin-coinbase:
     dependencies:
@@ -1823,7 +1867,14 @@ importers:
         version: 8.0.4(@nomicfoundation/hardhat-ethers@3.0.8(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)))(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)(web-streams-polyfill@3.3.3)
       tsup:
         specifier: 8.3.5
-        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@4.9.5)(yaml@2.7.0)
+      whatwg-url:
+        specifier: 7.1.0
+        version: 7.1.0
+    devDependencies:
+      typescript:
+        specifier: '4.9'
+        version: 4.9.5
 
   deps/eliza/packages/plugin-echochambers:
     dependencies:
@@ -1833,6 +1884,46 @@ importers:
       '@elizaos/plugin-node':
         specifier: workspace:*
         version: link:../plugin-node
+
+  deps/eliza/packages/plugin-email:
+    dependencies:
+      '@elizaos/adapter-postgres':
+        specifier: workspace:^
+        version: link:../adapter-postgres
+      '@elizaos/core':
+        specifier: workspace:^
+        version: link:../core
+      mail-notifier:
+        specifier: ^0.5.0
+        version: 0.5.0
+      nodemailer:
+        specifier: ^6.9.16
+        version: 6.10.0
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
+      '@types/mail-notifier':
+        specifier: 0.5.2
+        version: 0.5.2
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.17.9
+      '@types/nodemailer':
+        specifier: ^6.4.17
+        version: 6.4.17
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@20.17.9)(typescript@5.7.3))
+      ts-jest:
+        specifier: ^29.2.5
+        version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0))(typescript@5.6.3)
+      ts-jest-mock-import-meta:
+        specifier: ^1.2.1
+        version: 1.2.1(ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0))(typescript@5.6.3))
+      typescript:
+        specifier: ^5.0.0
+        version: 5.6.3
 
   deps/eliza/packages/plugin-evm:
     dependencies:
@@ -3649,8 +3740,8 @@ packages:
     peerDependencies:
       zod: ^3.0.0
 
-  '@ai-sdk/mistral@1.0.8':
-    resolution: {integrity: sha512-jWH4HHK4cYvXaac9UprMiSUBwOVb3e0hpbiL1wPb+2bF75pqQQKFQWQyfmoLFrh1oXlMOGn+B6IzwUDSFHLanA==}
+  '@ai-sdk/mistral@1.0.9':
+    resolution: {integrity: sha512-PzKbgkRKT63khz7QOlpej40dEuYc04WQrW4RhqPkSoBO/BPXDRlrQtTVwBs6BRLjyKvihIRDrc5NenbO/b8HlQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -3696,6 +3787,15 @@ packages:
 
   '@ai-sdk/provider-utils@2.0.7':
     resolution: {integrity: sha512-4sfPlKEALHPXLmMFcPlYksst3sWBJXmCDZpIBJisRrmwGG6Nn3mq0N1Zu/nZaGcrWZoOY+HT2Wbxla1oTElYHQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
+  '@ai-sdk/provider-utils@2.0.8':
+    resolution: {integrity: sha512-R/wsIqx7Lwhq+ogzkqSOek8foj2wOnyBSGW/CH8IPBla0agbisIE9Ug7R9HDTNiBbIIKVhduB54qQSMPFw0MZA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -8163,6 +8263,16 @@ packages:
   '@pythnetwork/price-service-sdk@1.8.0':
     resolution: {integrity: sha512-tFZ1thj3Zja06DzPIX2dEWSi7kIfIyqreoywvw5NQ3Z1pl5OJHQGMEhxt6Li3UCGSp2ooYZS9wl8/8XfrfrNSA==}
 
+  '@qdrant/js-client-rest@1.13.0':
+    resolution: {integrity: sha512-bewMtnXlGvhhnfXsp0sLoLXOGvnrCM15z9lNlG0Snp021OedNAnRtKkerjk5vkOcbQWUmJHXYCuxDfcT93aSkA==}
+    engines: {node: '>=18.0.0', pnpm: '>=8'}
+    peerDependencies:
+      typescript: '>=4.7'
+
+  '@qdrant/openapi-typescript-fetch@1.2.6':
+    resolution: {integrity: sha512-oQG/FejNpItrxRHoyctYvT3rwGZOnK4jr3JdppO/c78ktDvkWiPXPHNsrDf33K9sZdRb6PR7gi4noIapu5q4HA==}
+    engines: {node: '>=18.0.0', pnpm: '>=8'}
+
   '@radix-ui/primitive@1.1.1':
     resolution: {integrity: sha512-SJ31y+Q/zAyShtXJc8x83i9TYdbAfHZ++tUZnvjJJqFjzsdUnKsxPL6IEtBlxKkU7yzer//GQtZSV4GbldL3YA==}
 
@@ -8965,6 +9075,9 @@ packages:
   '@sentry/utils@5.30.0':
     resolution: {integrity: sha512-zaYmoH0NWWtvnJjC9/CBseXMtKHm/tm40sz3YfJRxeQjyzRqNQPgivpd9R/oDJCYj999mzdW382p/qi2ypjLww==}
     engines: {node: '>=6'}
+
+  '@sevinf/maybe@0.5.0':
+    resolution: {integrity: sha512-ARhyoYDnY1LES3vYI0fiG6e9esWfTNcXcO6+MPJJXcnyMV3bim4lnFt45VXouV7y82F4x3YH8nOQ6VztuvUiWg==}
 
   '@shikijs/core@1.26.1':
     resolution: {integrity: sha512-yeo7sG+WZQblKPclUOKRPwkv1PyoHYkJ4gP9DzhFJbTdueKR7wYTI1vfF/bFi1NTgc545yG/DzvVhZgueVOXMA==}
@@ -9917,6 +10030,9 @@ packages:
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
 
+  '@types/imap@0.8.42':
+    resolution: {integrity: sha512-FusePG9Cp2GYN6OLow9xBCkjznFkAR7WCz0Fm+j1p/ER6C8V8P71DtjpSmwrZsS7zekCeqdTPHEk9N5OgPwcsg==}
+
   '@types/ioredis@5.0.0':
     resolution: {integrity: sha512-zJbJ3FVE17CNl5KXzdeSPtdltc4tMT3TzC6fxQS0sQngkbFZ6h+0uTafsRqu+eSLIugf6Yb0Ea0SUuRr42Nk9g==}
     deprecated: This is a stub types definition. ioredis provides its own type definitions, so you do not need this installed.
@@ -9965,6 +10081,9 @@ packages:
 
   '@types/lru-cache@5.1.1':
     resolution: {integrity: sha512-ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==}
+
+  '@types/mail-notifier@0.5.2':
+    resolution: {integrity: sha512-1xPmiWlkGz38n+9Ly7G7XFuhir6WyBzPidiCKK9yWNVJxAq+j/92NLySosKX6mdu1GB1ymJ4tZAAF98I+qEABA==}
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
@@ -10025,6 +10144,9 @@ packages:
 
   '@types/node@22.8.4':
     resolution: {integrity: sha512-SpNNxkftTJOPk0oN+y2bIqurEXHTA2AOZ3EJDDKeJ5VzkvvORSvmQXGQarcOzWV1ac7DCaPBEdMDxBsM+d8jWw==}
+
+  '@types/nodemailer@6.4.17':
+    resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -10846,6 +10968,9 @@ packages:
 
   add-stream@1.0.0:
     resolution: {integrity: sha512-qQLMr+8o0WC4FZGQTcJiKBVC59JylcPSrTtk6usvmIDFUOCKegapy1VHQwRbFMOFyb/inzUVqHs+eMYKDM1YeQ==}
+
+  addressparser@1.0.1:
+    resolution: {integrity: sha512-aQX7AISOMM7HFE0iZ3+YnD07oIeJqWGVnJ+ZIKaBZAk03ftmVYVqsGas/rbXKR21n4D/hKCSHypvcyOkds/xzg==}
 
   adm-zip@0.4.16:
     resolution: {integrity: sha512-TFi4HBKSGfIKsK5YCkKaaFG2m4PEDyViZmEwof3MTIgzimHLto6muaHVpbrljdIvIrFZzEq/p4nafOeLcYegrg==}
@@ -14468,6 +14593,10 @@ packages:
     engines: {node: '>=6.9.0'}
     hasBin: true
 
+  imap@0.8.19:
+    resolution: {integrity: sha512-z5DxEA1uRnZG73UcPA4ES5NSCGnPuuouUx43OPX7KZx1yzq3N8/vx2mtXEShT5inxB3pRgnfG1hijfu7XN2YMw==}
+    engines: {node: '>=0.8.0'}
+
   immediate@3.0.6:
     resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
 
@@ -15895,6 +16024,13 @@ packages:
   magicast@0.3.5:
     resolution: {integrity: sha512-L0WhttDl+2BOsybvEOLK7fW3UA0OQ0IQ2d6Zl2x/a6vVRs3bAY0ECOSHHeL5jD+SbOpOCUEi0y1DgHEn9Qn1AQ==}
 
+  mail-notifier@0.5.0:
+    resolution: {integrity: sha512-jWO2nplukdCmfRaAt1vxaPRQ7kYtXdGl4YGPticiHt6lOPRkqzItkECcQu4LclM6o1oDhKXYlsORNcelZNayfg==}
+
+  mailparser@0.6.2:
+    resolution: {integrity: sha512-5Z5nv7TYojrdrKHjhCOKKFaYs0Lo7PCja4RnLZ2kFE1Fskqg+rRVwFpG9Oqx3YjosGM2QEItjHo7+Jc9qvxGqw==}
+    deprecated: Mailparser versions older than v2.3.0 are deprecated
+
   make-dir@2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
     engines: {node: '>=6'}
@@ -16064,6 +16200,10 @@ packages:
     resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
     engines: {node: '>=10.0.0'}
     hasBin: true
+
+  mimelib@0.3.1:
+    resolution: {integrity: sha512-ipzNp6TBsNfD3hButGlPVlGmuCgybIM9SBf8YwIG+SYmBgtU0u8wjf+BSrJX0mvqtv59SLmwphw/XiCbkLWv7w==}
+    deprecated: This project is unmaintained
 
   mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -16561,6 +16701,10 @@ packages:
   nodejs-whisper@0.1.18:
     resolution: {integrity: sha512-2FETHL/Ur46jIEh3H4bhJ0WAdPJxWBcaLPcdHCy6oDAXfD7ZGomQAiIL+musqtY1G1IV6/5+zUZJNxdZIsfy6A==}
     hasBin: true
+
+  nodemailer@6.10.0:
+    resolution: {integrity: sha512-SQ3wZCExjeSatLE/HBaXS5vqUOQk6GtBdIIKxiFdmm01mOQZX/POJkO3SUX1wDiYcwUOJwT23scFSC9fY2H8IA==}
+    engines: {node: '>=6.0.0'}
 
   nodemon@3.1.7:
     resolution: {integrity: sha512-hLj7fuMow6f0lbB0cD14Lz2xNjwsyruH251Pk4t/yIitCFJbmY1myuLlHm/q06aST4jg6EgAh74PIBBrRqpVAQ==}
@@ -18532,6 +18676,10 @@ packages:
     resolution: {integrity: sha512-LJWA9kSvMolR51oDE6PN3kALBNaUdkxzAGcexw8gjMA8xr5zUqK0JiR3CgARSqanYF3Z1YHvsErb1KDgh+v7Rg==}
     engines: {node: '>=12'}
 
+  semver@5.3.0:
+    resolution: {integrity: sha512-mfmm3/H9+67MCVix1h+IXTpDwL6710LyHuk7+cWC9T1mE0qz4iHhh6r4hU2wrIT9iTsAAC2XQRvfblL028cpLw==}
+    hasBin: true
+
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
@@ -19656,6 +19804,11 @@ packages:
     resolution: {integrity: sha512-uivwYcQaxAucv1CzRp2n/QdYPo4ILf9VXgH19zEIjFx2EJufV16P0JtJVpYHy89DItG6Kwj2oIUjrcK5au+4tQ==}
     engines: {node: '>=8'}
 
+  ts-jest-mock-import-meta@1.2.1:
+    resolution: {integrity: sha512-+qh8ZijpFnh7nMNdw1yYrvmnhe3Rctau5a3AFtgBAtps46RSiC8SHr3Z0S9sNqCU3cNOGumCAVO7Ac65fstxRA==}
+    peerDependencies:
+      ts-jest: '>=20.0.0'
+
   ts-jest@29.2.5:
     resolution: {integrity: sha512-KD8zB2aAZrcKIdGk4OwpJggeLcH1FgrICqDSROWqlnJXGCXK4Mn6FcdK2B6670Xr73lHMG1kHw8R87A0ecZ+vA==}
     engines: {node: ^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0}
@@ -20319,6 +20472,9 @@ packages:
     resolution: {integrity: sha512-EYZR+OpIXp9Y1eG1iueg8KRsY8TuT8VNgnanZ0uA3STqhHQTLwbl+WX76/9X5OY12yQubymBpaBSmMPkSTQcKA==}
     engines: {node: '>=6.14.2'}
 
+  utf7@1.0.2:
+    resolution: {integrity: sha512-qQrPtYLLLl12NF4DrM9CvfkxkYI97xOb5dsnGZHE3teFr0tWiEZ9UdgMPczv24vl708cYMpe6mGXGHrotIp3Bw==}
+
   utf8@3.0.0:
     resolution: {integrity: sha512-E8VjFIQ/TyQgp+TZfS6l8yp/xWppSAHzidGiRrqe4bK4XP9pTRyKFgGJpO3SN7zdX4DeomTrwaseCHovfpFcqQ==}
 
@@ -20341,6 +20497,9 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
+
+  uue@3.1.2:
+    resolution: {integrity: sha512-axKLXVqwtdI/czrjG0X8hyV1KLgeWx8F4KvSbvVCnS+RUvsQMGRjx0kfuZDXXqj0LYvVJmx3B9kWlKtEdRrJLg==}
 
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
@@ -21583,12 +21742,12 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@abstract-foundation/agw-client@1.0.1(abitype@1.0.8(typescript@5.7.3)(zod@3.24.1))(typescript@5.7.3)(viem@2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1))':
+  '@abstract-foundation/agw-client@1.0.1(abitype@1.0.8(typescript@4.9.5)(zod@3.24.1))(typescript@4.9.5)(viem@2.22.2(bufferutil@4.0.9)(typescript@4.9.5)(utf-8-validate@6.0.5)(zod@3.24.1))':
     dependencies:
-      abitype: 1.0.8(typescript@5.7.3)(zod@3.24.1)
-      viem: 2.22.2(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1)
+      abitype: 1.0.8(typescript@4.9.5)(zod@3.24.1)
+      viem: 2.22.2(bufferutil@4.0.9)(typescript@4.9.5)(utf-8-validate@6.0.5)(zod@3.24.1)
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 4.9.5
 
   '@acuminous/bitsyntax@0.1.2':
     dependencies:
@@ -21629,10 +21788,10 @@ snapshots:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       zod: 3.23.8
 
-  '@ai-sdk/mistral@1.0.8(zod@3.23.8)':
+  '@ai-sdk/mistral@1.0.9(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 1.0.4
-      '@ai-sdk/provider-utils': 2.0.7(zod@3.23.8)
+      '@ai-sdk/provider-utils': 2.0.8(zod@3.23.8)
       zod: 3.23.8
 
   '@ai-sdk/openai@1.0.18(zod@3.24.1)':
@@ -21691,6 +21850,15 @@ snapshots:
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.24.1
+
+  '@ai-sdk/provider-utils@2.0.8(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 1.0.4
+      eventsource-parser: 3.0.0
+      nanoid: 3.3.8
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.23.8
 
   '@ai-sdk/provider@0.0.24':
     dependencies:
@@ -24170,7 +24338,7 @@ snapshots:
       '@ai-sdk/google': 0.0.55(zod@3.23.8)
       '@ai-sdk/google-vertex': 0.0.43(@google-cloud/vertexai@1.9.2(encoding@0.1.13))(zod@3.23.8)
       '@ai-sdk/groq': 0.0.3(zod@3.23.8)
-      '@ai-sdk/mistral': 1.0.8(zod@3.23.8)
+      '@ai-sdk/mistral': 1.0.9(zod@3.23.8)
       '@ai-sdk/openai': 1.0.5(zod@3.23.8)
       '@anthropic-ai/sdk': 0.30.1(encoding@0.1.13)
       '@fal-ai/client': 1.2.0
@@ -27881,7 +28049,7 @@ snapshots:
     dependencies:
       debug: 4.4.0(supports-color@8.1.1)
       ethers: 5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      hardhat: 2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
+      hardhat: 2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10)
       lodash.isequal: 4.5.0
     transitivePeerDependencies:
       - supports-color
@@ -29631,6 +29799,15 @@ snapshots:
     dependencies:
       bn.js: 5.2.1
 
+  '@qdrant/js-client-rest@1.13.0(typescript@5.7.3)':
+    dependencies:
+      '@qdrant/openapi-typescript-fetch': 1.2.6
+      '@sevinf/maybe': 0.5.0
+      typescript: 5.7.3
+      undici: 5.28.5
+
+  '@qdrant/openapi-typescript-fetch@1.2.6': {}
+
   '@radix-ui/primitive@1.1.1': {}
 
   '@radix-ui/react-arrow@1.1.1(@types/react-dom@19.0.3(@types/react@19.0.6))(@types/react@19.0.6)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
@@ -30539,6 +30716,8 @@ snapshots:
     dependencies:
       '@sentry/types': 5.30.0
       tslib: 1.14.1
+
+  '@sevinf/maybe@0.5.0': {}
 
   '@shikijs/core@1.26.1':
     dependencies:
@@ -32271,6 +32450,10 @@ snapshots:
 
   '@types/http-errors@2.0.4': {}
 
+  '@types/imap@0.8.42':
+    dependencies:
+      '@types/node': 20.17.9
+
   '@types/ioredis@5.0.0':
     dependencies:
       ioredis: 5.4.2
@@ -32323,6 +32506,11 @@ snapshots:
   '@types/long@4.0.2': {}
 
   '@types/lru-cache@5.1.1': {}
+
+  '@types/mail-notifier@0.5.2':
+    dependencies:
+      '@types/imap': 0.8.42
+      '@types/node': 20.17.9
 
   '@types/mdast@4.0.4':
     dependencies:
@@ -32380,6 +32568,10 @@ snapshots:
   '@types/node@22.8.4':
     dependencies:
       undici-types: 6.19.8
+
+  '@types/nodemailer@6.4.17':
+    dependencies:
+      '@types/node': 20.17.9
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -33961,6 +34153,11 @@ snapshots:
       typescript: 5.7.3
       zod: 3.24.1
 
+  abitype@1.0.7(typescript@4.9.5)(zod@3.24.1):
+    optionalDependencies:
+      typescript: 4.9.5
+      zod: 3.24.1
+
   abitype@1.0.7(typescript@5.6.3)(zod@3.24.1):
     optionalDependencies:
       typescript: 5.6.3
@@ -33974,6 +34171,11 @@ snapshots:
   abitype@1.0.7(typescript@5.7.3)(zod@3.24.1):
     optionalDependencies:
       typescript: 5.7.3
+      zod: 3.24.1
+
+  abitype@1.0.8(typescript@4.9.5)(zod@3.24.1):
+    optionalDependencies:
+      typescript: 4.9.5
       zod: 3.24.1
 
   abitype@1.0.8(typescript@5.6.3)(zod@3.24.1):
@@ -34027,6 +34229,8 @@ snapshots:
   acorn@8.14.0: {}
 
   add-stream@1.0.0: {}
+
+  addressparser@1.0.1: {}
 
   adm-zip@0.4.16: {}
 
@@ -36525,11 +36729,11 @@ snapshots:
       '@polkadot/util-crypto': 13.3.1(@polkadot/util@13.3.1)
       '@prb/math': 4.1.0
       dotenv: 16.4.7
-      hardhat: 2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
+      hardhat: 2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10)
       hardhat-deploy: 0.12.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       hardhat-deploy-ethers: 0.4.2(@nomicfoundation/hardhat-ethers@3.0.8(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)))(hardhat-deploy@0.12.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))
       solady: 0.0.285
-      ts-node: 10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3)
+      ts-node: 10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@4.9.5)
       typescript: 5.7.3
     transitivePeerDependencies:
       - '@nomicfoundation/hardhat-ethers'
@@ -36775,7 +36979,6 @@ snapshots:
   encoding@0.1.13:
     dependencies:
       iconv-lite: 0.6.3
-    optional: true
 
   end-of-stream@1.4.4:
     dependencies:
@@ -38772,7 +38975,7 @@ snapshots:
   hardhat-deploy-ethers@0.4.2(@nomicfoundation/hardhat-ethers@3.0.8(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)))(hardhat-deploy@0.12.4(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)):
     dependencies:
       '@nomicfoundation/hardhat-ethers': 3.0.8(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))
-      hardhat: 2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
+      hardhat: 2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10)
       hardhat-deploy: 0.12.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
   hardhat-deploy@0.12.4(bufferutil@4.0.9)(utf-8-validate@5.0.10):
@@ -38806,7 +39009,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10):
+  hardhat@2.22.18(bufferutil@4.0.9)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10):
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@metamask/eth-sig-util': 4.0.1
@@ -38853,8 +39056,8 @@ snapshots:
       uuid: 8.3.2
       ws: 7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     optionalDependencies:
-      ts-node: 10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@5.7.3)
-      typescript: 5.7.3
+      ts-node: 10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@4.9.5)
+      typescript: 4.9.5
     transitivePeerDependencies:
       - bufferutil
       - c-kzg
@@ -39111,6 +39314,11 @@ snapshots:
   ignore@5.3.2: {}
 
   image-size@0.7.5: {}
+
+  imap@0.8.19:
+    dependencies:
+      readable-stream: 1.1.14
+      utf7: 1.0.2
 
   immediate@3.0.6: {}
 
@@ -41064,6 +41272,22 @@ snapshots:
       '@babel/types': 7.26.3
       source-map-js: 1.2.1
 
+  mail-notifier@0.5.0:
+    dependencies:
+      async: 2.6.4
+      debug: 2.6.9
+      imap: 0.8.19
+      mailparser: 0.6.2
+    transitivePeerDependencies:
+      - supports-color
+
+  mailparser@0.6.2:
+    dependencies:
+      encoding: 0.1.13
+      mime: 1.6.0
+      mimelib: 0.3.1
+      uue: 3.1.2
+
   make-dir@2.1.0:
     dependencies:
       pify: 4.0.1
@@ -41286,6 +41510,11 @@ snapshots:
   mime@1.6.0: {}
 
   mime@3.0.0: {}
+
+  mimelib@0.3.1:
+    dependencies:
+      addressparser: 1.0.1
+      encoding: 0.1.13
 
   mimic-fn@2.1.0: {}
 
@@ -41892,6 +42121,8 @@ snapshots:
       readline-sync: 1.4.10
       shelljs: 0.8.5
 
+  nodemailer@6.10.0: {}
+
   nodemon@3.1.7:
     dependencies:
       chokidar: 3.6.0
@@ -42462,6 +42693,20 @@ snapshots:
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.7.3
+    transitivePeerDependencies:
+      - zod
+
+  ox@0.6.0(typescript@4.9.5)(zod@3.24.1):
+    dependencies:
+      '@adraffy/ens-normalize': 1.11.0
+      '@noble/curves': 1.8.0
+      '@noble/hashes': 1.7.0
+      '@scure/bip32': 1.6.1
+      '@scure/bip39': 1.5.1
+      abitype: 1.0.8(typescript@4.9.5)(zod@3.24.1)
+      eventemitter3: 5.0.1
+    optionalDependencies:
+      typescript: 4.9.5
     transitivePeerDependencies:
       - zod
 
@@ -44264,6 +44509,8 @@ snapshots:
     dependencies:
       semver: 7.6.3
 
+  semver@5.3.0: {}
+
   semver@5.7.2: {}
 
   semver@6.3.1: {}
@@ -45734,6 +45981,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  ts-jest-mock-import-meta@1.2.1(ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0))(typescript@5.6.3)):
+    dependencies:
+      ts-jest: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0))(typescript@5.6.3)
+
   ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.2)(jest@29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@20.17.9)(typescript@5.7.3)))(typescript@5.7.3):
     dependencies:
       bs-logger: 0.2.6
@@ -45753,6 +46004,25 @@ snapshots:
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.26.0)
       esbuild: 0.24.2
+
+  ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0))(typescript@5.6.3):
+    dependencies:
+      bs-logger: 0.2.6
+      ejs: 3.1.10
+      fast-json-stable-stringify: 2.1.0
+      jest: 29.7.0(@types/node@20.17.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@20.17.9)(typescript@5.7.3))
+      jest-util: 29.7.0
+      json5: 2.2.3
+      lodash.memoize: 4.1.2
+      make-error: 1.3.6
+      semver: 7.6.3
+      typescript: 5.6.3
+      yargs-parser: 21.1.1
+    optionalDependencies:
+      '@babel/core': 7.26.0
+      '@jest/transform': 29.7.0
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.26.0)
 
   ts-jest@29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.10.5)(babel-plugin-macros@3.1.0))(typescript@5.7.3):
     dependencies:
@@ -45832,6 +46102,26 @@ snapshots:
       diff: 4.0.2
       make-error: 1.3.6
       typescript: 5.7.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optionalDependencies:
+      '@swc/core': 1.10.4(@swc/helpers@0.5.15)
+
+  ts-node@10.9.2(@swc/core@1.10.4(@swc/helpers@0.5.15))(@types/node@22.10.5)(typescript@4.9.5):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 22.10.5
+      acorn: 8.14.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
@@ -45964,6 +46254,34 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - ts-node
+
+  tsup@8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@4.9.5)(yaml@2.7.0):
+    dependencies:
+      bundle-require: 5.1.0(esbuild@0.24.2)
+      cac: 6.7.14
+      chokidar: 4.0.3
+      consola: 3.3.3
+      debug: 4.4.0(supports-color@8.1.1)
+      esbuild: 0.24.2
+      joycon: 3.1.1
+      picocolors: 1.1.1
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(yaml@2.7.0)
+      resolve-from: 5.0.0
+      rollup: 4.29.1
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tinyexec: 0.3.2
+      tinyglobby: 0.2.10
+      tree-kill: 1.2.2
+    optionalDependencies:
+      '@swc/core': 1.10.4(@swc/helpers@0.5.15)
+      postcss: 8.4.49
+      typescript: 4.9.5
+    transitivePeerDependencies:
+      - jiti
+      - supports-color
+      - tsx
+      - yaml
 
   tsup@8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.7.0):
     dependencies:
@@ -46508,6 +46826,10 @@ snapshots:
       node-gyp-build: 4.8.4
     optional: true
 
+  utf7@1.0.2:
+    dependencies:
+      semver: 5.3.0
+
   utf8@3.0.0: {}
 
   utfstring@2.0.2: {}
@@ -46529,6 +46851,11 @@ snapshots:
   utility-types@3.11.0: {}
 
   utils-merge@1.0.1: {}
+
+  uue@3.1.2:
+    dependencies:
+      escape-string-regexp: 1.0.5
+      extend: 3.0.2
 
   uuid@10.0.0: {}
 
@@ -46713,6 +47040,24 @@ snapshots:
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     optionalDependencies:
       typescript: 5.7.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+
+  viem@2.22.2(bufferutil@4.0.9)(typescript@4.9.5)(utf-8-validate@6.0.5)(zod@3.24.1):
+    dependencies:
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.1
+      '@scure/bip32': 1.6.0
+      '@scure/bip39': 1.5.0
+      abitype: 1.0.7(typescript@4.9.5)(zod@3.24.1)
+      isows: 1.0.6(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      ox: 0.6.0(typescript@4.9.5)(zod@3.24.1)
+      webauthn-p256: 0.0.10
+      ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+    optionalDependencies:
+      typescript: 4.9.5
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate

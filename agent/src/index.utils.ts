@@ -3,6 +3,7 @@ import { PostgresDatabaseAdapter } from "@elizaos/adapter-postgres";
 import { RedisClient } from "@elizaos/adapter-redis";
 import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
 import { SupabaseDatabaseAdapter } from "@elizaos/adapter-supabase";
+import { QdrantDatabaseAdapter } from "@elizaos/adapter-qdrant";
 import { AutoClientInterface } from "@elizaos/client-auto";
 import { DiscordClientInterface } from "@elizaos/client-discord";
 import { InstagramClientInterface } from "@elizaos/client-instagram";
@@ -11,6 +12,7 @@ import { SlackClientInterface } from "@elizaos/client-slack";
 import { TelegramClientInterface } from "@elizaos/client-telegram";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
 import { FarcasterClientInterface } from "@elizaos/client-farcaster";
+import { JeeterClientInterface } from "@elizaos/client-simsai";
 import { DirectClient } from "@elizaos/client-direct";
 
 import {
@@ -624,6 +626,20 @@ function initializeDatabase(dataDir: string) {
             dataDir: process.env.PGLITE_DATA_DIR,
         });
         return db;
+    } else if (
+        process.env.QDRANT_URL &&
+        process.env.QDRANT_KEY &&
+        process.env.QDRANT_PORT &&
+        process.env.QDRANT_VECTOR_SIZE
+    ) {
+        elizaLogger.info("Initializing Qdrant adapter...");
+        const db = new QdrantDatabaseAdapter(
+            process.env.QDRANT_URL,
+            process.env.QDRANT_KEY,
+            Number(process.env.QDRANT_PORT),
+            Number(process.env.QDRANT_VECTOR_SIZE),
+        );
+        return db;
     } else {
         const filePath =
             process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
@@ -693,10 +709,16 @@ export async function initializeClients(
             clients.farcaster = farcasterClient;
         }
     }
+
     if (clientTypes.includes("lens")) {
         const lensClient = new LensAgentClient(runtime);
         lensClient.start();
         clients.lens = lensClient;
+    }
+
+    if (clientTypes.includes(Clients.SIMSAI)) {
+        const simsaiClient = await JeeterClientInterface.start(runtime);
+        if (simsaiClient) clients.simsai = simsaiClient;
     }
 
     elizaLogger.log("client keys", Object.keys(clients));
@@ -842,8 +864,6 @@ export async function createAgent(
             getSecret(character, "TEE_MARLIN") ? teeMarlinPlugin : null,
         ].filter(Boolean),
         providers: [],
-        actions: [],
-        services: [],
         managers: [],
         cacheManager: cache,
         fetch: logFetch,
