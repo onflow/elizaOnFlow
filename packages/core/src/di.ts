@@ -33,7 +33,7 @@ globalContainer
                 jsonObjcet = await import(tryPath, { with: { type: "json" } });
                 if (jsonObjcet) {
                     elizaLogger.info(
-                        `Successfully loaded character from: ${tryPath}`
+                        `Successfully loaded 'flow.json' from: ${tryPath}`,
                     );
                     break;
                 }

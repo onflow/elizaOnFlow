@@ -1,13 +1,13 @@
 import { injectable, inject } from "inversify";
 import {
     elizaLogger,
-    IAgentRuntime,
-    Memory,
-    Provider,
-    State,
+    type IAgentRuntime,
+    type Memory,
+    type Provider,
+    type State,
 } from "@elizaos/core";
 import { FlowWalletProvider } from "@elizaos/plugin-flow";
-import { InjectableProvider } from "@elizaos/plugin-di";
+import type { InjectableProvider } from "@elizaos/plugin-di";
 import { ConnectorProvider } from "./connector";
 
 /**

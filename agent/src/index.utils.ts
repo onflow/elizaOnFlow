@@ -13,7 +13,7 @@ import { TelegramClientInterface } from "@elizaos/client-telegram";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
 import { FarcasterClientInterface } from "@elizaos/client-farcaster";
 import { JeeterClientInterface } from "@elizaos/client-simsai";
-import { DirectClient } from "@elizaos/client-direct";
+import type { DirectClient } from "@elizaos/client-direct";
 
 import {
     AgentRuntime,

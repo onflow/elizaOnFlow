@@ -24,9 +24,9 @@
                 "@elizaos/plugin-flow#build"
             ]
         },
-        "@fixes-ai/*#build": {
+        "@fixes-ai/common#build": {
             "dependsOn": [
-                "^@fixes-ai/core#build"
+                "@fixes-ai/core#build"
             ]
         }
     }

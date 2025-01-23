@@ -1,4 +1,4 @@
-import { type PluginOptions } from "@elizaos/plugin-di";
+import type { PluginOptions } from "@elizaos/plugin-di";
 import { TransferAction, GetPriceAction, GetTokenInfoAction } from "./actions";
 
 /**
