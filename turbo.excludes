@@ -35,3 +35,8 @@ create-eliza-app
 @elizaos/plugin-sui
 @elizaos/plugin-ton
 @elizaos/plugin-zksync-era
+@elizaos/plugin-initia
+@elizaos/plugin-lit
+@elizaos/plugin-mind-network
+@elizaos/plugin-sei
+@elizaos/plugin-mina

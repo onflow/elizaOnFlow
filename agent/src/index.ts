@@ -103,12 +103,12 @@ if (
     parseBooleanFromText(process.env.PREVENT_UNHANDLED_EXIT)
 ) {
     // Handle uncaught exceptions to prevent the process from crashing
-    process.on("uncaughtException", (err) => {
+    process.on("uncaughtException", function (err) {
         console.error("uncaughtException", err);
     });
 
     // Handle unhandled rejections to prevent the process from crashing
-    process.on("unhandledRejection", (err) => {
+    process.on("unhandledRejection", function (err) {
         console.error("unhandledRejection", err);
     });
 }

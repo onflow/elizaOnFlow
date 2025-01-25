@@ -1,9 +1,10 @@
 import { PGLiteDatabaseAdapter } from "@elizaos/adapter-pglite";
 import { PostgresDatabaseAdapter } from "@elizaos/adapter-postgres";
+import { QdrantDatabaseAdapter } from "@elizaos/adapter-qdrant";
 import { RedisClient } from "@elizaos/adapter-redis";
 import { SqliteDatabaseAdapter } from "@elizaos/adapter-sqlite";
 import { SupabaseDatabaseAdapter } from "@elizaos/adapter-supabase";
-import { QdrantDatabaseAdapter } from "@elizaos/adapter-qdrant";
+import { MongoDBDatabaseAdapter } from "@elizaos/adapter-mongodb";
 import { AutoClientInterface } from "@elizaos/client-auto";
 import { DiscordClientInterface } from "@elizaos/client-discord";
 import { InstagramClientInterface } from "@elizaos/client-instagram";
@@ -11,9 +12,11 @@ import { LensAgentClient } from "@elizaos/client-lens";
 import { SlackClientInterface } from "@elizaos/client-slack";
 import { TelegramClientInterface } from "@elizaos/client-telegram";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
+import { AlexaClientInterface } from "@elizaos/client-alexa";
+
 import { FarcasterClientInterface } from "@elizaos/client-farcaster";
 import { JeeterClientInterface } from "@elizaos/client-simsai";
-import type { DirectClient } from "@elizaos/client-direct";
+import { DirectClient } from "@elizaos/client-direct";
 
 import {
     AgentRuntime,
@@ -35,7 +38,7 @@ import {
     stringToUuid,
     validateCharacterConfig,
 } from "@elizaos/core";
-
+import { PrimusAdapter } from "@elizaos/plugin-primus";
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
 import { ThreeDGenerationPlugin } from "@elizaos/plugin-3d-generation";
 import { imageGenerationPlugin } from "@elizaos/plugin-image-generation";
@@ -46,13 +49,13 @@ import { TEEMode, teePlugin } from "@elizaos/plugin-tee";
 import { teeLogPlugin } from "@elizaos/plugin-tee-log";
 import { teeMarlinPlugin } from "@elizaos/plugin-tee-marlin";
 import { verifiableLogPlugin } from "@elizaos/plugin-tee-verifiable-log";
-import { PrimusAdapter } from "@elizaos/plugin-primus";
 
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import yargs from "yargs";
+import { MongoClient } from "mongodb";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -148,9 +151,7 @@ export async function loadCharacterFromOnchain(): Promise<Character[]> {
 
         // .id isn't really valid
         const characterId = character.id || character.name;
-        const characterPrefix = `CHARACTER.${characterId
-            .toUpperCase()
-            .replace(/ /g, "_")}.`;
+        const characterPrefix = `CHARACTER.${characterId.toUpperCase().replace(/ /g, "_")}.`;
 
         const characterSettings = Object.entries(process.env)
             .filter(([key]) => key.startsWith(characterPrefix))
@@ -224,9 +225,7 @@ export async function jsonToCharacter(
 
     // .id isn't really valid
     const characterId = character.id || character.name;
-    const characterPrefix = `CHARACTER.${characterId
-        .toUpperCase()
-        .replace(/ /g, "_")}.`;
+    const characterPrefix = `CHARACTER.${characterId.toUpperCase().replace(/ /g, "_")}.`;
     const characterSettings = Object.entries(process.env)
         .filter(([key]) => key.startsWith(characterPrefix))
         .reduce((settings, [key, value]) => {
@@ -430,6 +429,8 @@ export function getTokenForProvider(
             return "";
         case ModelProviderName.GAIANET:
             return "";
+        case ModelProviderName.BEDROCK:
+            return "";
         case ModelProviderName.OPENAI:
             return (
                 character.settings?.secrets?.OPENAI_API_KEY ||
@@ -533,11 +534,6 @@ export function getTokenForProvider(
                 character.settings?.secrets?.NVIDIA_API_KEY ||
                 settings.NVIDIA_API_KEY
             );
-        case ModelProviderName.NVIDIA:
-            return (
-                character.settings?.secrets?.NVIDIA_API_KEY ||
-                settings.NVIDIA_API_KEY
-            );
         case ModelProviderName.AKASH_CHAT_API:
             return (
                 character.settings?.secrets?.AKASH_CHAT_API_KEY ||
@@ -581,7 +577,35 @@ export function getTokenForProvider(
 }
 
 function initializeDatabase(dataDir: string) {
-    if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+    if (process.env.MONGODB_CONNECTION_STRING) {
+        elizaLogger.log("Initializing database on MongoDB Atlas");
+        const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING, {
+            maxPoolSize: 100,
+            minPoolSize: 5,
+            maxIdleTimeMS: 60000,
+            connectTimeoutMS: 10000,
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
+            compressors: ["zlib"],
+            retryWrites: true,
+            retryReads: true,
+        });
+
+        const dbName = process.env.MONGODB_DATABASE || "elizaAgent";
+        const db = new MongoDBDatabaseAdapter(client, dbName);
+
+        // Test the connection
+        db.init()
+            .then(() => {
+                elizaLogger.success("Successfully connected to MongoDB Atlas");
+            })
+            .catch((error) => {
+                elizaLogger.error("Failed to connect to MongoDB Atlas:", error);
+                throw error; // Re-throw to handle it in the calling code
+            });
+
+        return db;
+    } else if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
         elizaLogger.info("Initializing Supabase connection...");
         const db = new SupabaseDatabaseAdapter(
             process.env.SUPABASE_URL,
@@ -693,6 +717,13 @@ export async function initializeClients(
         const twitterClient = await TwitterClientInterface.start(runtime);
         if (twitterClient) {
             clients.twitter = twitterClient;
+        }
+    }
+
+    if (clientTypes.includes(Clients.ALEXA)) {
+        const alexaClient = await AlexaClientInterface.start(runtime);
+        if (alexaClient) {
+            clients.alexa = alexaClient;
         }
     }
 
