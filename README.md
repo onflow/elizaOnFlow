@@ -52,12 +52,35 @@ This project iterates fast, so we recommend checking out the latest release.
 git checkout $(git describe --tags --abbrev=0)
 ``` -->
 
-### Automatically Start ElizaOnFlow
+#### Edit the .env file
 
-This will run everything to setup the project and start the bot with the default character.
+Copy .env.example to .env and fill in the appropriate values.
 
 ```bash
-sh scripts/start.sh
+cp .env.example .env
+```
+
+Note: .env is optional. If you're planning to run multiple distinct agents, you can pass secrets through the character JSON
+
+#### Start Eliza
+
+```bash
+pnpm i
+pnpm build
+pnpm start
+
+# The project iterates fast, sometimes you need to clean the project if you are coming back to the project
+pnpm clean
+```
+
+### Interact via Browser
+
+Once the agent is running, you should see the message to run "pnpm start:client" at the end.
+
+Open another terminal, move to the same directory, run the command below, then follow the URL to chat with your agent.
+
+```bash
+pnpm start:client
 ```
 
 ### Edit the character file
@@ -68,17 +91,6 @@ sh scripts/start.sh
     - Multiple character files can be loaded simultaneously
 3. Connect with X (Twitter)
     - change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
-
-### Manually Start ElizaOnFlow
-
-```bash
-pnpm i
-pnpm build
-pnpm start
-
-# The project iterates fast, sometimes you need to clean the project if you are coming back to the project
-pnpm clean
-```
 
 #### Install / Add new Flow Cadence contracts dependencies
 
@@ -93,37 +105,6 @@ And if you want to add a new contract dependency, you can use the following comm
 
 ```bash
 flow deps add mainnet://0xAddress.ContractName
-```
-
-#### How to use plugins from ElizaOnFlow in original Eliza framework?
-
-Plugins from ElizaOnFlow is compatible with the original Eliza framework but you need to apply dependency injection when you use them.
-You can use the following code to use the plugins from ElizaOnFlow in the original Eliza framework.
-
-```bash
-# Import packages from ElizaOnFlow to your Eliza project
-pnpm add @fixes-ai/core @fixes-ai/common
-```
-
-Open the `agent/src/index.ts` file and add the following code:
-
-```typescript
-// Import the normalizeCharacter function from the core package
-import { normalizeCharacter } from "@fixes-ai/core";
-
-// Load the character file
-const startAgents = async () => {
-    // ... existing code
-    if (charactersArg) {
-        characters = await loadCharacters(charactersArg, defaultCharacter);
-    }
-
-    // Right after loading the characters
-    // Add this line to apply dependency injection and normalize characters, all dependencies will be injected
-    characters = await Promise.all(characters.map(normalizeCharacter));
-
-    // ... existing code
-}
 ```
 
 #### Additional Requirements
