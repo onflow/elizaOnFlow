@@ -240,9 +240,9 @@ access(all) contract AccountsPool {
     /// Returns the public account manager interface
     ///
     access(all)
-    view fun borrowAccountsPool(): &{PoolPublic} {
+    view fun borrowAccountsPool(): &Pool {
         return self.account
-            .capabilities.get<&{PoolPublic}>(self.PublicPath)
+            .capabilities.get<&Pool>(self.PublicPath)
             .borrow()
             ?? panic("Could not borrow accounts pool reference")
     }
