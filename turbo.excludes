@@ -30,6 +30,7 @@ create-eliza-app
 @elizaos/plugin-quai
 @elizaos/plugin-solana
 @elizaos/plugin-solana-agent-kit
+@elizaos/plugin-solana-v2
 @elizaos/plugin-starknet
 @elizaos/plugin-story
 @elizaos/plugin-sui
