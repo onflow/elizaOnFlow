@@ -9,10 +9,12 @@ create-eliza-app
 @elizaos/plugin-avalanche
 @elizaos/plugin-b2
 @elizaos/plugin-bnb
+@elizaos/plugin-btcfun
 @elizaos/plugin-coinbase
 @elizaos/plugin-conflux
 @elizaos/plugin-cronos
 @elizaos/plugin-cronoszkevm
+@elizaos/plugin-cosmos
 @elizaos/plugin-depin
 @elizaos/plugin-evm
 @elizaos/plugin-fuel
@@ -28,6 +30,7 @@ create-eliza-app
 @elizaos/plugin-nft-generation
 @elizaos/plugin-omniflix
 @elizaos/plugin-quai
+@elizaos/plugin-sei
 @elizaos/plugin-solana
 @elizaos/plugin-solana-agent-kit
 @elizaos/plugin-solana-v2
@@ -39,5 +42,4 @@ create-eliza-app
 @elizaos/plugin-initia
 @elizaos/plugin-lit
 @elizaos/plugin-mind-network
-@elizaos/plugin-sei
 @elizaos/plugin-mina
