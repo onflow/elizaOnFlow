@@ -20,7 +20,7 @@ transaction() {
         }
 
         if acct.capabilities.get<&EVM.CadenceOwnedAccount>(evmPublicPath).borrow() == nil {
-            acct.capabilities.unpublish(evmPublicPath)
+            let _ = acct.capabilities.unpublish(evmPublicPath)
             let addressableCap = acct.capabilities.storage.issue<&EVM.CadenceOwnedAccount>(evmStoragePath)
             acct.capabilities.publish(addressableCap, at: evmPublicPath)
         }
@@ -34,7 +34,7 @@ transaction() {
         }
 
         if acct.capabilities.get<&HybridCustody.Manager>(HybridCustody.ManagerPublicPath).borrow() == nil {
-            acct.capabilities.unpublish(HybridCustody.ManagerPublicPath)
+            let _ = acct.capabilities.unpublish(HybridCustody.ManagerPublicPath)
             acct.capabilities.publish(
                 acct.capabilities.storage.issue<&HybridCustody.Manager>(HybridCustody.ManagerStoragePath),
                 at: HybridCustody.ManagerPublicPath
@@ -53,7 +53,7 @@ transaction() {
         }
 
         if acct.capabilities.get<&AccountsPool.Pool>(AccountsPool.PublicPath).borrow() == nil {
-            acct.capabilities.unpublish(AccountsPool.PublicPath)
+            let _ = acct.capabilities.unpublish(AccountsPool.PublicPath)
             acct.capabilities.publish(
                 acct.capabilities.storage.issue<&AccountsPool.Pool>(AccountsPool.StoragePath),
                 at: AccountsPool.PublicPath

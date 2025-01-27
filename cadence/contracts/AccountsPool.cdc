@@ -175,7 +175,7 @@ access(all) contract AccountsPool {
 
             // check that paths are all configured properly
             // public path
-            child.capabilities.unpublish(HybridCustody.OwnedAccountPublicPath)
+            let _unpub1 = child.capabilities.unpublish(HybridCustody.OwnedAccountPublicPath)
             child.capabilities.publish(
                 child.capabilities.storage.issue<&HybridCustody.OwnedAccount>(HybridCustody.OwnedAccountStoragePath),
                 at: HybridCustody.OwnedAccountPublicPath
@@ -189,7 +189,7 @@ access(all) contract AccountsPool {
             child = childRef.borrowAccount()
 
             // unpublish the priv capability
-            child.inbox.unpublish<
+            let _unpub2 = child.inbox.unpublish<
                 auth(HybridCustody.Owner) &{HybridCustody.OwnedAccountPrivate, HybridCustody.OwnedAccountPublic, ViewResolver.Resolver}
             >(publishIdentifier)
 
@@ -213,7 +213,7 @@ access(all) contract AccountsPool {
                 // Save the COA to the new account
                 child.storage.save<@EVM.CadenceOwnedAccount>(<-coa, to: storagePath)
                 let addressableCap = child.capabilities.storage.issue<&EVM.CadenceOwnedAccount>(storagePath)
-                child.capabilities.unpublish(publicPath)
+                let _unpub3 = child.capabilities.unpublish(publicPath)
                 child.capabilities.publish(addressableCap, at: publicPath)
             }
         }
