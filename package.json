@@ -12,7 +12,6 @@
         "start": "pnpm --filter \"@fixes-ai/agent\" start --isRoot",
         "start:client": "pnpm --dir client dev",
         "start:debug": "cross-env NODE_ENV=development DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* pnpm --filter \"@fixes-ai/agent\" start --isRoot",
-        "dev": "bash ./deps/eliza/scripts/dev.sh",
         "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
         "clean": "bash ./deps/eliza/scripts/clean.sh",
         "test": "bash ./deps/eliza/scripts/test.sh",

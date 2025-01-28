@@ -11,8 +11,10 @@ import { InstagramClientInterface } from "@elizaos/client-instagram";
 import { LensAgentClient } from "@elizaos/client-lens";
 import { SlackClientInterface } from "@elizaos/client-slack";
 import { TelegramClientInterface } from "@elizaos/client-telegram";
+import { TelegramAccountClientInterface } from "@elizaos/client-telegram-account";
 import { TwitterClientInterface } from "@elizaos/client-twitter";
 import { AlexaClientInterface } from "@elizaos/client-alexa";
+import { DevaClientInterface } from "@elizaos/client-deva";
 
 import { FarcasterClientInterface } from "@elizaos/client-farcaster";
 import { JeeterClientInterface } from "@elizaos/client-simsai";
@@ -152,7 +154,9 @@ export async function loadCharacterFromOnchain(): Promise<Character[]> {
 
         // .id isn't really valid
         const characterId = character.id || character.name;
-        const characterPrefix = `CHARACTER.${characterId.toUpperCase().replace(/ /g, "_")}.`;
+        const characterPrefix = `CHARACTER.${characterId
+            .toUpperCase()
+            .replace(/ /g, "_")}.`;
 
         const characterSettings = Object.entries(process.env)
             .filter(([key]) => key.startsWith(characterPrefix))
@@ -226,7 +230,9 @@ export async function jsonToCharacter(
 
     // .id isn't really valid
     const characterId = character.id || character.name;
-    const characterPrefix = `CHARACTER.${characterId.toUpperCase().replace(/ /g, "_")}.`;
+    const characterPrefix = `CHARACTER.${characterId
+        .toUpperCase()
+        .replace(/ /g, "_")}.`;
     const characterSettings = Object.entries(process.env)
         .filter(([key]) => key.startsWith(characterPrefix))
         .reduce((settings, [key, value]) => {
@@ -719,6 +725,13 @@ export async function initializeClients(
         if (telegramClient) clients.telegram = telegramClient;
     }
 
+    if (clientTypes.includes(Clients.TELEGRAM_ACCOUNT)) {
+        const telegramAccountClient =
+            await TelegramAccountClientInterface.start(runtime);
+        if (telegramAccountClient)
+            clients.telegram_account = telegramAccountClient;
+    }
+
     if (clientTypes.includes(Clients.TWITTER)) {
         const twitterClient = await TwitterClientInterface.start(runtime);
         if (twitterClient) {
@@ -760,8 +773,12 @@ export async function initializeClients(
 
     elizaLogger.log("client keys", Object.keys(clients));
 
-    // TODO: Add Slack client to the list
-    // Initialize clients as an object
+    if (clientTypes.includes("deva")) {
+        if (clientTypes.includes("deva")) {
+            const devaClient = await DevaClientInterface.start(runtime);
+            if (devaClient) clients.deva = devaClient;
+        }
+    }
 
     if (clientTypes.includes("slack")) {
         const slackClient = await SlackClientInterface.start(runtime);
