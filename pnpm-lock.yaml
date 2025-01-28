@@ -988,13 +988,13 @@ importers:
     dependencies:
       '@discordjs/opus':
         specifier: github:discordjs/opus
-        version: https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13)
+        version: https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13)
       '@discordjs/rest':
         specifier: 2.4.0
         version: 2.4.0
       '@discordjs/voice':
         specifier: 0.17.0
-        version: 0.17.0(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13))(bufferutil@4.0.9)(ffmpeg-static@5.2.0)(utf-8-validate@6.0.5)
+        version: 0.17.0(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13))(bufferutil@4.0.9)(ffmpeg-static@5.2.0)(utf-8-validate@6.0.5)
       '@elizaos/core':
         specifier: workspace:*
         version: link:../core
@@ -1009,7 +1009,7 @@ importers:
         version: 0.7.15
       prism-media:
         specifier: 1.3.5
-        version: 1.3.5(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13))(ffmpeg-static@5.2.0)
+        version: 1.3.5(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13))(ffmpeg-static@5.2.0)
       whatwg-url:
         specifier: 7.1.0
         version: 7.1.0
@@ -4800,6 +4800,15 @@ importers:
       '@elizaos/plugin-flow':
         specifier: workspace:*
         version: link:../../deps/eliza/packages/plugin-flow
+      '@onflow/fcl':
+        specifier: 1.13.4
+        version: 1.13.4(@types/react@19.0.6)(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(ioredis@5.4.2)(jiti@2.4.2)(postcss@8.4.49)(react@19.0.0)(tsx@4.19.2)(utf-8-validate@6.0.5)
+      '@onflow/typedefs':
+        specifier: 1.4.0
+        version: 1.4.0
+      '@onflow/types':
+        specifier: 1.4.1
+        version: 1.4.1
       inversify:
         specifier: 6.2.1
         version: 6.2.1(reflect-metadata@0.2.2)
@@ -6259,8 +6268,8 @@ packages:
     resolution: {integrity: sha512-YJOVVZ545x24mHzANfYoy0BJX5PDyeZlpiJjDkUBM/V/Ao7TFX9lcUvCN4nr0tbr5ubeaXxtEBILUrHtTphVeQ==}
     hasBin: true
 
-  '@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063':
-    resolution: {tarball: https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063}
+  '@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda':
+    resolution: {tarball: https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda}
     version: 0.10.0
     engines: {node: '>=12.0.0'}
 
@@ -8805,6 +8814,9 @@ packages:
   '@noble/curves@1.3.0':
     resolution: {integrity: sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==}
 
+  '@noble/curves@1.4.0':
+    resolution: {integrity: sha512-p+4cb332SFCrReJkCYe8Xzm0OWi4Jji5jVdIZRL/PmacmDkFNw6MrrV+gGpiPxLHbV+zKFRywUWbaseT+tZRXg==}
+
   '@noble/curves@1.4.2':
     resolution: {integrity: sha512-TavHr8qycMChk8UwMld0ZDRvatedkzWfH8IiaeGCfymOP5i0hSCozz9vHOL0nkwk7HRMlFnAiKpS2jrUmSybcw==}
 
@@ -9409,13 +9421,24 @@ packages:
   '@onflow/fcl-core@1.13.1':
     resolution: {integrity: sha512-kXej2sLWjY2MVY42omIKiZz0v13V2MTwZV1dwf4xERqgFX0WvsG5ZGyVY0y4kp8mNiUXe7pZmtRhynu2TJGnJw==}
 
+  '@onflow/fcl-core@1.13.4':
+    resolution: {integrity: sha512-y4wk8wd88mHSRj2zHMSgrhEcuwXxp1F0LbOKTROU9pxHHg8ayjqzNWaminkp3yUWI3s5GE4OfVRjnKazAMVSYA==}
+
   '@onflow/fcl-wc@5.5.1':
     resolution: {integrity: sha512-c83yjATlOTBjGzGlSXUiBJR576L8/oGiiL7b3ymi5jbl47RhubPPiH4Ix+DoJqyDuRtpk5Lim2vodawmH/aiWQ==}
     peerDependencies:
       '@onflow/fcl-core': 1.13.1
 
+  '@onflow/fcl-wc@5.5.4':
+    resolution: {integrity: sha512-o2r25gapkDvGLIVLy4RjUUqcwrwYn9xyXYR6jKlYhyyqHHd1Npf9H1TtBTTl77Q+bp/0/PdxZcxPjUZd/NLoUg==}
+    peerDependencies:
+      '@onflow/fcl-core': 1.13.4
+
   '@onflow/fcl@1.13.1':
     resolution: {integrity: sha512-96Fe2SsnUqPSIaSxsaL7Fuz3wQUxPfV5eexz0JufWhyQ6NvwDu9bvD/ntNk1ACJkIANlEIzP+sq4Nfz93uINfw==}
+
+  '@onflow/fcl@1.13.4':
+    resolution: {integrity: sha512-7W4g0gA1lSi+u7GIXhDEX0/cB4TDUn8H/VnpY8wD1GRsFmYpTm1wlY724jFynNNty96aTgdLhGpoIACMGiicZQ==}
 
   '@onflow/interaction@0.0.11':
     resolution: {integrity: sha512-Xuq1Mmx6Wyba/F/L+QLQs0yJeQDsIDwy5SKk5vrCuVgIj0yD8k506g5L8ODrbM1LWll8i0tQsoOi0F85vNl5sA==}
@@ -9426,8 +9449,14 @@ packages:
   '@onflow/sdk@1.5.5':
     resolution: {integrity: sha512-79h56lYB/4vi1Tn+QrICUpQZ0Jh8O5d8I0IC/3adAf2zU8xfxvkypw7Tfx58Zr03vip+0h83Ri3DwyZpqIM2sw==}
 
+  '@onflow/sdk@1.5.6':
+    resolution: {integrity: sha512-bvk2V4FAYH8M/2kSQK9YnETK4FY564daMx2nQjochwKRWzkax22R5qquQMQ3nj6TQauouMmtNzgTS1JNCyuBcA==}
+
   '@onflow/transport-http@1.10.4':
     resolution: {integrity: sha512-yZNqNEISnCaP7bsB+pwBjHT7+AYjADxUQpj8SccrTWnWlM6LEDIcNVCr8eBzrANug3o2Y1LuqSOhMiWYtbXs7w==}
+
+  '@onflow/transport-http@1.10.5':
+    resolution: {integrity: sha512-Gh1TWLe/ZfntVWmvex3Itz6OPxLS6D6cWj9L+52IhgmZLdLNgQTDxyddCg2WaNsyKch20u7T3vHXPyOtN52yBA==}
 
   '@onflow/typedefs@1.4.0':
     resolution: {integrity: sha512-7b4C3F4Ztayx6XdQz/7YoHMzZ6kzy37dLxdVCV/PAsAunq9Jfu32HQaf8a0NCk0L0aM7FS2zT1Om4k7b5KP4Xg==}
@@ -11690,7 +11719,7 @@ packages:
     resolution: {integrity: sha512-bvohO3rIMSVL24Pb+I4EYTJ6cL82eFpInEXD/I8K8upOGjpqHsKUoAempR/RnUlI1qSFNyFlWJfu6MNUgfbCQQ==}
     engines: {node: '>=16'}
     peerDependencies:
-      '@solana/web3.js': npm:@solana/web3.js@1.95.5
+      '@solana/web3.js': ^1.88.0
 
   '@solana/spl-token@0.4.6':
     resolution: {integrity: sha512-1nCnUqfHVtdguFciVWaY/RKcQz1IF4b31jnKgAmjU9QVN1q7dRUkTEWJZgTYIEtsULjVnC9jRqlhgGN39WbKKA==}
@@ -11708,7 +11737,7 @@ packages:
     resolution: {integrity: sha512-g3wbj4F4gq82YQlwqhPB0gHFXfgsC6UmyGMxtSLf/BozT/oKd59465DbnlUK8L8EcimKMavxsVAMoLcEdeCicg==}
     engines: {node: '>=16'}
     peerDependencies:
-      '@solana/web3.js': npm:@solana/web3.js@1.95.5
+      '@solana/web3.js': ^1.95.3
 
   '@solana/spl-type-length-value@0.1.0':
     resolution: {integrity: sha512-JBMGB0oR4lPttOZ5XiUGyvylwLQjt1CPJa6qQ5oM+MBCndfjz2TKKkw0eATlLLcYmq1jBVsNlJ2cD6ns2GR7lA==}
@@ -13273,6 +13302,17 @@ packages:
       typescript: '>=4.9.4'
       zod: ^3 >=3.19.1
     peerDependenciesMeta:
+      zod:
+        optional: true
+
+  abitype@1.0.5:
+    resolution: {integrity: sha512-YzDhti7cjlfaBhHutMaboYB21Ha3rXR9QTkNJFzYC4kC8YclaiwPBBBJY8ejFdu2wnJeZCVZSMlQJ7fi8S6hsw==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+      zod: ^3 >=3.22.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
       zod:
         optional: true
 
@@ -17708,6 +17748,11 @@ packages:
     peerDependencies:
       ws: '*'
 
+  isows@1.0.4:
+    resolution: {integrity: sha512-hEzjY+x9u9hPmBom9IIAqdJCwNLax+xrPb51vEPpERoFlIxgmZcHzsT5jKG06nvInKOBGvReAVz80Umed5CczQ==}
+    peerDependencies:
+      ws: '*'
+
   isows@1.0.6:
     resolution: {integrity: sha512-lPHCayd40oW98/I0uvgaHKWCSvkzY27LjWLbtzOm64yQ+G3Q5npjjbdppU65iZXkK1Zt+kH9pfegli0AYfwYYw==}
     peerDependencies:
@@ -18634,6 +18679,7 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.includes@4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
@@ -23653,6 +23699,14 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
+  viem@2.20.1:
+    resolution: {integrity: sha512-a/BSe25TSfkc423GTSKYl1O0ON2J5huoQeOLkylHT1WS8wh3JFqb8nfAq7vg+aZ+W06BCTn36bbi47yp4D92Cg==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   viem@2.21.49:
     resolution: {integrity: sha512-NNItYfTv4+yGE5DDKc+S/g2S7KeJn047GwgEYG60FAJlK0FzwuP6lQKSeQ8k7Y4VasfuKPqiT+XiilcCtTRiDQ==}
     peerDependencies:
@@ -24235,6 +24289,9 @@ packages:
 
   webauthn-p256@0.0.10:
     resolution: {integrity: sha512-EeYD+gmIT80YkSIDb2iWq0lq2zbHo1CxHlQTeJ+KkCILWpVy3zASH3ByD4bopzfk0uCwXxLqKGLqp2W4O28VFA==}
+
+  webauthn-p256@0.0.5:
+    resolution: {integrity: sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg==}
 
   webcrypto-core@1.8.1:
     resolution: {integrity: sha512-P+x1MvlNCXlKbLSOY4cYrdreqPG5hbzkmawbcXLKN/mf6DZW0SdNNkZ+sjwsqVkI4A4Ko2sPZmkZtCKY58w83A==}
@@ -27930,7 +27987,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13)':
+  '@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13)':
     dependencies:
       '@discordjs/node-pre-gyp': 0.4.5(encoding@0.1.13)
       node-addon-api: 8.3.0
@@ -27952,11 +28009,11 @@ snapshots:
 
   '@discordjs/util@1.1.1': {}
 
-  '@discordjs/voice@0.17.0(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13))(bufferutil@4.0.9)(ffmpeg-static@5.2.0)(utf-8-validate@6.0.5)':
+  '@discordjs/voice@0.17.0(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13))(bufferutil@4.0.9)(ffmpeg-static@5.2.0)(utf-8-validate@6.0.5)':
     dependencies:
       '@types/ws': 8.5.13
       discord-api-types: 0.37.83
-      prism-media: 1.3.5(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13))(ffmpeg-static@5.2.0)
+      prism-media: 1.3.5(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13))(ffmpeg-static@5.2.0)
       tslib: 2.8.1
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     transitivePeerDependencies:
@@ -29419,7 +29476,7 @@ snapshots:
       '@changesets/cli': 2.27.12
       axios: 1.7.7
       isomorphic-ws: 5.0.0(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
-      viem: 2.21.58(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1)
+      viem: 2.20.1(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1)
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     transitivePeerDependencies:
       - bufferutil
@@ -33626,6 +33683,10 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.3.3
 
+  '@noble/curves@1.4.0':
+    dependencies:
+      '@noble/hashes': 1.4.0
+
   '@noble/curves@1.4.2':
     dependencies:
       '@noble/hashes': 1.4.0
@@ -34331,11 +34392,83 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@onflow/fcl-core@1.13.4(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.4)
+      '@onflow/config': 1.5.1
+      '@onflow/interaction': 0.0.11
+      '@onflow/rlp': 1.2.3
+      '@onflow/sdk': 1.5.6(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)
+      '@onflow/transport-http': 1.10.5(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)
+      '@onflow/types': 1.4.1
+      '@onflow/util-actor': 1.3.4
+      '@onflow/util-address': 1.2.3
+      '@onflow/util-invariant': 1.2.4
+      '@onflow/util-logger': 1.3.3
+      '@onflow/util-semver': 1.0.3
+      '@onflow/util-template': 1.2.3
+      '@onflow/util-uid': 1.2.3
+      abort-controller: 3.0.0
+      cross-fetch: 4.1.0(encoding@0.1.13)
+    transitivePeerDependencies:
+      - '@onflow/util-config'
+      - bufferutil
+      - encoding
+      - google-protobuf
+      - supports-color
+      - utf-8-validate
+
   '@onflow/fcl-wc@5.5.1(@onflow/fcl-core@1.13.1(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5))(@types/react@19.0.6)(bufferutil@4.0.9)(ioredis@5.4.2)(jiti@2.4.2)(postcss@8.4.49)(react@19.0.0)(tsx@4.19.2)(utf-8-validate@6.0.5)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@onflow/config': 1.5.1
       '@onflow/fcl-core': 1.13.1(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5)
+      '@onflow/util-invariant': 1.2.4
+      '@onflow/util-logger': 1.3.3
+      '@walletconnect/modal': 2.7.0(@types/react@19.0.6)(react@19.0.0)
+      '@walletconnect/modal-core': 2.7.0(@types/react@19.0.6)(react@19.0.0)
+      '@walletconnect/sign-client': 2.17.3(bufferutil@4.0.9)(ioredis@5.4.2)(utf-8-validate@6.0.5)
+      '@walletconnect/types': 2.17.3(ioredis@5.4.2)
+      '@walletconnect/utils': 2.17.3(ioredis@5.4.2)
+      postcss-cli: 11.0.0(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)
+      preact: 10.25.4
+      tailwindcss: 3.4.15
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@deno/kv'
+      - '@netlify/blobs'
+      - '@onflow/util-config'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/blob'
+      - '@vercel/kv'
+      - aws4fetch
+      - bufferutil
+      - db0
+      - ioredis
+      - jiti
+      - postcss
+      - react
+      - supports-color
+      - ts-node
+      - tsx
+      - uploadthing
+      - utf-8-validate
+
+  '@onflow/fcl-wc@5.5.4(@onflow/fcl-core@1.13.4(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5))(@types/react@19.0.6)(bufferutil@4.0.9)(ioredis@5.4.2)(jiti@2.4.2)(postcss@8.4.49)(react@19.0.0)(tsx@4.19.2)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@onflow/config': 1.5.1
+      '@onflow/fcl-core': 1.13.4(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5)
       '@onflow/util-invariant': 1.2.4
       '@onflow/util-logger': 1.3.3
       '@walletconnect/modal': 2.7.0(@types/react@19.0.6)(react@19.0.0)
@@ -34431,6 +34564,61 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
+  '@onflow/fcl@1.13.4(@types/react@19.0.6)(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(ioredis@5.4.2)(jiti@2.4.2)(postcss@8.4.49)(react@19.0.0)(tsx@4.19.2)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@onflow/config': 1.5.1
+      '@onflow/fcl-core': 1.13.4(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5)
+      '@onflow/fcl-wc': 5.5.4(@onflow/fcl-core@1.13.4(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(utf-8-validate@6.0.5))(@types/react@19.0.6)(bufferutil@4.0.9)(ioredis@5.4.2)(jiti@2.4.2)(postcss@8.4.49)(react@19.0.0)(tsx@4.19.2)(utf-8-validate@6.0.5)
+      '@onflow/interaction': 0.0.11
+      '@onflow/rlp': 1.2.3
+      '@onflow/sdk': 1.5.6(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)
+      '@onflow/types': 1.4.1
+      '@onflow/util-actor': 1.3.4
+      '@onflow/util-address': 1.2.3
+      '@onflow/util-invariant': 1.2.4
+      '@onflow/util-logger': 1.3.3
+      '@onflow/util-rpc': 0.0.2
+      '@onflow/util-semver': 1.0.3
+      '@onflow/util-template': 1.2.3
+      '@onflow/util-uid': 1.2.3
+      '@walletconnect/types': 2.17.3(ioredis@5.4.2)
+      abort-controller: 3.0.0
+      cross-fetch: 4.1.0(encoding@0.1.13)
+      events: 3.3.0
+      sha3: 2.1.4
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@deno/kv'
+      - '@netlify/blobs'
+      - '@onflow/util-config'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/blob'
+      - '@vercel/kv'
+      - aws4fetch
+      - bufferutil
+      - db0
+      - encoding
+      - google-protobuf
+      - ioredis
+      - jiti
+      - postcss
+      - react
+      - supports-color
+      - ts-node
+      - tsx
+      - uploadthing
+      - utf-8-validate
+
   '@onflow/interaction@0.0.11': {}
 
   '@onflow/rlp@1.2.3':
@@ -34461,7 +34649,48 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@onflow/sdk@1.5.6(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@onflow/config': 1.5.1
+      '@onflow/rlp': 1.2.3
+      '@onflow/transport-http': 1.10.5(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)
+      '@onflow/typedefs': 1.4.0
+      '@onflow/util-actor': 1.3.4
+      '@onflow/util-address': 1.2.3
+      '@onflow/util-invariant': 1.2.4
+      '@onflow/util-logger': 1.3.3
+      '@onflow/util-template': 1.2.3
+      deepmerge: 4.3.1
+      events: 3.3.0
+      sha3: 2.1.4
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - '@onflow/util-config'
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
+
   '@onflow/transport-http@1.10.4(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)':
+    dependencies:
+      '@babel/runtime': 7.26.0
+      '@onflow/util-address': 1.2.3
+      '@onflow/util-invariant': 1.2.4
+      '@onflow/util-logger': 1.3.3
+      '@onflow/util-template': 1.2.3
+      abort-controller: 3.0.0
+      cross-fetch: 4.1.0(encoding@0.1.13)
+      events: 3.3.0
+      isomorphic-ws: 5.0.0(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+    transitivePeerDependencies:
+      - '@onflow/util-config'
+      - bufferutil
+      - encoding
+      - utf-8-validate
+
+  '@onflow/transport-http@1.10.5(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@6.0.5)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@onflow/util-address': 1.2.3
@@ -34860,7 +35089,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.7.1
       '@polkadot-api/utils': 0.0.1-492c132563ea6b40ae1fc5470dec4cd18768d182.1.0
-      '@scure/base': 1.2.1
+      '@scure/base': 1.2.4
       scale-ts: 1.6.1
     optional: true
 
@@ -34868,7 +35097,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.7.1
       '@polkadot-api/utils': 0.1.0
-      '@scure/base': 1.2.1
+      '@scure/base': 1.2.4
       scale-ts: 1.6.1
     optional: true
 
@@ -35240,8 +35469,8 @@ snapshots:
 
   '@polkadot/util-crypto@13.3.1(@polkadot/util@13.3.1)':
     dependencies:
-      '@noble/curves': 1.8.0
-      '@noble/hashes': 1.7.0
+      '@noble/curves': 1.8.1
+      '@noble/hashes': 1.7.1
       '@polkadot/networks': 13.3.1
       '@polkadot/util': 13.3.1
       '@polkadot/wasm-crypto': 7.4.1(@polkadot/util@13.3.1)(@polkadot/x-randomvalues@13.3.1(@polkadot/util@13.3.1)(@polkadot/wasm-util@7.4.1(@polkadot/util@13.3.1)))
@@ -41204,7 +41433,7 @@ snapshots:
       '@xmtp/content-type-reply': 2.0.0
       '@xmtp/content-type-text': 2.0.0
       '@xmtp/node-sdk': 0.0.40
-      viem: 2.21.58(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1)
+      viem: 2.22.15(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -41405,6 +41634,11 @@ snapshots:
     dependencies:
       typescript: 5.7.3
     optionalDependencies:
+      zod: 3.24.1
+
+  abitype@1.0.5(typescript@5.7.3)(zod@3.24.1):
+    optionalDependencies:
+      typescript: 5.7.3
       zod: 3.24.1
 
   abitype@1.0.6(typescript@5.7.3)(zod@3.23.8):
@@ -42447,7 +42681,7 @@ snapshots:
 
   bitcoinjs-lib@6.1.3:
     dependencies:
-      '@noble/hashes': 1.7.0
+      '@noble/hashes': 1.7.1
       bech32: 2.0.0
       bip174: 2.1.1
       bs58check: 3.0.1
@@ -42745,7 +42979,7 @@ snapshots:
 
   bs58check@3.0.1:
     dependencies:
-      '@noble/hashes': 1.7.0
+      '@noble/hashes': 1.7.1
       bs58: 5.0.0
 
   bs58check@4.0.0:
@@ -47455,6 +47689,10 @@ snapshots:
     dependencies:
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
 
+  isows@1.0.4(ws@8.17.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)):
+    dependencies:
+      ws: 8.17.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+
   isows@1.0.6(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -51838,9 +52076,9 @@ snapshots:
       extend-shallow: 2.0.1
       js-beautify: 1.15.1
 
-  prism-media@1.3.5(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13))(ffmpeg-static@5.2.0):
+  prism-media@1.3.5(@discordjs/opus@https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13))(ffmpeg-static@5.2.0):
     optionalDependencies:
-      '@discordjs/opus': https://codeload.github.com/discordjs/opus/tar.gz/8c727579cd81831f6e866f8d82781b4bfa5f4063(encoding@0.1.13)
+      '@discordjs/opus': https://codeload.github.com/discordjs/opus/tar.gz/18cedf3292fe634f99f81af4a409389dc7b1ebda(encoding@0.1.13)
       ffmpeg-static: 5.2.0
 
   proc-log@4.2.0: {}
@@ -55468,6 +55706,24 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
+  viem@2.20.1(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.24.1):
+    dependencies:
+      '@adraffy/ens-normalize': 1.10.0
+      '@noble/curves': 1.4.0
+      '@noble/hashes': 1.4.0
+      '@scure/bip32': 1.4.0
+      '@scure/bip39': 1.3.0
+      abitype: 1.0.5(typescript@5.7.3)(zod@3.24.1)
+      isows: 1.0.4(ws@8.17.1(bufferutil@4.0.9)(utf-8-validate@6.0.5))
+      webauthn-p256: 0.0.5
+      ws: 8.17.1(bufferutil@4.0.9)(utf-8-validate@6.0.5)
+    optionalDependencies:
+      typescript: 5.7.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+
   viem@2.21.49(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@6.0.5)(zod@3.23.8):
     dependencies:
       '@noble/curves': 1.6.0
@@ -57295,6 +57551,11 @@ snapshots:
     dependencies:
       '@noble/curves': 1.8.0
       '@noble/hashes': 1.7.0
+
+  webauthn-p256@0.0.5:
+    dependencies:
+      '@noble/curves': 1.8.1
+      '@noble/hashes': 1.7.1
 
   webcrypto-core@1.8.1:
     dependencies:
