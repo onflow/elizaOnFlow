@@ -6,8 +6,8 @@ import {
     type IAgentRuntime,
 } from "@elizaos/core";
 import type { FlowConnector, FlowWalletProvider } from "@elizaos/plugin-flow";
-import { ConnectorProvider, WalletProvider } from "@fixes-ai/core";
 import { globalContainer } from "@elizaos/plugin-di";
+import { WalletProvider, ConnectorProvider } from "../providers";
 
 // Add SAMPLE to ServiceType enum in types.ts
 declare module "@elizaos/core" {
@@ -55,6 +55,13 @@ export class FlowWalletService extends Service {
 
         FlowWalletService.isInitialized = true;
         elizaLogger.info("FlowWalletService initialized");
+    }
+
+    /**
+     * Get the Flow connector
+     */
+    get connector() {
+        return this._connector;
     }
 
     /**

@@ -3,7 +3,6 @@ import path from "path";
 import { elizaLogger } from "@elizaos/core";
 import { globalContainer } from "@elizaos/plugin-di";
 import { CONSTANTS } from "./symbols";
-import { ConnectorProvider, WalletProvider, CacheProvider } from "./providers";
 
 // Load flow.json file and bind it to the container
 globalContainer
@@ -24,7 +23,7 @@ globalContainer
             pathsToTry.map((p) => ({
                 path: p,
                 exists: fs.existsSync(p),
-            }))
+            })),
         );
 
         let jsonObjcet: Record<string, unknown> | null = null;
@@ -47,15 +46,3 @@ globalContainer
         }
         return jsonObjcet;
     });
-
-// ----- Bind to Types -----
-
-// Connector provider is bound to singleton scope
-globalContainer
-    .bind<ConnectorProvider>(ConnectorProvider)
-    .toSelf()
-    .inSingletonScope();
-// Wallet provider is bound to request scope
-globalContainer.bind<WalletProvider>(WalletProvider).toSelf().inRequestScope();
-// Cache provider is bound to request scope
-globalContainer.bind<CacheProvider>(CacheProvider).toSelf().inRequestScope();

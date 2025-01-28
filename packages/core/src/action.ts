@@ -13,7 +13,8 @@ import {
     validateFlowConfig,
 } from "@elizaos/plugin-flow";
 import { type ActionOptions, BaseInjectableAction } from "@elizaos/plugin-di";
-import { ConnectorProvider, WalletProvider } from "./providers";
+import { FlowWalletService } from "./services";
+import { WalletProvider } from "./providers";
 
 /**
  * Base abstract class for injectable actions
@@ -24,12 +25,11 @@ export abstract class BaseFlowInjectableAction<
 > extends BaseInjectableAction<T> {
     // -------- Injects --------
 
-    // Inject the connector provider
-    @inject(ConnectorProvider)
-    public readonly connector: ConnectorProvider;
-    // Inject the wallet provider
     @inject(WalletProvider)
-    public readonly wallet: WalletProvider;
+    public readonly walletElizaProvider: WalletProvider;
+    // Inject the Flow wallet serivce
+    @inject(FlowWalletService)
+    public readonly walletSerivce: FlowWalletService;
 
     /**
      * Constructor for the base injectable action
@@ -50,7 +50,7 @@ export abstract class BaseFlowInjectableAction<
         runtime: IAgentRuntime,
         message: Memory,
         state?: State,
-        callback?: HandlerCallback
+        callback?: HandlerCallback,
     ): Promise<TransactionResponse | ScriptQueryResponse | null>;
 
     // -------- Implemented methods for Eliza runtime --------
@@ -67,15 +67,14 @@ export abstract class BaseFlowInjectableAction<
     async validate(
         runtime: IAgentRuntime,
         _message: Memory,
-        _state?: State
+        _state?: State,
     ): Promise<boolean> {
         // Validate the Flow environment configuration
         await validateFlowConfig(runtime);
 
-        const walletIns = await this.wallet.getInstance(runtime);
         // You need to ensure that the wallet is valid
         try {
-            await walletIns.syncAccountInfo();
+            await this.walletSerivce.wallet.syncAccountInfo();
         } catch {
             elizaLogger.error("Failed to sync account info");
             return false;
@@ -90,7 +89,7 @@ export abstract class BaseFlowInjectableAction<
     protected async prepareActionContext(
         runtime: IAgentRuntime,
         message: Memory,
-        state: State
+        state: State,
     ): Promise<string> {
         // Initialize or update state
         if (!state) {
@@ -100,7 +99,7 @@ export abstract class BaseFlowInjectableAction<
         }
 
         // Get wallet info for context, no state update
-        const walletInfo = await this.wallet.get(runtime, message);
+        const walletInfo = await this.walletElizaProvider.get(runtime, message);
         state.walletInfo = walletInfo;
 
         // Compose context
@@ -122,31 +121,31 @@ export abstract class BaseFlowInjectableAction<
         message: Memory,
         state?: State,
         options?: Record<string, unknown>,
-        callback?: HandlerCallback
+        callback?: HandlerCallback,
     ): Promise<any | null> {
         const res = await super.handler(
             runtime,
             message,
             state,
             options,
-            callback
+            callback,
         );
         if (res) {
             if (isScriptQueryResponse(res)) {
                 if (res.ok) {
                     elizaLogger.log(
                         `Action executed with script query successfully with data: `,
-                        JSON.stringify(res.data)
+                        JSON.stringify(res.data),
                     );
                 } else {
                     elizaLogger.error(
                         `Action executed with script query failed: `,
-                        res.errorMessage ?? res.error ?? "Unknown error"
+                        res.errorMessage ?? res.error ?? "Unknown error",
                     );
                 }
             } else {
                 elizaLogger.log(
-                    `Action executed with transaction: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`
+                    `Action executed with transaction: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`,
                 );
             }
         }

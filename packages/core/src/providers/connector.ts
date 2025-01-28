@@ -7,7 +7,7 @@ import {
     type State,
 } from "@elizaos/core";
 import { type FlowConnector, getFlowConnectorInstance } from "@elizaos/plugin-flow";
-import type { InjectableProvider } from "@elizaos/plugin-di";
+import { globalContainer, type InjectableProvider } from "@elizaos/plugin-di";
 import { CONSTANTS } from "../symbols";
 
 /**
@@ -25,7 +25,7 @@ export class ConnectorProvider
      */
     constructor(
         @inject(CONSTANTS.FlowJSON)
-        private readonly flowJSON: Record<string, unknown>
+        private readonly flowJSON: Record<string, unknown>,
     ) {}
 
     /**
@@ -36,7 +36,7 @@ export class ConnectorProvider
         if (!this._connector) {
             this._connector = await getFlowConnectorInstance(
                 runtime,
-                this.flowJSON
+                this.flowJSON,
             );
         }
         return this._connector;
@@ -61,7 +61,7 @@ export class ConnectorProvider
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
-        state?: State
+        state?: State,
     ): Promise<string | null> {
         // For one session, only inject the wallet info once
         if (state) {
@@ -78,9 +78,15 @@ export class ConnectorProvider
         } catch (error) {
             elizaLogger.error(
                 "Error in Flow connector provider:",
-                error.message
+                error.message,
             );
             return null;
         }
     }
 }
+
+// Connector provider is bound to singleton scope
+globalContainer
+    .bind<ConnectorProvider>(ConnectorProvider)
+    .toSelf()
+    .inSingletonScope();

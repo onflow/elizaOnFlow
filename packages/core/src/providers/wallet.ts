@@ -7,7 +7,7 @@ import {
     type State,
 } from "@elizaos/core";
 import { FlowWalletProvider } from "@elizaos/plugin-flow";
-import type { InjectableProvider } from "@elizaos/plugin-di";
+import { globalContainer, type InjectableProvider } from "@elizaos/plugin-di";
 import { ConnectorProvider } from "./connector";
 
 /**
@@ -21,7 +21,7 @@ export class WalletProvider
 
     constructor(
         @inject(ConnectorProvider)
-        private readonly connector: ConnectorProvider
+        private readonly connector: ConnectorProvider,
     ) {}
 
     /**
@@ -43,7 +43,7 @@ export class WalletProvider
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
-        state?: State
+        state?: State,
     ): Promise<string | null> {
         // For one session, only inject the wallet info once
         if (state) {
@@ -60,7 +60,7 @@ export class WalletProvider
             !runtime.getSetting("FLOW_PRIVATE_KEY")
         ) {
             elizaLogger.error(
-                "FLOW_ADDRESS or FLOW_PRIVATE_KEY not configured, skipping wallet injection"
+                "FLOW_ADDRESS or FLOW_PRIVATE_KEY not configured, skipping wallet injection",
             );
             return null;
         }
@@ -84,3 +84,6 @@ export class WalletProvider
         }
     }
 }
+
+// Wallet provider is bound to request scope
+globalContainer.bind<WalletProvider>(WalletProvider).toSelf().inRequestScope();
