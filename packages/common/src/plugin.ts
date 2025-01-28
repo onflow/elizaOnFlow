@@ -1,7 +1,6 @@
 import type { PluginOptions } from "@elizaos/plugin-di";
-import { WalletProvider } from "@fixes-ai/core";
+import { FlowWalletService, WalletProvider } from "@fixes-ai/core";
 import { TransferAction, GetPriceAction, GetTokenInfoAction } from "./actions";
-import { FlowWalletService } from "./services/wallet.service";
 import { AccountsPoolService } from "./services/acctPool.service";
 
 /**

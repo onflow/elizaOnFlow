@@ -169,15 +169,13 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
             await this.cache.setCachedData(
                 "flow-token-list",
                 JSON.stringify(tokenList),
-                60 * 60 * 24 // 24 hours
+                60 * 60 * 24, // 24 hours
             );
         } else {
             tokenList = JSON.parse(tokenListStr);
         }
 
         // Use shared wallet instance
-        const walletIns = await this.wallet.getInstance(runtime);
-
         const resp: ScriptQueryResponse = {
             ok: false,
         };
@@ -193,7 +191,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                 content.token
                     ? t.evmAddress === content.token ||
                       `A.${t.flowAddress}.${t.contractName}` === content.token
-                    : t.symbol === content.symbol
+                    : t.symbol === content.symbol,
             );
 
             // initialize token info
@@ -232,13 +230,13 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                     resp.error = `Token info not found for $${content.symbol}`;
                 } else {
                     try {
-                        const info = await walletIns.executeScript(
+                        const info = await this.walletSerivce.executeScript(
                             scripts.getTokenInfoCadence,
                             (arg, t) => [
                                 arg(tokenDetails.flowAddress, t.Address),
                                 arg(tokenDetails.contractName, t.String),
                             ],
-                            undefined
+                            undefined,
                         );
                         if (
                             info &&
@@ -246,10 +244,10 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                             info.contractName === tokenDetails.contractName
                         ) {
                             tokenInfo.totalSupply = Number.parseFloat(
-                                info.totalSupply
+                                info.totalSupply,
                             );
                             tokenInfo.priceInFLOW = Number.parseFloat(
-                                info.priceInFLOW
+                                info.priceInFLOW,
                             );
                             tokenInfo.mcapValueInFLOW =
                                 tokenInfo.totalSupply * tokenInfo.priceInFLOW;
@@ -264,10 +262,10 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
             } else if (/^0x[0-9a-fA-F]{40}$/.test(content.token ?? "")) {
                 // if content.vm is evm, query token info from the blockchain using evm DEX
                 try {
-                    const info = await walletIns.executeScript(
+                    const info = await this.walletSerivce.executeScript(
                         scripts.getTokenInfoEVM,
                         (arg, t) => [arg(content.token, t.String)],
-                        undefined
+                        undefined,
                     );
                     if (
                         info &&
@@ -281,10 +279,10 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                             Number.parseInt(info.totalSupply) /
                             Math.pow(10, tokenInfo.decimals);
                         const reservedTokenInPair = Number.parseInt(
-                            info.reservedTokenInPair
+                            info.reservedTokenInPair,
                         );
                         const reservedFlowInPair = Number.parseInt(
-                            info.reservedFlowInPair
+                            info.reservedFlowInPair,
                         );
                         tokenInfo.priceInFLOW =
                             reservedFlowInPair / reservedTokenInPair;
