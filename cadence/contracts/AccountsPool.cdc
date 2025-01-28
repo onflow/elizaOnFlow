@@ -38,6 +38,9 @@ access(all) contract AccountsPool {
         /// Get Address
         access(all)
         view fun getAddress(type: String, _ key: String): Address?
+        /// Get Children Amount
+        access(all)
+        view fun getChildrenAmount(type: String): UInt64
 
         /// ----- Access account methods -----
         /// Borrow child's AuthAccount
@@ -90,6 +93,15 @@ access(all) contract AccountsPool {
                 return dict[key]
             }
             return nil
+        }
+
+        /// Get Children Amount
+        access(all)
+        view fun getChildrenAmount(type: String): UInt64 {
+            if let dict = self.borrowDict(type) {
+                return UInt64(dict.keys.length)
+            }
+            return 0
         }
 
         /// ----- Access account methods -----

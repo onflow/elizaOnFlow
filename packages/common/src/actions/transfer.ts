@@ -45,25 +45,15 @@ export class TransferContent {
 
     @property({
         description:
-            "Recipient wallet address, can be EVM address or Cadence address",
+            "Recipient identifier, can a wallet address like EVM address or Cadence address, or a userId which is UUID formated.",
         examples: [
             "For Cadence address: '0x1654653399040a61'",
             "For EVM address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'",
+            "For userId: 'e1b3b9c2-7e3f-4b1b-9f7d-2a0c7e2d6e9c'",
         ],
         schema: z.string(),
     })
     to: string;
-
-    @property({
-        description:
-            "Boolean value indicating if field 'token' matches the field 'to' or not",
-        examples: [
-            "if field 'token' is 'null' or Cadence resource identifier, field 'to' can be EVM address or Cadence address, so the value of 'matched' should be true",
-            "if field 'token' is ERC20 contract address, field 'to' should be EVM address, so the value of 'matched' should be true, otherwise false",
-        ],
-        schema: z.boolean(),
-    })
-    matched: boolean;
 }
 
 /**
@@ -88,12 +78,6 @@ const transferOption: ActionOptions<TransferContent> = {
                 user: "{{user1}}",
                 content: {
                     text: "Send 1 FLOW to 0xa2de93114bae3e73",
-                },
-            },
-            {
-                user: "{{agentName}}",
-                content: {
-                    text: "Sending 1 FLOW tokens now, pls wait...",
                     action: "SEND_COIN",
                 },
             },
@@ -103,12 +87,6 @@ const transferOption: ActionOptions<TransferContent> = {
                 user: "{{user1}}",
                 content: {
                     text: "Send 1 FLOW - A.1654653399040a61.FlowToken to 0xa2de93114bae3e73",
-                },
-            },
-            {
-                user: "{{agentName}}",
-                content: {
-                    text: "Sending 1 FLOW tokens now, pls wait...",
                     action: "SEND_COIN",
                 },
             },
@@ -118,12 +96,15 @@ const transferOption: ActionOptions<TransferContent> = {
                 user: "{{user1}}",
                 content: {
                     text: "Send 1000 FROTH - 0xb73bf8e6a4477a952e0338e6cc00cc0ce5ad04ba to 0x000000000000000000000002e44fbfbd00395de5",
+                    action: "SEND_COIN",
                 },
             },
+        ],
+        [
             {
                 user: "{{agentName}}",
                 content: {
-                    text: "Sending 1000 FROTH tokens now, pls wait...",
+                    text: "I need to send 1 FLOW to user: {{user1}}",
                     action: "SEND_COIN",
                 },
             },

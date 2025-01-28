@@ -1,5 +1,8 @@
 import type { PluginOptions } from "@elizaos/plugin-di";
+import { WalletProvider } from "@fixes-ai/core";
 import { TransferAction, GetPriceAction, GetTokenInfoAction } from "./actions";
+import { FlowWalletService } from "./services/wallet.service";
+import { AccountsPoolService } from "./services/acctPool.service";
 
 /**
  * Basic Flow Plugin Options
@@ -9,7 +12,7 @@ export const basicFlowPluginOptions: PluginOptions = {
     name: "flow-basic",
     description: "Flow Plugin for Eliza, with basic actions like transfer",
     actions: [TransferAction, GetPriceAction, GetTokenInfoAction],
-    providers: [],
+    providers: [WalletProvider],
     evaluators: [],
-    services: [],
+    services: [FlowWalletService, AccountsPoolService],
 };
