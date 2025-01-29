@@ -429,10 +429,12 @@ export function getTokenForProvider(
     character: Character,
 ): string | undefined {
     switch (provider) {
-        // no key needed for llama_local or gaianet
+        // no key needed for llama_local, ollama, lmstudio, gaianet or bedrock
         case ModelProviderName.LLAMALOCAL:
             return "";
         case ModelProviderName.OLLAMA:
+            return "";
+        case ModelProviderName.LMSTUDIO:
             return "";
         case ModelProviderName.GAIANET:
             return "";

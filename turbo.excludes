@@ -20,7 +20,7 @@ create-eliza-app
 @elizaos/plugin-hyperliquid
 @elizaos/plugin-icp
 @elizaos/plugin-injective
-@elizaos/plugin-lensNetwork
+@elizaos/plugin-lens-network
 @elizaos/plugin-massa
 @elizaos/plugin-movement
 @elizaos/plugin-multiversx
