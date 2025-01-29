@@ -51,20 +51,24 @@ export class EnsureUserAccountExistsAction implements Action {
                 },
             ],
         ];
-        this.suppressInitialMessage = false;
+        this.suppressInitialMessage = true;
     }
 
     /**
      * Validate if the action can be executed
      */
-    async validate(
-        _runtime: IAgentRuntime,
-        message: Memory,
-        _state?: State,
-    ): Promise<boolean> {
+    async validate(_runtime: IAgentRuntime, message: Memory): Promise<boolean> {
         if (!this.walletSerivce.isInitialized) {
             return false;
         }
+
+        const content =
+            typeof message.content === "string"
+                ? message.content
+                : message.content?.text;
+
+        if (!content) return false;
+
         const keywords: string[] = [
             "create",
             "wallet",
@@ -75,7 +79,7 @@ export class EnsureUserAccountExistsAction implements Action {
         ];
         // Check if the message contains the keywords
         return keywords.some((keyword) =>
-            message.content.text.toLowerCase().includes(keyword.toLowerCase()),
+            content.toLowerCase().includes(keyword.toLowerCase()),
         );
     }
 

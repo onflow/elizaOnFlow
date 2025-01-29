@@ -63,6 +63,7 @@ const actionOpts: ActionOptions<GetPriceContent> = {
         ],
     ],
     contentClass: GetPriceContent,
+    suppressInitialMessage: true,
 };
 
 /**

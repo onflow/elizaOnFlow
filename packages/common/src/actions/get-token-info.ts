@@ -98,6 +98,7 @@ const actionOpts: ActionOptions<GetTokenInfoContent> = {
         ],
     ],
     contentClass: GetTokenInfoContent,
+    suppressInitialMessage: true,
 };
 
 /**
