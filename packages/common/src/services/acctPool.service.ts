@@ -41,18 +41,46 @@ export class AccountsPoolService extends Service {
 
     // ----- Customized methods -----
 
+    /**
+     * Get the main address of the wallet
+     */
+    get mainAddress(): string {
+        return this.walletService.address;
+    }
+
+    /**
+     * Query account info
+     * @param userId
+     * @returns
+     */
     async queryAccountInfo(
         userId: string = undefined,
     ): Promise<FlowAccountBalanceInfo | undefined> {
         const walletAddress = this.walletService.address;
-        return await this.walletService.executeScript(
-            scripts.getAccountStatus,
-            (arg, t) => [
-                arg(walletAddress, t.Address),
-                arg(userId ?? null, t.Optional(t.String)),
-            ],
-            undefined,
-        );
+        try {
+            const obj = await this.walletService.executeScript(
+                scripts.getAccountInfoFrom,
+                (arg, t) => [
+                    arg(walletAddress, t.Address),
+                    arg(userId ?? null, t.Optional(t.String)),
+                ],
+                undefined,
+            );
+            if (obj) {
+                return {
+                    address: obj.address,
+                    balance: parseFloat(obj.balance),
+                    coaAddress: obj.coaAddress,
+                    coaBalance: obj.coaBalance ? parseFloat(obj.coaBalance) : 0,
+                };
+            }
+        } catch (error) {
+            elizaLogger.error(
+                `Failed to query account info for ${userId} from ${walletAddress}`,
+                error,
+            );
+        }
+        return undefined;
     }
 }
 

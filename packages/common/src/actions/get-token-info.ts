@@ -111,7 +111,7 @@ const actionOpts: ActionOptions<GetTokenInfoContent> = {
 export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoContent> {
     constructor(
         @inject(CacheProvider)
-        private readonly cache: CacheProvider
+        private readonly cache: CacheProvider,
     ) {
         super(actionOpts);
     }
@@ -122,7 +122,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
     async validate(
         _runtime: IAgentRuntime,
         message: Memory,
-        _state?: State
+        _state?: State,
     ): Promise<boolean> {
         const keywords: string[] = [
             "details",
@@ -136,7 +136,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
         ];
         // Check if the message contains the keywords
         return keywords.some((keyword) =>
-            message.content.text.toLowerCase().includes(keyword.toLowerCase())
+            message.content.text.toLowerCase().includes(keyword.toLowerCase()),
         );
     }
 
@@ -149,10 +149,10 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
      */
     async execute(
         content: GetTokenInfoContent | null,
-        runtime: IAgentRuntime,
+        _runtime: IAgentRuntime,
         _message: Memory,
         _state?: State,
-        callback?: HandlerCallback
+        callback?: HandlerCallback,
     ): Promise<ScriptQueryResponse | null> {
         if (!content) {
             elizaLogger.warn("No content generated");

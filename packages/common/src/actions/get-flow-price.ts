@@ -84,12 +84,12 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
     async validate(
         _runtime: IAgentRuntime,
         message: Memory,
-        _state?: State
+        _state?: State,
     ): Promise<boolean> {
         const keywords: string[] = ["price", "flow", "stflow", "价格", "币价"];
         // Check if the message contains the keywords
         return keywords.some((keyword) =>
-            message.content.text.toLowerCase().includes(keyword.toLowerCase())
+            message.content.text.toLowerCase().includes(keyword.toLowerCase()),
         );
     }
 
@@ -102,10 +102,10 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
      */
     async execute(
         content: GetPriceContent | null,
-        runtime: IAgentRuntime,
+        _runtime: IAgentRuntime,
         _message: Memory,
         _state?: State,
-        callback?: HandlerCallback
+        callback?: HandlerCallback,
     ): Promise<ScriptQueryResponse | null> {
         if (!content) {
             elizaLogger.warn("No content generated");

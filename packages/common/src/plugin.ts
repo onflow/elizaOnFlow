@@ -8,6 +8,7 @@ import {
     EnsureUserAccountExistsAction,
 } from "./actions";
 import { AccountsPoolService } from "./services/acctPool.service";
+import { AccountProvider } from "./providers/account.provider";
 
 /**
  * Basic Flow Plugin Options
@@ -23,7 +24,7 @@ export const basicFlowPluginOptions: PluginOptions = {
         GetUserAccountInfoAction,
         EnsureUserAccountExistsAction,
     ],
-    providers: [],
+    providers: [AccountProvider],
     evaluators: [],
     services: [FlowWalletService, AccountsPoolService],
 };
