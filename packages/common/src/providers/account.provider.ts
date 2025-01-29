@@ -47,7 +47,7 @@ export class AccountProvider implements Provider {
             const accountName = `Account[${this.acctPoolService.mainAddress}/${isSelf ? "root" : userId}]`;
             return formatWalletInfo(userId, accountName, acctInfo);
         } catch (error) {
-            elizaLogger.error("Error in Flow wallet provider:", error.message);
+            elizaLogger.error("Error in Account provider:", error.message);
         }
         return null;
     }

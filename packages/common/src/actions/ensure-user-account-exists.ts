@@ -10,9 +10,10 @@ import {
 } from "@elizaos/core";
 import { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
-import { FlowWalletService } from "@fixes-ai/core";
-import { scripts } from "../assets/scripts.defs";
+import { FlowWalletService, TransactionSentResponse } from "@fixes-ai/core";
+
 import { formatWalletInfo } from "../formater";
+import { AccountsPoolService } from "../services/acctPool.service";
 
 /**
  * Ensure user account exists
@@ -31,6 +32,8 @@ export class EnsureUserAccountExistsAction implements Action {
     constructor(
         @inject(FlowWalletService)
         private readonly walletSerivce: FlowWalletService,
+        @inject(AccountsPoolService)
+        private readonly acctPoolSerivce: AccountsPoolService,
     ) {
         this.name = "ENSURE_USER_ACCOUNT";
         this.similes = [
@@ -46,6 +49,15 @@ export class EnsureUserAccountExistsAction implements Action {
                     user: "{{user1}}",
                     content: {
                         text: "Create a new wallet for me.",
+                        action: "ENSURE_USER_ACCOUNT",
+                    },
+                },
+            ],
+            [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "Check if I have a wallet, if not, create one.",
                         action: "ENSURE_USER_ACCOUNT",
                     },
                 },
@@ -107,29 +119,14 @@ export class EnsureUserAccountExistsAction implements Action {
 
         let acctInfo: FlowAccountBalanceInfo;
         try {
-            const obj = await this.walletSerivce.executeScript(
-                scripts.getAccountInfoFrom,
-                (arg, t) => [
-                    arg(mainAddr, t.Address),
-                    arg(isSelf ? null : userId, t.Optional(t.String)),
-                ],
-                undefined,
+            acctInfo = await this.acctPoolSerivce.queryAccountInfo(
+                isSelf ? null : userId,
             );
-            if (obj) {
-                acctInfo = {
-                    address: obj.address,
-                    balance: parseFloat(obj.balance),
-                    coaAddress: obj.coaAddress,
-                    coaBalance: obj.coaBalance ? parseFloat(obj.coaBalance) : 0,
-                };
-            }
         } catch (e) {
             elizaLogger.error("Error:", e);
             callback?.({
                 text: `Unable to fetch info for ${accountName}.`,
-                content: {
-                    error: e.message,
-                },
+                content: { error: e.message },
                 source: "FlowBlockchain",
             });
             return;
@@ -145,7 +142,31 @@ export class EnsureUserAccountExistsAction implements Action {
         }
 
         // create a new account by sendinng transaction
-        // TODO
+        await new Promise((resolve, reject) => {
+            let txResp: TransactionSentResponse;
+            this.acctPoolSerivce
+                .createNewAccount(userId, {
+                    onFinalized: async (txId, status, errorMsg) => {
+                        if (errorMsg) {
+                            reject(
+                                new Error(
+                                    "Error creating account: " + errorMsg,
+                                ),
+                            );
+                            return;
+                        }
+                        // TODO parse the events
+                        // status.events and callback to Eliza
+                        resolve({
+                            txId,
+                            keyIndex: txResp?.index,
+                            ...status,
+                        });
+                    },
+                })
+                .then((tx) => (txResp = tx))
+                .catch((e) => reject(e));
+        });
 
         elizaLogger.log("Completed ENSURE_USER_ACCOUNT_EXISTS handler.");
     }

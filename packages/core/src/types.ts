@@ -35,3 +35,8 @@ export type TransactionTrackingPayload = {
     txId: string;
     unsubscribe: () => void;
 };
+
+export type TransactionSentResponse = {
+    txId: string;
+    index: number;
+};

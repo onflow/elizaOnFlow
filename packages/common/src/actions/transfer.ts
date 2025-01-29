@@ -171,6 +171,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
 
         // Use shared wallet instance
         const walletAddress = this.walletSerivce.address;
+        // TODO: use account pool transactions for the transfer action
 
         const logPrefix = `Address: ${walletAddress}\n`;
 

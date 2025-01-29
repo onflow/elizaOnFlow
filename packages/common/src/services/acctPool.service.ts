@@ -7,9 +7,14 @@ import {
 } from "@elizaos/core";
 import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
-import { FlowWalletService } from "@fixes-ai/core";
+import {
+    FlowWalletService,
+    type TransactionCallbacks,
+    type TransactionSentResponse,
+} from "@fixes-ai/core";
 
 import { scripts } from "../assets/scripts.defs";
+import { transactions } from "../assets/transactions.defs";
 
 // Add SAMPLE to ServiceType enum in types.ts
 declare module "@elizaos/core" {
@@ -76,11 +81,35 @@ export class AccountsPoolService extends Service {
             }
         } catch (error) {
             elizaLogger.error(
-                `Failed to query account info for ${userId} from ${walletAddress}`,
+                `Failed to query account info for ${userId ?? "root"} from ${walletAddress}`,
                 error,
             );
+            throw error;
         }
         return undefined;
+    }
+
+    /**
+     * Create a new account
+     * @param userId
+     * @returns
+     */
+    async createNewAccount(
+        userId: string,
+        callbacks?: TransactionCallbacks,
+        initalFunding?: number,
+    ): Promise<TransactionSentResponse> {
+        return await this.walletService.sendTransaction(
+            transactions.acctPoolCreateChildAccount,
+            (arg, t) => [
+                arg(userId, t.String),
+                arg(
+                    initalFunding ? initalFunding.toFixed(8) : null,
+                    t.Optional(t.UFix64),
+                ),
+            ],
+            callbacks,
+        );
     }
 }
 
