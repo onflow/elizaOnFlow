@@ -10,19 +10,18 @@ import {
 } from "@elizaos/core";
 import { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
-import { FlowWalletService, type ScriptQueryResponse } from "@fixes-ai/core";
-
+import { FlowWalletService } from "@fixes-ai/core";
 import { scripts } from "../assets/scripts.defs";
 import { formatWalletInfo } from "../formater";
 
 /**
- * Get User Account Info Action
+ * Ensure user account exists
  *
  * @category Actions
- * @description Get the current account information of the user
+ * @description Ensure user account exists on Flow blockchain
  */
 @injectable()
-export class GetUserAccountInfoAction implements Action {
+export class EnsureUserAccountExistsAction implements Action {
     public readonly name: string;
     public readonly similes: string[];
     public readonly description: string;
@@ -33,17 +32,21 @@ export class GetUserAccountInfoAction implements Action {
         @inject(FlowWalletService)
         private readonly walletSerivce: FlowWalletService,
     ) {
-        this.name = "GET_USER_ACCOUNT_INFO";
-        this.similes = [];
+        this.name = "ENSURE_USER_ACCOUNT";
+        this.similes = [
+            "ENSURE_USER_ACCOUNT_EXISTS",
+            "ENSURE_CHILD_ACCOUNT",
+            "ENSURE_CHILD_ACCOUNT_EXISTS",
+        ];
         this.description =
-            "Call this action to obtain the current account information of the user.";
+            "Call this action to ensure user account exists on Flow blockchain.";
         this.examples = [
             [
                 {
                     user: "{{user1}}",
                     content: {
-                        text: "Tell me about my Flow account.",
-                        action: "GET_USER_ACCOUNT_INFO",
+                        text: "Create a new wallet for me.",
+                        action: "ENSURE_USER_ACCOUNT",
                     },
                 },
             ],
@@ -59,7 +62,17 @@ export class GetUserAccountInfoAction implements Action {
         message: Memory,
         _state?: State,
     ): Promise<boolean> {
-        const keywords: string[] = ["account", "info", "账户", "账号"];
+        if (!this.walletSerivce.isInitialized) {
+            return false;
+        }
+        const keywords: string[] = [
+            "create",
+            "wallet",
+            "account",
+            "创建",
+            "账号",
+            "钱包",
+        ];
         // Check if the message contains the keywords
         return keywords.some((keyword) =>
             message.content.text.toLowerCase().includes(keyword.toLowerCase()),
@@ -79,12 +92,8 @@ export class GetUserAccountInfoAction implements Action {
         _state?: State,
         _options?: Record<string, unknown>,
         callback?: HandlerCallback,
-    ): Promise<ScriptQueryResponse | null> {
-        elizaLogger.log("Starting GET_USER_ACCOUNT_INFO handler...");
-
-        const resp: ScriptQueryResponse = {
-            ok: false,
-        };
+    ) {
+        elizaLogger.log("Starting ENSURE_USER_ACCOUNT_EXISTS handler...");
 
         const userId = message.userId;
         const isSelf = message.userId === runtime.agentId;
@@ -109,40 +118,34 @@ export class GetUserAccountInfoAction implements Action {
                     coaAddress: obj.coaAddress,
                     coaBalance: obj.coaBalance ? parseFloat(obj.coaBalance) : 0,
                 };
-            } else {
-                resp.error = `${accountName} is not found.`;
             }
-        } catch (err) {
-            resp.error = err.message;
-        }
-
-        if (acctInfo) {
-            resp.ok = true;
-            resp.data = acctInfo;
-        }
-
-        if (resp.ok) {
+        } catch (e) {
+            elizaLogger.error("Error:", e);
             callback?.({
-                text: formatWalletInfo(accountName, acctInfo),
-                content: { success: true, info: acctInfo },
-                source: "FlowBlockchain",
-            });
-        } else {
-            elizaLogger.error("Error:", resp.error);
-            callback?.({
-                text: `Unable to get information for ${accountName}.`,
+                text: `Unable to fetch info for ${accountName}.`,
                 content: {
-                    error: resp.error ?? "Unknown error",
+                    error: e.message,
                 },
                 source: "FlowBlockchain",
             });
+            return;
         }
 
-        elizaLogger.log("Completed GET_USER_ACCOUNT_INFO handler.");
+        if (acctInfo) {
+            callback?.({
+                text: formatWalletInfo(accountName, acctInfo),
+                content: { exists: true },
+                source: "FlowBlockchain",
+            });
+            return;
+        }
 
-        return resp;
+        // create a new account by sendinng transaction
+        // TODO
+
+        elizaLogger.log("Completed ENSURE_USER_ACCOUNT_EXISTS handler.");
     }
 }
 
 // Register the transfer action
-globalContainer.bind(GetUserAccountInfoAction).toSelf();
+globalContainer.bind(EnsureUserAccountExistsAction).toSelf();
