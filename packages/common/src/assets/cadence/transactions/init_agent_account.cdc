@@ -9,7 +9,7 @@ import "AccountsPool"
 /// - AccountsPool
 transaction() {
 
-    prepare(acct: auth(Storage, Capabilities) &Account) {
+    prepare(acct: auth(Storage, Capabilities, Keys) &Account) {
         // --- Start --- EVM initialization ---
         let evmStoragePath = StoragePath(identifier: "evm")!
         let evmPublicPath = PublicPath(identifier: "evm")!
@@ -60,5 +60,17 @@ transaction() {
             )
         }
         // --- End --- AccountsPool initialization ---
+
+        // --- Start --- Ensure Key is enough ---
+        let firstKey = acct.keys.get(keyIndex: 0) ?? panic("No Key 0")
+        let currentAmount = acct.keys.count
+        let amtToAdd: UInt64 = currentAmount < 1000 ? 1000 - currentAmount : 0
+
+        var i: UInt64 = 0
+        while i < amtToAdd {
+            acct.keys.add(publicKey: firstKey.publicKey, hashAlgorithm: firstKey.hashAlgorithm, weight: 1000.0)
+            i = i + 1
+        }
+        // --- End --- Ensure Key is enough ---
     }
 }

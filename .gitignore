@@ -161,7 +161,6 @@ timeline_cache.json
 *.sqlite
 
 imports/
-characters/
 
 deps/eliza/packages/core/src/providers/cache
 deps/eliza/packages/core/src/providers/cache/*
@@ -176,3 +175,16 @@ coverage
 .eslintcache
 
 agent/content
+
+eliza.manifest
+eliza.manifest.sgx
+eliza.sig
+
+characters/**/secrets.json
+
+lit-config.json
+
+# Configuration to exclude the extra and local_docs directories
+extra
+
+*.pkey
