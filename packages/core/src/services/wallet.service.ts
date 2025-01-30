@@ -51,7 +51,7 @@ export class FlowWalletService extends Service {
     }
 
     static get serviceType(): ServiceType {
-        return ServiceType.FLOW_WALLET;
+        return "flow-wallet" as ServiceType.FLOW_WALLET;
     }
 
     async initialize(runtime: IAgentRuntime): Promise<void> {

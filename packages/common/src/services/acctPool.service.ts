@@ -36,7 +36,7 @@ export class AccountsPoolService extends Service {
     }
 
     static get serviceType(): ServiceType {
-        return ServiceType.ACCOUNTS_POOL;
+        return "accounts-pool" as ServiceType.ACCOUNTS_POOL;
     }
 
     async initialize(_runtime: IAgentRuntime): Promise<void> {
@@ -45,23 +45,28 @@ export class AccountsPoolService extends Service {
         if (!status) {
             // Register the main account
             await new Promise<void>((resolve, reject) => {
-                this.walletService.sendTransaction(
-                    transactions.initAgentAccount,
-                    (_arg, _t) => [],
-                    {
-                        onFinalized: async (txid, _status, errorMsg) => {
-                            if (errorMsg) {
-                                elizaLogger.error(
-                                    `Failed to initialize main account: ${errorMsg}`,
-                                );
-                                reject(new Error(errorMsg));
-                            } else {
-                                elizaLogger.info("Main account initialized by txid:", txid);
-                                resolve();
-                            }
+                this.walletService
+                    .sendTransaction(
+                        transactions.initAgentAccount,
+                        (_arg, _t) => [],
+                        {
+                            onFinalized: async (txid, _status, errorMsg) => {
+                                if (errorMsg) {
+                                    elizaLogger.error(
+                                        `Failed to initialize main account: ${errorMsg}`,
+                                    );
+                                    reject(new Error(errorMsg));
+                                } else {
+                                    elizaLogger.info(
+                                        "Main account initialized by txid:",
+                                        txid,
+                                    );
+                                    resolve();
+                                }
+                            },
                         },
-                    }
-                ).catch(reject);
+                    )
+                    .catch(reject);
             });
         }
         elizaLogger.info("AccountsPoolService initialized");
