@@ -52,13 +52,13 @@
     },
     "pnpm": {
         "overrides": {
-            "onnxruntime-node": "1.20.1",
-            "@onflow/fcl": "1.13.4",
-            "viem": "2.22.15",
             "@ai-sdk/provider": "1.0.6",
             "@ai-sdk/provider-utils": "2.1.2",
+            "@onflow/fcl": "1.13.4",
+            "bs58": "5.0.0",
             "cookie": "0.7.0",
-            "bs58": "5.0.0"
+            "onnxruntime-node": "1.20.1",
+            "viem": "2.22.15"
         }
     },
     "engines": {

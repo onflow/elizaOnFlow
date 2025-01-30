@@ -46,3 +46,4 @@ create-eliza-app
 @elizaos/plugin-zilliqa
 @elizaos/plugin-arbitrage
 @elizaos/plugin-massa
+@elizaos/plugin-holdstation
