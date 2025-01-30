@@ -2,6 +2,6 @@ export * from "./actions";
 export * from "./plugin";
 export * from "./assets/scripts.defs";
 
-import { basicFlowPluginOptions } from "./plugin";
+import { basicFlowPlugin } from "./plugin";
 
-export default basicFlowPluginOptions;
+export default basicFlowPlugin;
