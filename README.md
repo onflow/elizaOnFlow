@@ -67,7 +67,10 @@ Note: .env is optional. If you're planning to run multiple distinct agents, you 
 ```bash
 pnpm i
 pnpm build
-pnpm start
+pnpm start # or you can use `pnpm start:debug` for more debugging logs
+```
+
+```bash
 
 # The project iterates fast, sometimes you need to clean the project if you are coming back to the project
 pnpm clean
