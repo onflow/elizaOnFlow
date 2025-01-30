@@ -69,7 +69,6 @@ export class FlowWalletService extends Service {
         this._maxKeyIndex = acctInfo.keys.length;
 
         FlowWalletService.isInitialized = true;
-        elizaLogger.info("FlowWalletService initialized");
     }
 
     /**
