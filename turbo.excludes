@@ -45,3 +45,4 @@ create-eliza-app
 @elizaos/plugin-trikon
 @elizaos/plugin-zilliqa
 @elizaos/plugin-arbitrage
+@elizaos/plugin-massa

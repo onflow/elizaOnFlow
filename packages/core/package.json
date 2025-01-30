@@ -32,12 +32,6 @@
         "node-cache": "5.1.2",
         "zod": "3.23.8"
     },
-    "resolutions": {
-        "@onflow/fcl": "1.13.4"
-    },
-    "overrides": {
-        "@onflow/fcl": "1.13.4"
-    },
     "devDependencies": {
         "dotenv": "16.4.5",
         "tsup": "8.3.5",

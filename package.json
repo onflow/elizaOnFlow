@@ -11,7 +11,7 @@
         "cleanstart:debug": "if [ -f agent/data/db.sqlite ]; then rm agent/data/db.sqlite; fi && cross-env NODE_ENV=development DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* pnpm --filter \"@fixes-ai/agent\" start --isRoot",
         "start": "pnpm --filter \"@fixes-ai/agent\" start --isRoot",
         "start:client": "pnpm --dir client dev",
-        "start:debug": "cross-env NODE_ENV=development DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* pnpm --filter \"@fixes-ai/agent\" start --isRoot",
+        "start:debug": "cross-env NODE_ENV=development VERBOSE=true DEFAULT_LOG_LEVEL=debug DEBUG=eliza:* pnpm --filter \"@fixes-ai/agent\" start --isRoot",
         "release": "pnpm build && pnpm prettier && npx lerna publish --no-private --force-publish",
         "clean": "bash ./deps/eliza/scripts/clean.sh",
         "test": "bash ./deps/eliza/scripts/test.sh",
@@ -25,19 +25,18 @@
         "@typescript-eslint/eslint-plugin": "8.16.0",
         "@typescript-eslint/parser": "8.16.0",
         "@vitest/eslint-plugin": "1.1.13",
+        "@types/jest": "^29.5.11",
         "concurrently": "9.1.0",
         "cross-env": "7.0.3",
-        "eslint": "9.16.0",
-        "eslint-config-prettier": "9.1.0",
         "husky": "9.1.7",
+        "jest": "^29.7.0",
         "lerna": "8.1.5",
         "only-allow": "1.2.1",
-        "prettier": "3.4.1",
         "turbo": "2.3.3",
         "typedoc": "0.26.11",
         "typescript": "5.6.3",
         "viem": "2.21.58",
-        "vite": "5.4.11",
+        "vite": "5.4.12",
         "vitest": "2.1.5"
     },
     "dependencies": {
@@ -53,7 +52,13 @@
     },
     "pnpm": {
         "overrides": {
-            "onnxruntime-node": "1.20.1"
+            "onnxruntime-node": "1.20.1",
+            "@onflow/fcl": "1.13.4",
+            "viem": "2.22.15",
+            "@ai-sdk/provider": "1.0.6",
+            "@ai-sdk/provider-utils": "2.1.2",
+            "cookie": "0.7.0",
+            "bs58": "5.0.0"
         }
     },
     "engines": {
