@@ -40,7 +40,30 @@ export class AccountsPoolService extends Service {
     }
 
     async initialize(_runtime: IAgentRuntime): Promise<void> {
-        // NOTHING to do here
+        // ensure agent account initialized
+        const status = await this.getMainAccountStatus();
+        if (!status) {
+            // Register the main account
+            await new Promise<void>((resolve, reject) => {
+                this.walletService.sendTransaction(
+                    transactions.initAgentAccount,
+                    (_arg, _t) => [],
+                    {
+                        onFinalized: async (txid, _status, errorMsg) => {
+                            if (errorMsg) {
+                                elizaLogger.error(
+                                    `Failed to initialize main account: ${errorMsg}`,
+                                );
+                                reject(new Error(errorMsg));
+                            } else {
+                                elizaLogger.info("Main account initialized by txid:", txid);
+                                resolve();
+                            }
+                        },
+                    }
+                ).catch(reject);
+            });
+        }
         elizaLogger.info("AccountsPoolService initialized");
     }
 
@@ -51,6 +74,34 @@ export class AccountsPoolService extends Service {
      */
     get mainAddress(): string {
         return this.walletService.address;
+    }
+
+    /**
+     * Get the main account status
+     */
+    async getMainAccountStatus() {
+        const walletAddress = this.walletService.address;
+        try {
+            const obj = await this.walletService.executeScript(
+                scripts.getAccountStatus,
+                (arg, t) => [arg(walletAddress, t.Address)],
+                undefined,
+            );
+            if (obj) {
+                return {
+                    address: obj.address,
+                    balance: parseFloat(obj.balance),
+                    childrenAmount: parseInt(obj.childrenAmount),
+                };
+            }
+        } catch (error) {
+            elizaLogger.error(
+                `Failed to query account status from ${walletAddress}`,
+                error,
+            );
+            throw error;
+        }
+        return undefined;
     }
 
     /**
