@@ -23,7 +23,7 @@ globalContainer
             pathsToTry.map((p) => ({
                 path: p,
                 exists: fs.existsSync(p),
-            })),
+            }))
         );
 
         let jsonObjcet: Record<string, unknown> | null = null;
@@ -33,7 +33,7 @@ globalContainer
                     .default;
                 if (jsonObjcet) {
                     elizaLogger.info(
-                        `Successfully loaded 'flow.json' from: ${tryPath}`,
+                        `Successfully loaded 'flow.json' from: ${tryPath}`
                     );
                     break;
                 }

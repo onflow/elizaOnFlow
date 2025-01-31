@@ -51,7 +51,7 @@ export class CacheProvider
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
-        _state?: State,
+        _state?: State
     ): Promise<string | null> {
         // ensure the cache manager is initialized
         await this.getInstance(runtime);
@@ -88,7 +88,7 @@ export class CacheProvider
     public async setCachedData<T>(
         cacheKey: string,
         data: T,
-        ttl?: number,
+        ttl?: number
     ): Promise<void> {
         // Set in-memory cache
         this._nodeCache.set(cacheKey, data);
@@ -113,7 +113,7 @@ export class CacheProvider
     private async _writeToCache<T>(
         key: string,
         data: T,
-        ttl?: number,
+        ttl?: number
     ): Promise<void> {
         await this._fileCache?.set(this._getFileCacheKey(key), data, {
             expires: Date.now() + (ttl ?? this.CACHE_EXPIRY_SEC) * 1000,

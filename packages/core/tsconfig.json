@@ -32,6 +32,6 @@
     "exclude": [
         "node_modules",
         "dist",
-        "src/**/*.d.ts",
+        "src/**/*.d.ts"
     ]
 }

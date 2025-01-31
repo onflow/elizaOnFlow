@@ -1,1 +1,0 @@
-deps/eliza/prettier.config.cjs

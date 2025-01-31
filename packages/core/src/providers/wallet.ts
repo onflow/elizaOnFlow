@@ -21,7 +21,7 @@ export class WalletProvider
 
     constructor(
         @inject(ConnectorProvider)
-        private readonly connector: ConnectorProvider,
+        private readonly connector: ConnectorProvider
     ) {}
 
     /**
@@ -43,7 +43,7 @@ export class WalletProvider
     async get(
         runtime: IAgentRuntime,
         _message: Memory,
-        state?: State,
+        state?: State
     ): Promise<string | null> {
         // For one session, only inject the wallet info once
         if (state) {
@@ -60,7 +60,7 @@ export class WalletProvider
             !runtime.getSetting("FLOW_PRIVATE_KEY")
         ) {
             elizaLogger.error(
-                "FLOW_ADDRESS or FLOW_PRIVATE_KEY not configured, skipping wallet injection",
+                "FLOW_ADDRESS or FLOW_PRIVATE_KEY not configured, skipping wallet injection"
             );
             return null;
         }
@@ -75,8 +75,12 @@ export class WalletProvider
             let output = `Here is user<${runtime.character.name}>'s wallet status:\n`;
             output += `Flow wallet address: ${walletProvider.address}\n`;
             output += `FLOW balance: ${info.balance} FLOW\n`;
-            output += `Flow wallet's COA(EVM) address: ${info.coaAddress || "unknown"}\n`;
-            output += `FLOW balance in COA(EVM) address: ${info.coaBalance ?? 0} FLOW`;
+            output += `Flow wallet's COA(EVM) address: ${
+                info.coaAddress || "unknown"
+            }\n`;
+            output += `FLOW balance in COA(EVM) address: ${
+                info.coaBalance ?? 0
+            } FLOW`;
             return output;
         } catch (error) {
             elizaLogger.error("Error in Flow wallet provider:", error.message);

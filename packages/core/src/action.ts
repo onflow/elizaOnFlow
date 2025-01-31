@@ -18,7 +18,7 @@ import { WalletProvider } from "./providers";
  */
 @injectable()
 export abstract class BaseFlowInjectableAction<
-    T,
+    T
 > extends BaseInjectableAction<T> {
     // -------- Injects --------
 
@@ -47,7 +47,7 @@ export abstract class BaseFlowInjectableAction<
         runtime: IAgentRuntime,
         message: Memory,
         state?: State,
-        callback?: HandlerCallback,
+        callback?: HandlerCallback
     ): Promise<any | null>;
 
     // -------- Implemented methods for Eliza runtime --------
@@ -64,7 +64,7 @@ export abstract class BaseFlowInjectableAction<
     async validate(
         runtime: IAgentRuntime,
         _message: Memory,
-        _state?: State,
+        _state?: State
     ): Promise<boolean> {
         // Validate the Flow environment configuration
         await validateFlowConfig(runtime);
@@ -86,7 +86,7 @@ export abstract class BaseFlowInjectableAction<
     protected async prepareActionContext(
         runtime: IAgentRuntime,
         message: Memory,
-        state: State,
+        state: State
     ): Promise<string> {
         // Initialize or update state
         if (!state) {
@@ -118,31 +118,31 @@ export abstract class BaseFlowInjectableAction<
         message: Memory,
         state?: State,
         options?: Record<string, unknown>,
-        callback?: HandlerCallback,
+        callback?: HandlerCallback
     ): Promise<any | null> {
         const res = await super.handler(
             runtime,
             message,
             state,
             options,
-            callback,
+            callback
         );
         if (res) {
             if (isScriptQueryResponse(res)) {
                 if (res.ok) {
                     elizaLogger.log(
                         `Action executed with script query successfully with data: `,
-                        JSON.stringify(res.data),
+                        JSON.stringify(res.data)
                     );
                 } else {
                     elizaLogger.error(
                         `Action executed with script query failed: `,
-                        res.errorMessage ?? res.error ?? "Unknown error",
+                        res.errorMessage ?? res.error ?? "Unknown error"
                     );
                 }
             } else {
                 elizaLogger.log(
-                    `Action executed with transaction: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`,
+                    `Action executed with transaction: ${res.signer.address}[${res.signer.keyIndex}] - ${res.txid}`
                 );
             }
         }

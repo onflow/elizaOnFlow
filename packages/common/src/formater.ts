@@ -1,4 +1,4 @@
-import { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 
 /**
  * Format the account information
@@ -10,7 +10,7 @@ import { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 export function formatWalletInfo(
     userId: string,
     accountName: string,
-    info: FlowAccountBalanceInfo = undefined,
+    info: FlowAccountBalanceInfo = undefined
 ): string {
     let output = formatAccountInfoPrefix(userId, accountName);
     if (info === undefined) {
@@ -18,8 +18,12 @@ export function formatWalletInfo(
     } else {
         output += `- Flow wallet address: ${info.address}\n`;
         output += `- FLOW balance: ${info.balance} FLOW\n`;
-        output += `- Flow wallet's COA(EVM) address: ${info.coaAddress || "unknown"}\n`;
-        output += `- FLOW balance in COA(EVM) address: ${info.coaBalance ?? 0} FLOW`;
+        output += `- Flow wallet's COA(EVM) address: ${
+            info.coaAddress || "unknown"
+        }\n`;
+        output += `- FLOW balance in COA(EVM) address: ${
+            info.coaBalance ?? 0
+        } FLOW`;
     }
     return output;
 }
@@ -34,7 +38,7 @@ export function formatWalletInfo(
 export function formatWalletCreated(
     userId: string,
     accountName: string,
-    newAddress: string,
+    newAddress: string
 ): string {
     let output = formatAccountInfoPrefix(userId, accountName);
     output += `- New created address: ${newAddress}`;
@@ -45,7 +49,7 @@ export function formatWalletCreated(
  * Format the account information prefix
  */
 function formatAccountInfoPrefix(userId: string, accountName: string): string {
-    let output = `Here is your account information:\n`;
+    let output = "Here is your account information:\n";
     output += `- UserId: ${userId}\n`;
     output += `- WalletId: ${accountName}\n`;
     return output;
@@ -59,7 +63,7 @@ function formatAccountInfoPrefix(userId: string, accountName: string): string {
 export function formatTransationSent(
     txId: string,
     network: string,
-    extra?: string,
+    extra?: string
 ): string {
     const baseUrl =
         network === "testnet"

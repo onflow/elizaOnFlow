@@ -1,16 +1,19 @@
 import { inject, injectable } from "inversify";
 import {
-    ActionExample,
     elizaLogger,
+    type ActionExample,
     type Action,
     type HandlerCallback,
     type IAgentRuntime,
     type Memory,
     type State,
 } from "@elizaos/core";
-import { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
-import { FlowWalletService, TransactionSentResponse } from "@fixes-ai/core";
+import {
+    FlowWalletService,
+    type TransactionSentResponse,
+} from "@fixes-ai/core";
 
 import { formatWalletCreated, formatWalletInfo } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";

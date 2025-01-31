@@ -1,7 +1,7 @@
 import { elizaLogger, parseBooleanFromText, settings } from "@elizaos/core";
 import { DirectClient } from "@elizaos/client-direct";
 import { normalizeCharacter } from "@elizaos/plugin-di";
-import net from "net";
+import net from "node:net";
 
 import { defaultCharacter } from "./character";
 import {
@@ -64,7 +64,7 @@ const startAgents = async () => {
     // Find available port
     while (!(await checkPortAvailable(serverPort))) {
         elizaLogger.warn(
-            `Port ${serverPort} is in use, trying ${serverPort + 1}`,
+            `Port ${serverPort} is in use, trying ${serverPort + 1}`
         );
         serverPort++;
     }
@@ -88,7 +88,7 @@ const startAgents = async () => {
     }
 
     elizaLogger.log(
-        "Run `pnpm start:client` to start the client and visit the outputted URL (http://localhost:5173) to chat with your agents. When running multiple agents, use client with different port `SERVER_PORT=3001 pnpm start:client`",
+        "Run `pnpm start:client` to start the client and visit the outputted URL (http://localhost:5173) to chat with your agents. When running multiple agents, use client with different port `SERVER_PORT=3001 pnpm start:client`"
     );
 };
 
@@ -103,12 +103,12 @@ if (
     parseBooleanFromText(process.env.PREVENT_UNHANDLED_EXIT)
 ) {
     // Handle uncaught exceptions to prevent the process from crashing
-    process.on("uncaughtException", function (err) {
+    process.on("uncaughtException", (err) => {
         console.error("uncaughtException", err);
     });
 
     // Handle unhandled rejections to prevent the process from crashing
-    process.on("unhandledRejection", function (err) {
+    process.on("unhandledRejection", (err) => {
         console.error("unhandledRejection", err);
     });
 }
