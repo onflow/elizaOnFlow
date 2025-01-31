@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { elizaLogger, Service, type ServiceType, type IAgentRuntime } from "@elizaos/core";
-import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+import { queries as defaultQueries, type FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
 import {
     FlowWalletService,
@@ -65,6 +65,8 @@ export class AccountsPoolService extends Service {
     get mainAddress(): string {
         return this.walletService.address;
     }
+
+    // ----- Flow blockchain READ scripts -----
 
     /**
      * Get the main account status
@@ -145,6 +147,8 @@ export class AccountsPoolService extends Service {
         return undefined;
     }
 
+    // ----- Flow blockchain WRITE transactions -----
+
     /**
      * Create a new account
      * @param userId
@@ -160,6 +164,90 @@ export class AccountsPoolService extends Service {
             (arg, t) => [
                 arg(userId, t.String),
                 arg(initalFunding ? initalFunding.toFixed(8) : null, t.Optional(t.UFix64)),
+            ],
+            callbacks,
+        );
+    }
+
+    /**
+     * Transfer FlowToken to another account from the user's account
+     * @param fromUserId
+     */
+    async transferFlowToken(
+        fromUserId: string,
+        recipient: string,
+        amount: number,
+        callbacks?: TransactionCallbacks,
+    ): Promise<TransactionSentResponse> {
+        return await this.walletService.sendTransaction(
+            transactions.acctPoolFlowTokenDynamicTransfer,
+            (arg, t) => [
+                arg(recipient, t.String),
+                arg(amount.toFixed(8), t.UFix64),
+                arg(fromUserId, t.Optional(t.String)),
+            ],
+            callbacks,
+        );
+    }
+
+    /**
+     * Transfer Cadence Generic FT to another account from the user's account
+     * @param fromUserId
+     * @param recipient
+     * @param amount
+     * @param tokenFTAddr
+     * @param tokenContractName
+     * @param callbacks
+     */
+    async transferGenericFT(
+        fromUserId: string,
+        recipient: string,
+        amount: number,
+        tokenFTAddr: string,
+        tokenContractName: string,
+        callbacks?: TransactionCallbacks,
+    ): Promise<TransactionSentResponse> {
+        return await this.walletService.sendTransaction(
+            transactions.acctPoolFTGenericTransfer,
+            (arg, t) => [
+                arg(amount.toFixed(8), t.UFix64),
+                arg(recipient, t.Address),
+                arg(tokenFTAddr, t.Address),
+                arg(tokenContractName, t.String),
+                arg(fromUserId, t.Optional(t.String)),
+            ],
+            callbacks,
+        );
+    }
+
+    /**
+     * Transfer ERC20 token to another account from the user's account
+     * @param fromUserId
+     * @param recipient
+     * @param amount
+     * @param callback
+     */
+    async transferERC20(
+        fromUserId: string,
+        recipient: string,
+        amount: number,
+        erc20Contract: string,
+        callbacks?: TransactionCallbacks,
+    ): Promise<TransactionSentResponse> {
+        // Transfer ERC20 token on EVM side
+        // we need to update the amount to be in the smallest unit
+        const decimals = await defaultQueries.queryEvmERC20Decimals(
+            this.walletService.wallet,
+            erc20Contract,
+        );
+        const adjustedAmount = BigInt(amount * 10 ** decimals);
+        return await this.walletService.sendTransaction(
+            transactions.acctPoolEVMTransferERC20,
+            (arg, t) => [
+                arg(erc20Contract, t.String),
+                arg(recipient, t.String),
+                arg(adjustedAmount.toString(), t.UInt256),
+                arg(fromUserId, t.Optional(t.String)),
             ],
             callbacks,
         );

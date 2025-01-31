@@ -7,14 +7,10 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import {
-    isCadenceIdentifier,
-    isEVMAddress,
-    queries as defaultQueries,
-    transactions,
-} from "@elizaos/plugin-flow";
+import { isCadenceIdentifier, isEVMAddress, isFlowAddress } from "@elizaos/plugin-flow";
 import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
+
 import { formatTransationSent } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";
 
@@ -112,6 +108,16 @@ const transferOption: ActionOptions<TransferContent> = {
 };
 
 /**
+ * Check if a string is a valid UUID
+ * @param str The string to check
+ * @returns true if the string is a valid UUID
+ */
+function isUUID(str: string): boolean {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(str);
+}
+
+/**
  * Transfer action
  *
  * @category Actions
@@ -150,7 +156,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
     async execute(
         content: TransferContent | null,
         _runtime: IAgentRuntime,
-        _message: Memory,
+        message: Memory,
         _state?: State,
         callback?: HandlerCallback,
     ) {
@@ -161,99 +167,107 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
 
         elizaLogger.log("Starting Flow Plugin's SEND_COIN handler...");
 
-        // Use shared wallet instance
+        // Use main account of the agent
         const walletAddress = this.walletSerivce.address;
-        // TODO: use account pool transactions for the transfer action
 
-        const logPrefix = `Address: ${walletAddress}\n`;
+        // Get the user id
+        const userId = message.userId;
+        const isSelf = userId === message.agentId;
+        const logPrefix = `Account[${walletAddress}/${isSelf ? "root" : userId}]`;
 
         // Parsed fields
-        const recipient = content.to;
         const amount =
             typeof content.amount === "number" ? content.amount : Number.parseFloat(content.amount);
 
-        // Check if the wallet has enough balance to transfer
-        const accountInfo = await defaultQueries.queryAccountBalanceInfo(
-            this.walletSerivce.wallet,
-            walletAddress,
-        );
-        const totalBalance = accountInfo.balance + (accountInfo.coaBalance ?? 0);
-
-        // Check if the amount is valid
-        if (totalBalance < amount) {
-            elizaLogger.error("Insufficient balance to transfer.");
-            callback?.({
-                text: `${logPrefix} Unable to process transfer request. Insufficient balance.`,
-                content: {
-                    error: "Insufficient balance",
-                },
-            });
-            throw new Error("Insufficient balance to transfer");
-        }
-
-        let txId: string;
-        let keyIndex: number;
-
         try {
+            let recipient = content.to;
+            // Check if the recipient is a user id
+            if (isUUID(content.to)) {
+                if (content.to === userId) {
+                    // You can't send to yourself
+                    throw new Error("Recipient is the same as the sender");
+                }
+
+                // Get the wallet address of the user
+                const acctInfo = await this.acctPoolService.queryAccountInfo(content.to);
+                if (acctInfo) {
+                    recipient = acctInfo.address;
+                    elizaLogger.info(
+                        `${logPrefix}\n Recipient is a user id - ${content.to}, its wallet address: ${recipient}`,
+                    );
+                } else {
+                    throw new Error(`Recipient not found with id: ${content.to}`);
+                }
+            }
+
+            let txId: string;
+            let keyIndex: number;
+
             // For different token types, we need to handle the token differently
             if (!content.token) {
-                elizaLogger.log(`${logPrefix} Sending ${amount} FLOW to ${recipient}...`);
+                // Check if the wallet has enough balance to transfer
+                const fromAccountInfo = await this.acctPoolService.queryAccountInfo(userId);
+                const totalBalance = fromAccountInfo.balance + (fromAccountInfo.coaBalance ?? 0);
+
+                // Check if the amount is valid
+                if (totalBalance < amount) {
+                    throw new Error("Insufficient balance to transfer");
+                }
+
+                elizaLogger.log(`${logPrefix}\n Sending ${amount} FLOW to ${recipient}...`);
                 // Transfer FLOW token
-                const resp = await this.walletSerivce.sendTransaction(
-                    transactions.mainFlowTokenDynamicTransfer,
-                    (arg, t) => [arg(recipient, t.String), arg(amount.toFixed(1), t.UFix64)],
+                const resp = await this.acctPoolService.transferFlowToken(
+                    userId,
+                    recipient,
+                    amount,
                 );
                 txId = resp.txId;
                 keyIndex = resp.index;
             } else if (isCadenceIdentifier(content.token)) {
+                if (!isFlowAddress(recipient)) {
+                    throw new Error("Recipient address is not a valid Flow address");
+                }
+
                 // Transfer Fungible Token on Cadence side
                 const [_, tokenAddr, tokenContractName] = content.token.split(".");
                 elizaLogger.log(
-                    `${logPrefix} Sending ${amount} A.${tokenAddr}.${tokenContractName} to ${recipient}...`,
+                    `${logPrefix}\n Sending ${amount} A.${tokenAddr}.${tokenContractName} to ${recipient}...`,
                 );
-                const resp = await this.walletSerivce.sendTransaction(
-                    transactions.mainFTGenericTransfer,
-                    (arg, t) => [
-                        arg(amount.toFixed(1), t.UFix64),
-                        arg(recipient, t.Address),
-                        arg(`0x${tokenAddr}`, t.Address),
-                        arg(tokenContractName, t.String),
-                    ],
+                const resp = await this.acctPoolService.transferGenericFT(
+                    userId,
+                    recipient,
+                    amount,
+                    `0x${tokenAddr}`,
+                    tokenContractName,
                 );
                 txId = resp.txId;
                 keyIndex = resp.index;
             } else if (isEVMAddress(content.token)) {
-                // Transfer ERC20 token on EVM side
-                // we need to update the amount to be in the smallest unit
-                const decimals = await defaultQueries.queryEvmERC20Decimals(
-                    this.walletSerivce.wallet,
-                    content.token,
-                );
-                const adjustedAmount = BigInt(amount * 10 ** decimals);
+                if (!isEVMAddress(recipient)) {
+                    throw new Error("Recipient address is not a valid EVM address");
+                }
 
                 elizaLogger.log(
-                    `${logPrefix} Sending ${adjustedAmount} ${content.token}(EVM) to ${recipient}...`,
+                    `${logPrefix}\n Sending ${amount} ${content.token}(EVM) to ${recipient}...`,
                 );
 
-                const resp = await this.walletSerivce.sendTransaction(
-                    transactions.mainEVMTransferERC20,
-                    (arg, t) => [
-                        arg(content.token, t.String),
-                        arg(recipient, t.String),
-                        // Convert the amount to string, the string should be pure number, not a scientific notation
-                        arg(adjustedAmount.toString(), t.UInt256),
-                    ],
+                // Transfer ERC20 token on EVM side
+                const resp = await this.acctPoolService.transferERC20(
+                    userId,
+                    recipient,
+                    amount,
+                    content.token,
                 );
                 txId = resp.txId;
                 keyIndex = resp.index;
             }
 
-            elizaLogger.log(`${logPrefix} Sent transaction: ${txId} by KeyIndex[${keyIndex}]`);
+            elizaLogger.log(`${logPrefix}\n Sent transaction: ${txId} by KeyIndex[${keyIndex}]`);
 
             // call the callback with the transaction response
             if (callback) {
                 const tokenName = content.token || "FLOW";
-                const extraMsg = `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}`;
+                const extraMsg = `${logPrefix}\n Successfully transferred ${content.amount} ${tokenName} to ${content.to}`;
                 callback?.({
                     text: formatTransationSent(txId, this.walletSerivce.wallet.network, extraMsg),
                     content: {
@@ -268,7 +282,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
         } catch (e) {
             elizaLogger.error("Error in sending transaction:", e.message);
             callback?.({
-                text: `${logPrefix} Unable to process transfer request. Error in sending transaction.`,
+                text: `${logPrefix}\n Unable to process transfer request. Error: \n ${e.message}`,
                 content: {
                     error: e.message,
                 },

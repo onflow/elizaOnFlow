@@ -131,7 +131,7 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
 
         if (resp.ok) {
             callback?.({
-                text: format(resp.data, targetToken),
+                text: format(resp.data as number, targetToken),
                 content: {
                     success: true,
                     token: content.token,

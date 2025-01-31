@@ -7,7 +7,7 @@ import type { TransactionStatus } from "@onflow/typedefs";
 export interface ScriptQueryResponse {
     ok: boolean;
     data?: unknown;
-    error?: Record<string, unknown>;
+    error?: string | Record<string, unknown>;
     errorMessage?: string;
 }
 
