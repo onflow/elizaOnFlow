@@ -1,13 +1,7 @@
+import path from "node:path";
 import { injectable } from "inversify";
-import path from "path";
 import { v4 } from "uuid";
-import type {
-    IAgentRuntime,
-    ICacheManager,
-    Memory,
-    Provider,
-    State,
-} from "@elizaos/core";
+import type { IAgentRuntime, ICacheManager, Memory, Provider, State } from "@elizaos/core";
 import NodeCache from "node-cache";
 import { globalContainer, type InjectableProvider } from "@elizaos/plugin-di";
 
@@ -15,9 +9,7 @@ import { globalContainer, type InjectableProvider } from "@elizaos/plugin-di";
  * Cache provider
  */
 @injectable()
-export class CacheProvider
-    implements Provider, InjectableProvider<ICacheManager>
-{
+export class CacheProvider implements Provider, InjectableProvider<ICacheManager> {
     private readonly _nodeCache: NodeCache;
     private readonly cacheKey: string = "fixes-ai/shared-cache";
     private readonly CACHE_EXPIRY_SEC = 120; // Cache TTL set to 2 minutes
@@ -48,11 +40,7 @@ export class CacheProvider
      * Eliza provider `get` method
      * @returns The message to be injected into the context
      */
-    async get(
-        runtime: IAgentRuntime,
-        _message: Memory,
-        _state?: State
-    ): Promise<string | null> {
+    async get(runtime: IAgentRuntime, _message: Memory, _state?: State): Promise<string | null> {
         // ensure the cache manager is initialized
         await this.getInstance(runtime);
         return null;
@@ -85,11 +73,7 @@ export class CacheProvider
      * @param data The data to cache
      * @param ttl The time-to-live in seconds, defaults to 120 seconds, if not provided
      */
-    public async setCachedData<T>(
-        cacheKey: string,
-        data: T,
-        ttl?: number
-    ): Promise<void> {
+    public async setCachedData<T>(cacheKey: string, data: T, ttl?: number): Promise<void> {
         // Set in-memory cache
         this._nodeCache.set(cacheKey, data);
 
@@ -110,11 +94,7 @@ export class CacheProvider
         return await this._fileCache.get<T>(this._getFileCacheKey(key));
     }
 
-    private async _writeToCache<T>(
-        key: string,
-        data: T,
-        ttl?: number
-    ): Promise<void> {
+    private async _writeToCache<T>(key: string, data: T, ttl?: number): Promise<void> {
         await this._fileCache?.set(this._getFileCacheKey(key), data, {
             expires: Date.now() + (ttl ?? this.CACHE_EXPIRY_SEC) * 1000,
         });

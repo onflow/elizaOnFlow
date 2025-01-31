@@ -1,10 +1,5 @@
 import { injectable, inject } from "inversify";
-import {
-    elizaLogger,
-    Service,
-    ServiceType,
-    type IAgentRuntime,
-} from "@elizaos/core";
+import { elizaLogger, Service, type ServiceType, type IAgentRuntime } from "@elizaos/core";
 import type { FlowConnector, FlowWalletProvider } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
 import * as fcl from "@onflow/fcl";
@@ -36,16 +31,13 @@ export class FlowWalletService extends Service {
     private _maxKeyIndex: number;
 
     private readonly keysInUse = new Set<number>();
-    private readonly keysTrackingPayloads = new Map<
-        number,
-        TransactionTrackingPayload
-    >();
+    private readonly keysTrackingPayloads = new Map<number, TransactionTrackingPayload>();
 
     constructor(
         @inject(ConnectorProvider)
         private readonly connectorProvider: ConnectorProvider,
         @inject(WalletProvider)
-        private readonly walletProvider: WalletProvider
+        private readonly walletProvider: WalletProvider,
     ) {
         super();
     }
@@ -115,11 +107,7 @@ export class FlowWalletService extends Service {
      * @param defaultValue
      * @returns
      */
-    async executeScript(
-        code: string,
-        argsFunc: ArgumentFunction,
-        defaultValue: any
-    ) {
+    async executeScript<T>(code: string, argsFunc: ArgumentFunction, defaultValue: T): Promise<T> {
         return await this._wallet.executeScript(code, argsFunc, defaultValue);
     }
 
@@ -132,13 +120,11 @@ export class FlowWalletService extends Service {
     async sendTransaction(
         code: string,
         argsFunc: ArgumentFunction,
-        callbacks?: TransactionCallbacks
+        callbacks?: TransactionCallbacks,
     ): Promise<TransactionSentResponse> {
         const index = await this.acquireAndLockIndex();
         if (index < 0) {
-            throw new Error(
-                "No available account key index to send transaction"
-            );
+            throw new Error("No available account key index to send transaction");
         }
 
         // use availalbe index and default private key
@@ -146,15 +132,11 @@ export class FlowWalletService extends Service {
             const txId = await this._wallet.sendTransaction(
                 code,
                 argsFunc,
-                this._wallet.buildAuthorization(index)
+                this._wallet.buildAuthorization(index),
             );
             if (txId) {
                 // Start transaction tracking
-                await this.startTransactionTrackingSubstribe(
-                    index,
-                    txId,
-                    callbacks
-                );
+                await this.startTransactionTrackingSubstribe(index, txId, callbacks);
             }
             return { txId, index };
         } catch (error) {
@@ -172,7 +154,7 @@ export class FlowWalletService extends Service {
     private async startTransactionTrackingSubstribe(
         index: number,
         txid: string,
-        callbacks?: TransactionCallbacks
+        callbacks?: TransactionCallbacks,
     ) {
         // Clear any existing interval
         if (this.keysTrackingPayloads.has(index)) {
@@ -184,9 +166,7 @@ export class FlowWalletService extends Service {
             // Acknowledge and unlock the account key index
             await this.ackAndUnlockIndex(index);
         }
-        elizaLogger.info(
-            `FlowWalletService: Starting transaction tracking task for txid: ${txid}`
-        );
+        elizaLogger.info(`FlowWalletService: Starting transaction tracking task for txid: ${txid}`);
 
         let isFinalizedSent = false;
         const unsub = fcl.tx(txid).subscribe((res) => {
@@ -210,7 +190,7 @@ export class FlowWalletService extends Service {
                     // remove the tracking payload
                     this.keysTrackingPayloads.delete(index);
                     elizaLogger.info(
-                        `FlowWalletService: Transaction tracking task completed for txid: ${txid}`
+                        `FlowWalletService: Transaction tracking task completed for txid: ${txid}`,
                     );
                 }
             }
@@ -242,11 +222,7 @@ export class FlowWalletService extends Service {
      * @param index
      */
     private async ackAndUnlockIndex(index: number) {
-        if (
-            index >= 0 &&
-            index < this._maxKeyIndex &&
-            this.keysInUse.has(index)
-        ) {
+        if (index >= 0 && index < this._maxKeyIndex && this.keysInUse.has(index)) {
             this.keysInUse.delete(index);
         }
     }

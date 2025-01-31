@@ -14,9 +14,7 @@ import { CONSTANTS } from "../symbols";
  * Connector provider
  */
 @injectable()
-export class ConnectorProvider
-    implements Provider, InjectableProvider<FlowConnector>
-{
+export class ConnectorProvider implements Provider, InjectableProvider<FlowConnector> {
     private _connector: FlowConnector;
 
     /**
@@ -25,7 +23,7 @@ export class ConnectorProvider
      */
     constructor(
         @inject(CONSTANTS.FlowJSON)
-        private readonly flowJSON: Record<string, unknown>
+        private readonly flowJSON: Record<string, unknown>,
     ) {}
 
     /**
@@ -34,10 +32,7 @@ export class ConnectorProvider
      */
     async getInstance(runtime: IAgentRuntime): Promise<FlowConnector> {
         if (!this._connector) {
-            this._connector = await getFlowConnectorInstance(
-                runtime,
-                this.flowJSON
-            );
+            this._connector = await getFlowConnectorInstance(runtime, this.flowJSON);
         }
         return this._connector;
     }
@@ -58,15 +53,10 @@ export class ConnectorProvider
      * Eliza provider `get` method
      * @returns The message to be injected into the context
      */
-    async get(
-        runtime: IAgentRuntime,
-        _message: Memory,
-        state?: State
-    ): Promise<string | null> {
+    async get(runtime: IAgentRuntime, _message: Memory, state?: State): Promise<string | null> {
         // For one session, only inject the wallet info once
         if (state) {
-            const CONNECTOR_PROVIDER_SESSION_FLAG =
-                "connector-provider-session";
+            const CONNECTOR_PROVIDER_SESSION_FLAG = "connector-provider-session";
             if (state[CONNECTOR_PROVIDER_SESSION_FLAG]) {
                 return null;
             }
@@ -76,17 +66,11 @@ export class ConnectorProvider
         try {
             return await this.getConnectorStatus(runtime);
         } catch (error) {
-            elizaLogger.error(
-                "Error in Flow connector provider:",
-                error.message
-            );
+            elizaLogger.error("Error in Flow connector provider:", error.message);
             return null;
         }
     }
 }
 
 // Connector provider is bound to singleton scope
-globalContainer
-    .bind<ConnectorProvider>(ConnectorProvider)
-    .toSelf()
-    .inSingletonScope();
+globalContainer.bind<ConnectorProvider>(ConnectorProvider).toSelf().inSingletonScope();
