@@ -10,6 +10,7 @@ import getTokenInfoCadence from "./cadence/scripts/get_flow_token_info.cdc?raw";
 import getTokenInfoEVM from "./cadence/scripts/get_erc20_token_info.cdc?raw";
 
 // Scripts for account pool
+import isAddressChildOf from "./cadence/scripts/account-pool/is_address_child_of_main.cdc?raw";
 import getAccountInfoFrom from "./cadence/scripts/account-pool/get_acct_info_from.cdc?raw";
 import getAccountStatus from "./cadence/scripts/account-pool/get_acct_status.cdc?raw";
 
@@ -20,4 +21,5 @@ export const scripts = {
     getTokenInfoEVM,
     getAccountInfoFrom,
     getAccountStatus,
+    isAddressChildOf,
 };

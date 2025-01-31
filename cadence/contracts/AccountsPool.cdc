@@ -269,6 +269,19 @@ access(all) contract AccountsPool {
         return <- create Pool(cap)
     }
 
+    access(all)
+    fun isAddressOwnedBy(
+        _ mainAddr: Address,
+        checkAddress: Address
+    ): Bool {
+        if let childOwnedAcct = getAccount(checkAddress)
+            .capabilities.get<&HybridCustody.OwnedAccount>(HybridCustody.OwnedAccountPublicPath)
+            .borrow() {
+            return childOwnedAcct.isChildOf(mainAddr)
+        }
+        return false
+    }
+
     init() {
         let identifier = "AccountsPool_".concat(self.account.address.toString())
         self.StoragePath = StoragePath(identifier: identifier)!
