@@ -7,16 +7,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import {
-    type ActionOptions,
-    globalContainer,
-    property,
-} from "@elizaos/plugin-di";
-import {
-    BaseFlowInjectableAction,
-    CacheProvider,
-    type ScriptQueryResponse,
-} from "@fixes-ai/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { BaseFlowInjectableAction, CacheProvider, type ScriptQueryResponse } from "@fixes-ai/core";
 import { scripts } from "../assets/scripts.defs";
 import type { TokenDetailsFromTokenList, TokenInfo } from "../types";
 
@@ -119,11 +111,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
     /**
      * Validate if the action can be executed
      */
-    async validate(
-        _runtime: IAgentRuntime,
-        message: Memory,
-        _state?: State,
-    ): Promise<boolean> {
+    async validate(_runtime: IAgentRuntime, message: Memory, _state?: State): Promise<boolean> {
         const keywords: string[] = [
             "details",
             "token",
@@ -162,8 +150,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
         elizaLogger.log("Starting GET_TOKEN_INFO handler...");
 
         // Get token list from cache
-        const tokenListStr =
-            await this.cache.getCachedData<string>("flow-token-list");
+        const tokenListStr = await this.cache.getCachedData<string>("flow-token-list");
         let tokenList: TokenDetailsFromTokenList[] = [];
         if (!tokenListStr) {
             tokenList = await fetchTokenList();
@@ -244,12 +231,8 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                             info.address === tokenDetails.flowAddress &&
                             info.contractName === tokenDetails.contractName
                         ) {
-                            tokenInfo.totalSupply = Number.parseFloat(
-                                info.totalSupply,
-                            );
-                            tokenInfo.priceInFLOW = Number.parseFloat(
-                                info.priceInFLOW,
-                            );
+                            tokenInfo.totalSupply = Number.parseFloat(info.totalSupply);
+                            tokenInfo.priceInFLOW = Number.parseFloat(info.priceInFLOW);
                             tokenInfo.mcapValueInFLOW =
                                 tokenInfo.totalSupply * tokenInfo.priceInFLOW;
 
@@ -268,27 +251,16 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                         (arg, t) => [arg(content.token, t.String)],
                         undefined,
                     );
-                    if (
-                        info &&
-                        info.address?.toLowerCase() ===
-                            content.token.toLowerCase()
-                    ) {
+                    if (info && info.address?.toLowerCase() === content.token.toLowerCase()) {
                         tokenInfo.name = info.name;
                         tokenInfo.symbol = info.symbol;
                         tokenInfo.decimals = Number.parseInt(info.decimals);
                         tokenInfo.totalSupply =
-                            Number.parseInt(info.totalSupply) /
-                            Math.pow(10, tokenInfo.decimals);
-                        const reservedTokenInPair = Number.parseInt(
-                            info.reservedTokenInPair,
-                        );
-                        const reservedFlowInPair = Number.parseInt(
-                            info.reservedFlowInPair,
-                        );
-                        tokenInfo.priceInFLOW =
-                            reservedFlowInPair / reservedTokenInPair;
-                        tokenInfo.mcapValueInFLOW =
-                            tokenInfo.totalSupply * tokenInfo.priceInFLOW;
+                            Number.parseInt(info.totalSupply) / 10 ** tokenInfo.decimals;
+                        const reservedTokenInPair = Number.parseInt(info.reservedTokenInPair);
+                        const reservedFlowInPair = Number.parseInt(info.reservedFlowInPair);
+                        tokenInfo.priceInFLOW = reservedFlowInPair / reservedTokenInPair;
+                        tokenInfo.mcapValueInFLOW = tokenInfo.totalSupply * tokenInfo.priceInFLOW;
 
                         resp.ok = true;
                         resp.data = tokenInfo;
@@ -342,7 +314,7 @@ const fetchTokenList = async () => {
 
 const format = (token: TokenInfo): string => `### Token Details
 
-${token.logoURI && token.logoURI.startsWith("http") ? `![${token.name}](${token.logoURI})` : ""}
+${token.logoURI?.startsWith("http") ? `![${token.name}](${token.logoURI})` : ""}
 Symbol: $${token.symbol}
 Name: ${token.name}
 Decimals: ${token.decimals}

@@ -7,11 +7,7 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import {
-    type ActionOptions,
-    globalContainer,
-    property,
-} from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
 import { BaseFlowInjectableAction, type ScriptQueryResponse } from "@fixes-ai/core";
 import { scripts } from "../assets/scripts.defs";
 
@@ -35,11 +31,7 @@ export class GetPriceContent {
  */
 const actionOpts: ActionOptions<GetPriceContent> = {
     name: "GET_FLOW_PRICE",
-    similes: [
-        "GET_STFLOW_PRICE",
-        "GET_FLOW_TOKEN_PRICE",
-        "GET_STFLOW_TOKEN_PRICE",
-    ],
+    similes: ["GET_STFLOW_PRICE", "GET_FLOW_TOKEN_PRICE", "GET_STFLOW_TOKEN_PRICE"],
     description:
         "Call this action to obtain the current price in USD of FLOW token or stFLOW token",
     examples: [
@@ -81,11 +73,7 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
     /**
      * Validate if the action can be executed
      */
-    async validate(
-        _runtime: IAgentRuntime,
-        message: Memory,
-        _state?: State,
-    ): Promise<boolean> {
+    async validate(_runtime: IAgentRuntime, message: Memory, _state?: State): Promise<boolean> {
         const keywords: string[] = ["price", "flow", "stflow", "价格", "币价"];
         // Check if the message contains the keywords
         return keywords.some((keyword) =>
@@ -126,9 +114,7 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
             let data: string;
             try {
                 data = await this.walletSerivce.executeScript(
-                    targetToken === "flow"
-                        ? scripts.getFlowPrice
-                        : scripts.getStFlowPrice,
+                    targetToken === "flow" ? scripts.getFlowPrice : scripts.getStFlowPrice,
                     (_arg, _t) => [],
                     "",
                 );

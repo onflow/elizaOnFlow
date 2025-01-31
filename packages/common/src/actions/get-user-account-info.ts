@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import {
-    ActionExample,
+    type ActionExample,
     elizaLogger,
     type Action,
     type HandlerCallback,
@@ -13,7 +13,7 @@ import { FlowWalletService, type ScriptQueryResponse } from "@fixes-ai/core";
 
 import { formatWalletInfo } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";
-import { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 
 /**
  * Get User Account Info Action
@@ -56,25 +56,17 @@ export class GetUserAccountInfoAction implements Action {
     /**
      * Validate if the action can be executed
      */
-    async validate(
-        _runtime: IAgentRuntime,
-        message: Memory,
-        _state?: State,
-    ): Promise<boolean> {
+    async validate(_runtime: IAgentRuntime, message: Memory, _state?: State): Promise<boolean> {
         if (!this.walletSerivce.isInitialized) {
             return false;
         }
 
         const content =
-            typeof message.content === "string"
-                ? message.content
-                : message.content?.text;
+            typeof message.content === "string" ? message.content : message.content?.text;
 
         const keywords: string[] = ["account", "info", "账户", "账号"];
         // Check if the message contains the keywords
-        return keywords.some((keyword) =>
-            content.toLowerCase().includes(keyword.toLowerCase()),
-        );
+        return keywords.some((keyword) => content.toLowerCase().includes(keyword.toLowerCase()));
     }
 
     /**
@@ -105,9 +97,7 @@ export class GetUserAccountInfoAction implements Action {
 
         let acctInfo: FlowAccountBalanceInfo;
         try {
-            acctInfo = await this.acctPoolService.queryAccountInfo(
-                isSelf ? undefined : userId,
-            );
+            acctInfo = await this.acctPoolService.queryAccountInfo(isSelf ? undefined : userId);
         } catch (error) {
             resp.error = `Error: ${error.message}`;
         }

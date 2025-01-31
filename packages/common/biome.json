@@ -33,6 +33,11 @@
             "quoteStyle": "double"
         }
     },
+    "json": {
+        "formatter": {
+            "enabled": false
+        }
+    },
     "files": {
         "ignore": [
             "dist/**/*",

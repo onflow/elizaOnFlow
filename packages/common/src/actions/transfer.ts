@@ -13,11 +13,7 @@ import {
     queries as defaultQueries,
     transactions,
 } from "@elizaos/plugin-flow";
-import {
-    type ActionOptions,
-    globalContainer,
-    property,
-} from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
 import { formatTransationSent } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";
@@ -136,11 +132,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
      * @param message the message content
      * @param state the state object
      */
-    async validate(
-        runtime: IAgentRuntime,
-        message: Memory,
-        state?: State,
-    ): Promise<boolean> {
+    async validate(runtime: IAgentRuntime, message: Memory, state?: State): Promise<boolean> {
         if (await super.validate(runtime, message, state)) {
             // TODO: Add custom validation logic here to ensure the transfer does not come from unauthorized sources
             return true;
@@ -158,7 +150,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
     async execute(
         content: TransferContent | null,
         _runtime: IAgentRuntime,
-        message: Memory,
+        _message: Memory,
         _state?: State,
         callback?: HandlerCallback,
     ) {
@@ -178,17 +170,14 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
         // Parsed fields
         const recipient = content.to;
         const amount =
-            typeof content.amount === "number"
-                ? content.amount
-                : Number.parseFloat(content.amount);
+            typeof content.amount === "number" ? content.amount : Number.parseFloat(content.amount);
 
         // Check if the wallet has enough balance to transfer
         const accountInfo = await defaultQueries.queryAccountBalanceInfo(
             this.walletSerivce.wallet,
             walletAddress,
         );
-        const totalBalance =
-            accountInfo.balance + (accountInfo.coaBalance ?? 0);
+        const totalBalance = accountInfo.balance + (accountInfo.coaBalance ?? 0);
 
         // Check if the amount is valid
         if (totalBalance < amount) {
@@ -208,23 +197,17 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
         try {
             // For different token types, we need to handle the token differently
             if (!content.token) {
-                elizaLogger.log(
-                    `${logPrefix} Sending ${amount} FLOW to ${recipient}...`,
-                );
+                elizaLogger.log(`${logPrefix} Sending ${amount} FLOW to ${recipient}...`);
                 // Transfer FLOW token
                 const resp = await this.walletSerivce.sendTransaction(
                     transactions.mainFlowTokenDynamicTransfer,
-                    (arg, t) => [
-                        arg(recipient, t.String),
-                        arg(amount.toFixed(1), t.UFix64),
-                    ],
+                    (arg, t) => [arg(recipient, t.String), arg(amount.toFixed(1), t.UFix64)],
                 );
                 txId = resp.txId;
                 keyIndex = resp.index;
             } else if (isCadenceIdentifier(content.token)) {
                 // Transfer Fungible Token on Cadence side
-                const [_, tokenAddr, tokenContractName] =
-                    content.token.split(".");
+                const [_, tokenAddr, tokenContractName] = content.token.split(".");
                 elizaLogger.log(
                     `${logPrefix} Sending ${amount} A.${tokenAddr}.${tokenContractName} to ${recipient}...`,
                 );
@@ -233,7 +216,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
                     (arg, t) => [
                         arg(amount.toFixed(1), t.UFix64),
                         arg(recipient, t.Address),
-                        arg("0x" + tokenAddr, t.Address),
+                        arg(`0x${tokenAddr}`, t.Address),
                         arg(tokenContractName, t.String),
                     ],
                 );
@@ -246,7 +229,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
                     this.walletSerivce.wallet,
                     content.token,
                 );
-                const adjustedAmount = BigInt(amount * Math.pow(10, decimals));
+                const adjustedAmount = BigInt(amount * 10 ** decimals);
 
                 elizaLogger.log(
                     `${logPrefix} Sending ${adjustedAmount} ${content.token}(EVM) to ${recipient}...`,
@@ -265,20 +248,14 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
                 keyIndex = resp.index;
             }
 
-            elizaLogger.log(
-                `${logPrefix} Sent transaction: ${txId} by KeyIndex[${keyIndex}]`,
-            );
+            elizaLogger.log(`${logPrefix} Sent transaction: ${txId} by KeyIndex[${keyIndex}]`);
 
             // call the callback with the transaction response
             if (callback) {
                 const tokenName = content.token || "FLOW";
                 const extraMsg = `${logPrefix} Successfully transferred ${content.amount} ${tokenName} to ${content.to}`;
                 callback?.({
-                    text: formatTransationSent(
-                        txId,
-                        this.walletSerivce.wallet.network,
-                        extraMsg,
-                    ),
+                    text: formatTransationSent(txId, this.walletSerivce.wallet.network, extraMsg),
                     content: {
                         success: true,
                         txid: txId,
@@ -288,7 +265,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
                     },
                 });
             }
-        } catch (e: any) {
+        } catch (e) {
             elizaLogger.error("Error in sending transaction:", e.message);
             callback?.({
                 text: `${logPrefix} Unable to process transfer request. Error in sending transaction.`,

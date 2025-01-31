@@ -24,11 +24,7 @@ export class AccountProvider implements Provider {
      * Eliza provider `get` method
      * @returns The message to be injected into the context
      */
-    async get(
-        _runtime: IAgentRuntime,
-        message: Memory,
-        state?: State,
-    ): Promise<string | null> {
+    async get(_runtime: IAgentRuntime, message: Memory, state?: State): Promise<string | null> {
         const userId = message.userId;
         // For one session, only inject the wallet info once
         if (state) {

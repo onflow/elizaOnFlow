@@ -10,10 +10,7 @@ import {
 } from "@elizaos/core";
 import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
-import {
-    FlowWalletService,
-    type TransactionSentResponse,
-} from "@fixes-ai/core";
+import { FlowWalletService, type TransactionSentResponse } from "@fixes-ai/core";
 
 import { formatWalletCreated, formatWalletInfo } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";
@@ -44,8 +41,7 @@ export class EnsureUserAccountExistsAction implements Action {
             "ENSURE_CHILD_ACCOUNT",
             "ENSURE_CHILD_ACCOUNT_EXISTS",
         ];
-        this.description =
-            "Call this action to ensure user account exists on Flow blockchain.";
+        this.description = "Call this action to ensure user account exists on Flow blockchain.";
         this.examples = [
             [
                 {
@@ -78,24 +74,13 @@ export class EnsureUserAccountExistsAction implements Action {
         }
 
         const content =
-            typeof message.content === "string"
-                ? message.content
-                : message.content?.text;
+            typeof message.content === "string" ? message.content : message.content?.text;
 
         if (!content) return false;
 
-        const keywords: string[] = [
-            "create",
-            "wallet",
-            "account",
-            "创建",
-            "账号",
-            "钱包",
-        ];
+        const keywords: string[] = ["create", "wallet", "account", "创建", "账号", "钱包"];
         // Check if the message contains the keywords
-        return keywords.some((keyword) =>
-            content.toLowerCase().includes(keyword.toLowerCase()),
-        );
+        return keywords.some((keyword) => content.toLowerCase().includes(keyword.toLowerCase()));
     }
 
     /**
@@ -123,9 +108,7 @@ export class EnsureUserAccountExistsAction implements Action {
         let acctInfo: FlowAccountBalanceInfo;
         try {
             elizaLogger.debug("Querying account info for", accountName);
-            acctInfo = await this.acctPoolSerivce.queryAccountInfo(
-                isSelf ? null : userId
-            );
+            acctInfo = await this.acctPoolSerivce.queryAccountInfo(isSelf ? null : userId);
         } catch (e) {
             elizaLogger.error("Error:", e);
             callback?.({
@@ -153,54 +136,38 @@ export class EnsureUserAccountExistsAction implements Action {
         };
 
         try {
-            const resp = await new Promise<TransactionResponse>(
-                (resolve, reject) => {
-                    let txResp: TransactionSentResponse;
-                    this.acctPoolSerivce
-                        .createNewAccount(userId, {
-                            onFinalized: async (txId, status, errorMsg) => {
-                                if (errorMsg) {
-                                    reject(
-                                        new Error(
-                                            "Error in the creation transaction: " +
-                                                errorMsg
-                                        )
-                                    );
-                                    return;
-                                }
-                                const addressCreateEvt = status.events.find(
-                                    (e) => e.type === "flow.AccountCreated"
-                                );
-                                if (addressCreateEvt) {
-                                    const address =
-                                        addressCreateEvt.data.address;
-                                    elizaLogger.log(
-                                        `Account created for ${userId} at ${address}`
-                                    );
-                                    resolve({
-                                        txId: txResp?.txId ?? txId,
-                                        keyIndex: txResp?.index,
-                                        address: address,
-                                    });
-                                } else {
-                                    reject(
-                                        new Error(
-                                            "No account created event found."
-                                        )
-                                    );
-                                }
-                            },
-                        })
-                        .then((tx) => (txResp = tx))
-                        .catch((e) => reject(e));
-                }
-            );
+            const resp = await new Promise<TransactionResponse>((resolve, reject) => {
+                let txResp: TransactionSentResponse;
+                this.acctPoolSerivce
+                    .createNewAccount(userId, {
+                        onFinalized: async (txId, status, errorMsg) => {
+                            if (errorMsg) {
+                                reject(new Error(`Error in the creation transaction: ${errorMsg}`));
+                                return;
+                            }
+                            const addressCreateEvt = status.events.find(
+                                (e) => e.type === "flow.AccountCreated",
+                            );
+                            if (addressCreateEvt) {
+                                const address = addressCreateEvt.data.address;
+                                elizaLogger.log(`Account created for ${userId} at ${address}`);
+                                resolve({
+                                    txId: txResp?.txId ?? txId,
+                                    keyIndex: txResp?.index,
+                                    address: address,
+                                });
+                            } else {
+                                reject(new Error("No account created event found."));
+                            }
+                        },
+                    })
+                    .then((tx) => {
+                        txResp = tx;
+                    })
+                    .catch((e) => reject(e));
+            });
             callback?.({
-                text: formatWalletCreated(
-                    message.userId,
-                    accountName,
-                    resp.address
-                ),
+                text: formatWalletCreated(message.userId, accountName, resp.address),
                 content: resp,
                 source: "FlowBlockchain",
             });
@@ -211,7 +178,6 @@ export class EnsureUserAccountExistsAction implements Action {
                 source: "FlowBlockchain",
             });
         }
-
 
         elizaLogger.log("Completed ENSURE_USER_ACCOUNT_EXISTS handler.");
     }

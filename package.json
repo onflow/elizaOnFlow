@@ -4,7 +4,7 @@
     "scripts": {
         "format": "biome format --write .",
         "lint": "biome lint .",
-        "check": "biome check --apply .",
+        "check": "biome check --write .",
         "preinstall": "npx only-allow pnpm",
         "build": "turbo run build $(sed 's/^/--filter=!/' turbo.excludes | tr '\n' ' ')",
         "cleanstart": "if [ -f agent/data/db.sqlite ]; then rm agent/data/db.sqlite; fi && pnpm --filter \"@fixes-ai/agent\" start --isRoot",

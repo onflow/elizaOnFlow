@@ -10,7 +10,7 @@ import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 export function formatWalletInfo(
     userId: string,
     accountName: string,
-    info: FlowAccountBalanceInfo = undefined
+    info: FlowAccountBalanceInfo = undefined,
 ): string {
     let output = formatAccountInfoPrefix(userId, accountName);
     if (info === undefined) {
@@ -18,12 +18,8 @@ export function formatWalletInfo(
     } else {
         output += `- Flow wallet address: ${info.address}\n`;
         output += `- FLOW balance: ${info.balance} FLOW\n`;
-        output += `- Flow wallet's COA(EVM) address: ${
-            info.coaAddress || "unknown"
-        }\n`;
-        output += `- FLOW balance in COA(EVM) address: ${
-            info.coaBalance ?? 0
-        } FLOW`;
+        output += `- Flow wallet's COA(EVM) address: ${info.coaAddress || "unknown"}\n`;
+        output += `- FLOW balance in COA(EVM) address: ${info.coaBalance ?? 0} FLOW`;
     }
     return output;
 }
@@ -38,7 +34,7 @@ export function formatWalletInfo(
 export function formatWalletCreated(
     userId: string,
     accountName: string,
-    newAddress: string
+    newAddress: string,
 ): string {
     let output = formatAccountInfoPrefix(userId, accountName);
     output += `- New created address: ${newAddress}`;
@@ -60,15 +56,8 @@ function formatAccountInfoPrefix(userId: string, accountName: string): string {
  * @param txid
  * @param extra
  */
-export function formatTransationSent(
-    txId: string,
-    network: string,
-    extra?: string
-): string {
-    const baseUrl =
-        network === "testnet"
-            ? "https://testnet.flowscan.io"
-            : "https://flowscan.io";
+export function formatTransationSent(txId: string, network: string, extra?: string): string {
+    const baseUrl = network === "testnet" ? "https://testnet.flowscan.io" : "https://flowscan.io";
     const txURL = `${baseUrl}/tx/${txId}/events`;
     return `Transaction Sent: [${txId}](${txURL})\n${extra ?? ""}`;
 }
