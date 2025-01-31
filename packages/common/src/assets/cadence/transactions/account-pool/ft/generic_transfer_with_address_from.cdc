@@ -48,7 +48,7 @@ transaction(
             ? signer
             : (signer.storage.borrow<auth(AccountsPool.Child) &AccountsPool.Pool>(from: AccountsPool.StoragePath)
                 ?? panic("Failed to load Accounts Pool for ".concat(signer.address.toString()))
-            ).borrowChildAccount(type: "Eliza", from))
+            ).borrowChildAccount(type: "eliza", from))
                 ?? panic("Could not borrow Account reference for ".concat(from ?? "signer"))
         // ------------- End - Load the correct Account from signer's Account Pool -------------
 

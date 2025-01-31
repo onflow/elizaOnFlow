@@ -14,7 +14,7 @@ access(all) fun main(
         flowAddress = mainAddr
     } else if let pool = acct.storage
         .borrow<auth(AccountsPool.Child) &AccountsPool.Pool>(from: AccountsPool.StoragePath) {
-        flowAddress = pool.getAddress(type: "Eliza", userId!) ;
+        flowAddress = pool.getAddress(type: "eliza", userId!) ;
     }
 
     if flowAddress == nil {
