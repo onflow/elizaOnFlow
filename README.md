@@ -22,7 +22,12 @@ Check out the [Eliza's README](https://github.com/elizaOS/eliza/tree/main?tab=re
   - Provide standard action / evaluator wrapper for plugins.
   - Let develoeprs focus on the business logic of actions / evaluators.
 - Use shared `flow.json` for all Flow Cadence contracts dependencies in Flow relevant plugins.
+- Provide accounts management for AI Agents based on Flow’s unique Account Linking feature.
+  - Fully on-chain child accounts management without any extra off-chain private key custodial service.
+  - Each user account in Eliza system can be allocated with a full functional Flow wallet fully controlled by the AI Agent as its child account.
+  - You can customize any transaction for your users based on the on-chain child accounts management system.
 - Both Flow EVM and Flow Cadence projects will be supported.
+- Fully compatible with origin Eliza plugins.
 
 ## 🚀 Quick Start
 
