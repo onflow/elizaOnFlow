@@ -45,7 +45,7 @@ export function formatWalletCreated(
  * Format the account information prefix
  */
 function formatAccountInfoPrefix(userId: string, accountName: string): string {
-    let output = "Here is your account information:\n";
+    let output = "Here is current user's account information:\n";
     output += `- UserId: ${userId}\n`;
     output += `- WalletId: ${accountName}\n`;
     return output;
