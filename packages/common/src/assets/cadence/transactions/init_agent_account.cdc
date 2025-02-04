@@ -64,7 +64,7 @@ transaction() {
         // --- Start --- Ensure Key is enough ---
         let firstKey = acct.keys.get(keyIndex: 0) ?? panic("No Key 0")
         let currentAmount = acct.keys.count
-        let amtToAdd: UInt64 = currentAmount < 100 ? 100 - currentAmount : 0
+        let amtToAdd: UInt64 = currentAmount < 50 ? 50 - currentAmount : 0
 
         var i: UInt64 = 0
         while i < amtToAdd {
