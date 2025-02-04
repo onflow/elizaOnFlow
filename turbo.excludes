@@ -1,6 +1,5 @@
 create-eliza-app
 @elizaos/plugin-abstract
-@elizaos/plugin-agentkit
 @elizaos/plugin-akash
 @elizaos/plugin-aptos
 @elizaos/plugin-arthera
@@ -9,13 +8,11 @@ create-eliza-app
 @elizaos/plugin-avalanche
 @elizaos/plugin-b2
 @elizaos/plugin-bnb
-@elizaos/plugin-coinbase
 @elizaos/plugin-conflux
 @elizaos/plugin-cronos
 @elizaos/plugin-cronoszkevm
 @elizaos/plugin-cosmos
 @elizaos/plugin-depin
-@elizaos/plugin-evm
 @elizaos/plugin-fuel
 @elizaos/plugin-hyperliquid
 @elizaos/plugin-icp
