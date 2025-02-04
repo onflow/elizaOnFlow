@@ -3,7 +3,8 @@
         "AccountsPool": {
             "source": "cadence/contracts/AccountsPool.cdc",
             "aliases": {
-                "testnet": "9f9cd022231f7a19"
+                "testnet": "9f9cd022231f7a19",
+                "mainnet": "a253e78e8971f273"
             }
         }
     },
@@ -422,6 +423,15 @@
                 "type": "file",
                 "location": "pool-testnet-deploy.pkey"
             }
+        },
+        "pool-mainnet-deploy": {
+            "address": "a253e78e8971f273",
+            "key": {
+                "type": "google-kms",
+                "index": 0,
+                "hashAlgorithm": "SHA2_256",
+                "resourceID": "projects/blockchains-360016/locations/global/keyRings/Prod_FixesWorld/cryptoKeys/mainnet-accounts-pool/cryptoKeyVersions/1"
+            }
         }
     },
     "deployments": {
@@ -432,6 +442,11 @@
         },
         "testnet": {
             "pool-testnet-deploy": [
+                "AccountsPool"
+            ]
+        },
+        "mainnet": {
+            "pool-mainnet-deploy": [
                 "AccountsPool"
             ]
         }

@@ -116,7 +116,7 @@ pnpm install --include=optional sharp
 
 | Contract | Testnet Address | Mainnet Address |
 | --- | --- | --- |
-| AccountsPool | [0x9f9cd022231f7a19](https://testnet.flowscan.io/account/0x9f9cd022231f7a19) | Not deployed yet |
+| AccountsPool | [0x9f9cd022231f7a19](https://testnet.flowscan.io/contract/A.9f9cd022231f7a19.AccountsPool) | [0xa253e78e8971f273](https://www.flowscan.io/contract/A.a253e78e8971f273.AccountsPool) |
 
 ### Install / Add new Flow Cadence contracts dependencies
 
