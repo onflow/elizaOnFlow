@@ -64,7 +64,7 @@ export class GetUserAccountInfoAction implements Action {
         const content =
             typeof message.content === "string" ? message.content : message.content?.text;
 
-        const keywords: string[] = ["account", "info", "账户", "账号"];
+        const keywords: string[] = ["wallet", "account", "info", "status", "钱包", "账户", "账号"];
         // Check if the message contains the keywords
         return keywords.some((keyword) => content.toLowerCase().includes(keyword.toLowerCase()));
     }
