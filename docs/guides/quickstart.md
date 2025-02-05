@@ -111,10 +111,60 @@ FLOW_ENDPOINT_URL=  # Default: <https://mainnet.onflow.org>
 
 ## Create Your First Agent
 
+### **Create a Character File**
+
 Check out the `deps/eliza/characters/` directory for a number of character files to try out.
 Additionally you can override Eliza's `defaultCharacter` by editting [charactor.ts](../../agent/src/character.ts) which will be default used if no character json provided.
 
-<!-- TODO -->
+Copy one of the example character files and make it your own
+
+```bash
+cp deps/eliza/characters/sbf.character.json characters/deep-thought.character.json
+```
+
+📝 [Character Documentation](https://elizaos.github.io/eliza/docs/core/characterfile/)
+
+### **Start the Agent**
+
+Inform it which character you want to run:
+
+```bash
+pnpm start --character="characters/deep-thought.character.json"
+```
+
+Or you can use `pnpm start:debug` for more debugging logs.
+
+```bash
+pnpm start:debug --character="characters/deep-thought.character.json"
+```
+
+You can load multiple characters with a comma-separated list:
+
+```bash
+pnpm start --characters="characters/deep-thought.character.json, deps/eliza/characters/sbf.character.json"
+```
+
+### **Interact with the Agent**
+
+Now you're ready to start a conversation with your agent.
+
+Open a new terminal window and run the client's http server.
+
+```bash
+pnpm start:client
+```
+
+Once the client is running, you'll see a message like this:
+
+```bash
+➜  Local:   http://localhost:5173/
+```
+
+Simply click the link or open your browser to `http://localhost:5173/`. You'll see the chat interface connect to the system, and you can begin interacting with your character.
+
+## Social Platform Integration
+
+Check orgin Eliza's [Platform Integration](https://elizaos.github.io/eliza/docs/quickstart/#platform-integration)
 
 ## Common Issues & Solutions
 
