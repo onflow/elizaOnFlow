@@ -144,6 +144,14 @@ You can load multiple characters with a comma-separated list:
 pnpm start --characters="characters/deep-thought.character.json, deps/eliza/characters/sbf.character.json"
 ```
 
+#### Additional Requirements
+
+You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
+
+```bash
+pnpm install --include=optional sharp
+```
+
 ### **Interact with the Agent**
 
 Now you're ready to start a conversation with your agent.
@@ -164,8 +172,14 @@ Simply click the link or open your browser to `http://localhost:5173/`. You'll s
 
 ## Social Platform Integration
 
-Check orgin Eliza's [Platform Integration](https://elizaos.github.io/eliza/docs/quickstart/#platform-integration)
+You can also connect your agent to social platforms like Twitter, Discord, and Telegram.
+
+For example, connect with X (Twitter) by using `@elizaos/client-twitter`:
+
+- change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
+
+For more details, please check the orgin Eliza's [Platform Integration](https://elizaos.github.io/eliza/docs/quickstart/#platform-integration)
 
 ## Common Issues & Solutions
 
-Check orgin Eliza's [Common Issues & Solutions](https://elizaos.github.io/eliza/docs/quickstart/#common-issues--solutions)
+Please check the orgin Eliza's [Common Issues & Solutions](https://elizaos.github.io/eliza/docs/quickstart/#common-issues--solutions)
