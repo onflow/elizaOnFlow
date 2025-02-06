@@ -83,6 +83,14 @@
                 "testnet": "8c5303eaa26202d6"
             }
         },
+        "EVMTokenList": {
+            "source": "mainnet://15a918087ab12d86.EVMTokenList",
+            "hash": "d94f029ca11147e7d37f2d76ebb71a0c3f5e6c49a04df13a5717631a1d4be2d9",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
         "FTViewUtils": {
             "source": "mainnet://15a918087ab12d86.FTViewUtils",
             "hash": "ef8343697ebcb455a835bc9f87b8060f574c3d968644de47f6613cebf05d7749",
@@ -256,6 +264,22 @@
                 "testnet": "631e88ae7f1d7c20"
             }
         },
+        "NFTList": {
+            "source": "mainnet://15a918087ab12d86.NFTList",
+            "hash": "30bcd96975d4b175873fd516ebf58f64bfbf09e83c29c907abf98296e0347626",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
+        "NFTViewUtils": {
+            "source": "mainnet://15a918087ab12d86.NFTViewUtils",
+            "hash": "9c0fe5d7ec4da744c1f7a2f2e5ce098879e86cd77e7e3c90ffb1b3974d797e1b",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
         "NonFungibleToken": {
             "source": "mainnet://1d7e57aa55817448.NonFungibleToken",
             "hash": "b63f10e00d1a814492822652dac7c0574428a200e4c26cb3c832c4829e2778f0",
@@ -372,6 +396,14 @@
         "TokenList": {
             "source": "mainnet://15a918087ab12d86.TokenList",
             "hash": "ac9298cfdf02e785e92334858fab0f388e5a72136c3bc4d4ed7f2039ac152bd5",
+            "aliases": {
+                "mainnet": "15a918087ab12d86",
+                "testnet": "b86f928a1fa7798e"
+            }
+        },
+        "TokenListHelper": {
+            "source": "mainnet://15a918087ab12d86.TokenListHelper",
+            "hash": "2bf02ca6b8e4499b6f7c81e2576e70108bea86a16e258a60a536946a728d5007",
             "aliases": {
                 "mainnet": "15a918087ab12d86",
                 "testnet": "b86f928a1fa7798e"
