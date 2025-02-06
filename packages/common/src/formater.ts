@@ -1,4 +1,19 @@
+import type { Character } from "@elizaos/core";
 import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+
+/**
+ * Format the agent wallet information
+ * @param character
+ * @param info
+ */
+export function formatAgentWalletInfo(
+    character: Character,
+    info: FlowAccountBalanceInfo,
+): string {
+    let output = `Here is the Agent<${character.name}>'s Flow wallet information:\n`;
+    output += formatWalletBalances(info);
+    return output;
+}
 
 /**
  * Format the account information
@@ -16,11 +31,21 @@ export function formatWalletInfo(
     if (info === undefined) {
         output += `- No wallet information found, maybe you don't have a wallet yet.`;
     } else {
-        output += `- Flow wallet address: ${info.address}\n`;
-        output += `- FLOW balance: ${info.balance} FLOW\n`;
-        output += `- Flow wallet's COA(EVM) address: ${info.coaAddress || "unknown"}\n`;
-        output += `- FLOW balance in COA(EVM) address: ${info.coaBalance ?? 0} FLOW`;
+        output += formatWalletBalances(info);
     }
+    return output;
+}
+
+/**
+ * Format the wallet balances
+ * @param info
+ * @returns
+ */
+function formatWalletBalances(info: FlowAccountBalanceInfo): string {
+    let output = `- Flow wallet address: ${info.address}\n`;
+    output += `- FLOW balance: ${info.balance} FLOW\n`;
+    output += `- Flow wallet's COA(EVM) address: ${info.coaAddress || "unknown"}\n`;
+    output += `- FLOW balance in COA(EVM) address: ${info.coaBalance ?? 0} FLOW`;
     return output;
 }
 

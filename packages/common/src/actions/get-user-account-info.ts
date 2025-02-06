@@ -11,7 +11,7 @@ import {
 import { globalContainer } from "@elizaos/plugin-di";
 import { FlowWalletService, type ScriptQueryResponse } from "@fixes-ai/core";
 
-import { formatWalletInfo } from "../formater";
+import { formatAgentWalletInfo, formatWalletInfo } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";
 import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 
@@ -36,9 +36,9 @@ export class GetUserAccountInfoAction implements Action {
         private readonly acctPoolService: AccountsPoolService,
     ) {
         this.name = "GET_USER_ACCOUNT_INFO";
-        this.similes = [];
+        this.similes = ["GET_AGENT_ACCOUNT_INFO"];
         this.description =
-            "Call this action to obtain the current account information of the user.";
+            "Call this action to obtain the current account information of the user or the agent itself.";
         this.examples = [
             [
                 {
@@ -48,6 +48,36 @@ export class GetUserAccountInfoAction implements Action {
                         action: "GET_USER_ACCOUNT_INFO",
                     },
                 },
+            ],
+            [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "What's your wallet status?",
+                    },
+                },
+                {
+                    user: "{{agentName}}",
+                    content: {
+                        text: "Let me check my wallet status.",
+                        action: "GET_AGENT_ACCOUNT_INFO",
+                    }
+                }
+            ],
+            [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "What's your balance?",
+                    },
+                },
+                {
+                    user: "{{agentName}}",
+                    content: {
+                        text: "Let me check my wallet status.",
+                        action: "GET_AGENT_ACCOUNT_INFO",
+                    }
+                }
             ],
         ];
         this.suppressInitialMessage = true;
@@ -64,7 +94,7 @@ export class GetUserAccountInfoAction implements Action {
         const content =
             typeof message.content === "string" ? message.content : message.content?.text;
 
-        const keywords: string[] = ["wallet", "account", "info", "status", "钱包", "账户", "账号"];
+        const keywords: string[] = ["wallet", "account", "info", "balance", "status", "钱包", "账户", "账号", "余额"];
         // Check if the message contains the keywords
         return keywords.some((keyword) => content.toLowerCase().includes(keyword.toLowerCase()));
     }
@@ -89,8 +119,13 @@ export class GetUserAccountInfoAction implements Action {
             ok: false,
         };
 
+        const content =
+            typeof message.content === "string" ? message.content : message.content?.text;
+        const keywords = ["you", "your", "agent", "agent's", "你", "你的", "代理"];
+        const isQueryAgent = keywords.some((keyword) => content.toLowerCase().includes(keyword));
+
         const userId = message.userId;
-        const isSelf = message.userId === runtime.agentId;
+        const isSelf = message.userId === runtime.agentId || isQueryAgent;
         const mainAddr = this.walletSerivce.address;
 
         const accountName = `Account[${mainAddr}/${isSelf ? "root" : userId}]`;
@@ -120,7 +155,9 @@ export class GetUserAccountInfoAction implements Action {
             resp.data = acctInfo;
 
             callback?.({
-                text: formatWalletInfo(userId, accountName, acctInfo),
+                text: isSelf
+                    ? formatAgentWalletInfo(runtime.character, acctInfo)
+                    : formatWalletInfo(userId, accountName, acctInfo),
                 content: { success: true, info: acctInfo },
                 source: "FlowBlockchain",
             });
