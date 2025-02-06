@@ -50,12 +50,12 @@
     "pnpm": {
         "overrides": {
             "@ai-sdk/provider": "1.0.6",
-            "@ai-sdk/provider-utils": "2.1.2",
+            "@ai-sdk/provider-utils": "2.1.6",
             "@onflow/fcl": "1.13.4",
             "bs58": "5.0.0",
             "cookie": "0.7.0",
             "onnxruntime-node": "1.20.1",
-            "viem": "2.22.15"
+            "viem": "2.21.58"
         }
     },
     "engines": {
