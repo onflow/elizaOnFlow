@@ -14,6 +14,10 @@ import isAddressChildOf from "./cadence/scripts/account-pool/is_address_child_of
 import getAccountInfoFrom from "./cadence/scripts/account-pool/get_acct_info_from.cdc?raw";
 import getAccountStatus from "./cadence/scripts/account-pool/get_acct_status.cdc?raw";
 
+// Scripts for TokenList
+import isTokenRegistered from "./cadence/scripts/token-list/is-token-registered.cdc?raw";
+import isEVMAssetRegistered from "./cadence/scripts/token-list/is-evm-asset-registered.cdc?raw";
+
 export const scripts = {
     getFlowPrice,
     getStFlowPrice,
@@ -22,4 +26,6 @@ export const scripts = {
     getAccountInfoFrom,
     getAccountStatus,
     isAddressChildOf,
+    isTokenRegistered,
+    isEVMAssetRegistered,
 };
