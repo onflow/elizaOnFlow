@@ -84,7 +84,7 @@ function formatAccountInfoPrefix(userId: string, accountName: string): string {
 export function formatTransationSent(txId: string, network: string, extra?: string): string {
     const baseUrl = network === "testnet" ? "https://testnet.flowscan.io" : "https://flowscan.io";
     const txURL = `${baseUrl}/tx/${txId}/events`;
-    return `Transaction Sent: [${txId}](${txURL})\n${extra ?? ""}`;
+    return `Transaction Sent: <${txURL}>\n${extra ?? ""}`;
 }
 
 /**

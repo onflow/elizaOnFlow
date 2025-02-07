@@ -175,7 +175,7 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
 
             try {
                 isRegistered = await this.walletSerivce.executeScript(scripts.isEVMAssetRegistered, (arg, t) => [
-                    arg(content.token, t.String),
+                    arg(content.token.toLowerCase(), t.String),
                 ], false)
             } catch (e) {
                 elizaLogger.error("Error in checking token registration:", e);
@@ -207,6 +207,7 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
         type RegisterTokenResponse = {
             success: boolean;
             txid: string;
+            evmBridged: boolean;
             from: string;
             flowSpent: number;
             gasFeeSpent: number;
@@ -231,6 +232,7 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
                         let flowSpent = 0;
                         let gasFeeSpent = 0;
                         let hasValidEvent = false;
+                        let evmBridged = false;
                         for (const evt of status.events) {
                             // check if the transaction has a valid event
                             if (!hasValidEvent) {
@@ -247,6 +249,10 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
                             if (evt.type.endsWith("FlowFees.FeesDeducted")) {
                                 gasFeeSpent += Number.parseFloat(evt.data.amount);
                             }
+                            // check if the event is FlowEVMBridge.BridgeDefiningContractDeployed
+                            if (evt.type.endsWith("FlowEVMBridge.BridgeDefiningContractDeployed")) {
+                                evmBridged = true;
+                            }
                         }
 
                         if (hasValidEvent) {
@@ -254,15 +260,17 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
                             resolve({
                                 success: true,
                                 txid: txId,
+                                evmBridged,
                                 from: fromAddress,
                                 flowSpent,
                                 gasFeeSpent,
                             });
                         } else {
-                            elizaLogger.error(`Failed to register token: ${content.token}, no valid event found.`);
+                            elizaLogger.log(`Failed to register token: ${content.token}, no valid event found.`);
                             resolve({
                                 success: false,
                                 txid: txId,
+                                evmBridged,
                                 from: fromAddress,
                                 flowSpent,
                                 gasFeeSpent,
@@ -310,10 +318,13 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
             });
             // format the flow spent information
             const flowSpentInfo = formatFlowSpent(resp.from, resp.flowSpent, this.walletSerivce.address, resp.gasFeeSpent);
+            const prefix = `Operator: ${accountName}\n${flowSpentInfo}\n`;
             // return the response to the callback
             const finalMsg = resp.success
-                    ? `Operator: ${accountName}\n${flowSpentInfo}\nToken ${content.token} registered successfully.`
-                    : `Operator: ${accountName}\n${flowSpentInfo}\nFailed to register token, no valid event found.`;
+                    ? `${prefix}\n  Token ${content.token} registered successfully.`
+                    : resp.evmBridged
+                        ? `${prefix}\n  Token has just bridged from EVM side, you need send another transaction to register it in TokenList.`
+                        : `${prefix}\n  Failed to register token, no valid event found.`;
             callback?.({
                 text: formatTransationSent(resp.txid, this.walletSerivce.connector.network, finalMsg),
                 content: resp,
