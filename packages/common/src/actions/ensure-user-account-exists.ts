@@ -68,7 +68,7 @@ export class EnsureUserAccountExistsAction implements Action {
                 {
                     user: "{{user1}}",
                     content: {
-                        text: "Tell me about my Flow account.",
+                        text: "Tell me about my Flow account, if no walelt, please create one.",
                         action: "GET_USER_ACCOUNT_INFO",
                     },
                 },
@@ -81,7 +81,7 @@ export class EnsureUserAccountExistsAction implements Action {
                     },
                 },
                 {
-                    user: "{{agentName}}",
+                    user: "{{user2}}",
                     content: {
                         text: "Let me check my wallet status.",
                         action: "GET_AGENT_ACCOUNT_INFO",
@@ -96,7 +96,7 @@ export class EnsureUserAccountExistsAction implements Action {
                     },
                 },
                 {
-                    user: "{{agentName}}",
+                    user: "{{user2}}",
                     content: {
                         text: "Let me check my wallet status.",
                         action: "GET_AGENT_ACCOUNT_INFO",
