@@ -86,3 +86,15 @@ export function formatTransationSent(txId: string, network: string, extra?: stri
     const txURL = `${baseUrl}/tx/${txId}/events`;
     return `Transaction Sent: [${txId}](${txURL})\n${extra ?? ""}`;
 }
+
+/**
+ * Format the FLOW spent message
+ * @param fromAddress
+ * @param spent
+ * @param gasFee
+ */
+export function formatFlowSpent(fromAddress: string, spent: number, agentAddr: string, gasFee: number): string {
+    let output = `- FLOW spent from ${fromAddress}: ${spent} FLOW\n`;
+    output += `- GasFee spent from Agent[${agentAddr}]: ${gasFee} FLOW`;
+    return output;
+}

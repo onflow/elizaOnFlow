@@ -9,10 +9,10 @@ import {
 } from "@elizaos/core";
 import { isCadenceIdentifier, isEVMAddress, type FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { property, globalContainer, type ActionOptions } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction, TransactionCallbacks, type TransactionSentResponse } from "@fixes-ai/core";
+import { BaseFlowInjectableAction, type TransactionCallbacks, type TransactionSentResponse } from "@fixes-ai/core";
 
 import { scripts } from "../assets/scripts.defs";
-import { formatTransationSent, formatWalletCreated } from "../formater";
+import { formatFlowSpent, formatTransationSent, formatWalletCreated } from "../formater";
 import { transactions } from "../assets/transactions.defs";
 
 /**
@@ -207,6 +207,9 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
         type RegisterTokenResponse = {
             success: boolean;
             txid: string;
+            from: string;
+            flowSpent: number;
+            gasFeeSpent: number;
         }
 
         // Register the token
@@ -224,21 +227,45 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
                             'TokenList.FungibleTokenRegistered',
                             'NFTList.NFTCollectionRegistered'
                         ]
-                        const hasValidEvent = status.events.some((e) => {
-                            const [_1, _2, contractName, eventName] = e.type.split('.');
-                            return validEventNames.includes(`${contractName}.${eventName}`);
-                        });
+                        let fromAddress = "";
+                        let flowSpent = 0;
+                        let gasFeeSpent = 0;
+                        let hasValidEvent = false;
+                        for (const evt of status.events) {
+                            // check if the transaction has a valid event
+                            if (!hasValidEvent) {
+                                const [_1, _2, contractName, eventName] = evt.type.split('.');
+                                hasValidEvent = validEventNames.includes(`${contractName}.${eventName}`)
+                            }
+                            // check if the event is FlowToken.TokensWithdrawn from user's account
+                            if (evt.type.endsWith('FlowToken.TokensWithdrawn') && evt.data.from !== this.walletSerivce.address) {
+                                // calculate the flow spent
+                                fromAddress = evt.data.from;
+                                flowSpent += Number.parseFloat(evt.data.amount);
+                            }
+                            // check gas fee spent
+                            if (evt.type.endsWith("FlowFees.FeesDeducted")) {
+                                gasFeeSpent += Number.parseFloat(evt.data.amount);
+                            }
+                        }
+
                         if (hasValidEvent) {
                             elizaLogger.log(`Token registered successfully: ${content.token}`);
                             resolve({
                                 success: true,
                                 txid: txId,
+                                from: fromAddress,
+                                flowSpent,
+                                gasFeeSpent,
                             });
                         } else {
                             elizaLogger.error(`Failed to register token: ${content.token}, no valid event found.`);
                             resolve({
                                 success: false,
                                 txid: txId,
+                                from: fromAddress,
+                                flowSpent,
+                                gasFeeSpent,
                             });
                         }
                     },
@@ -281,10 +308,12 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
                 // wait for the transaction to be finalized
                 transaction.catch((e) => reject(e));
             });
+            // format the flow spent information
+            const flowSpentInfo = formatFlowSpent(resp.from, resp.flowSpent, this.walletSerivce.address, resp.gasFeeSpent);
             // return the response to the callback
             const finalMsg = resp.success
-                    ? `Operator: ${accountName}\n Token ${content.token} registered successfully.`
-                    : `Operator: ${accountName}\n Failed to register token, no valid event found.`;
+                    ? `Operator: ${accountName}\n${flowSpentInfo}\nToken ${content.token} registered successfully.`
+                    : `Operator: ${accountName}\n${flowSpentInfo}\nFailed to register token, no valid event found.`;
             callback?.({
                 text: formatTransationSent(resp.txid, this.walletSerivce.connector.network, finalMsg),
                 content: resp,
