@@ -44,7 +44,7 @@ export class EnsureUserAccountExistsAction implements Action {
             "GET_USER_ACCOUNT_INFO",
             "GET_AGENT_ACCOUNT_INFO",
         ];
-        this.description = "Call this action to user or agent's account existing on Flow blockchain, and obtain the current account information of it.";
+        this.description = "Call this action to ensure user or agent's wallet account existing on Flow blockchain, and obtain the current wallet account information of it.";
         this.examples = [
             [
                 {
