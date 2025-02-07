@@ -94,7 +94,9 @@ export function formatTransationSent(txId: string, network: string, extra?: stri
  * @param gasFee
  */
 export function formatFlowSpent(fromAddress: string, spent: number, agentAddr: string, gasFee: number): string {
-    let output = `- FLOW spent from ${fromAddress}: ${spent} FLOW\n`;
-    output += `- GasFee spent from Agent[${agentAddr}]: ${gasFee} FLOW`;
+    let output = fromAddress ? `- FLOW spent from ${fromAddress}: ${spent} FLOW\n` : "";
+    if (gasFee > 0) {
+        output += `- GasFee spent from Agent[${agentAddr}]: ${gasFee} FLOW`;
+    }
     return output;
 }
