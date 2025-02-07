@@ -33,7 +33,7 @@ export class EnsureUserAccountExistsAction implements Action {
         @inject(FlowWalletService)
         private readonly walletSerivce: FlowWalletService,
         @inject(AccountsPoolService)
-        private readonly acctPoolSerivce: AccountsPoolService,
+        private readonly acctPoolService: AccountsPoolService,
     ) {
         this.name = "FETCH_ACCOUNT_INFO";
         this.similes = [
@@ -155,7 +155,7 @@ export class EnsureUserAccountExistsAction implements Action {
         let acctInfo: FlowAccountBalanceInfo;
         try {
             elizaLogger.debug("Querying account info for", accountName);
-            acctInfo = await this.acctPoolSerivce.queryAccountInfo(isSelf ? null : userId);
+            acctInfo = await this.acctPoolService.queryAccountInfo(isSelf ? null : userId);
         } catch (e) {
             elizaLogger.error("Error:", e);
             callback?.({
@@ -187,7 +187,7 @@ export class EnsureUserAccountExistsAction implements Action {
         try {
             const resp = await new Promise<TransactionResponse>((resolve, reject) => {
                 let txResp: TransactionSentResponse;
-                this.acctPoolSerivce
+                this.acctPoolService
                     .createNewAccount(userId, {
                         onFinalized: async (txId, status, errorMsg) => {
                             if (errorMsg) {

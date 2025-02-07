@@ -84,5 +84,19 @@ function formatAccountInfoPrefix(userId: string, accountName: string): string {
 export function formatTransationSent(txId: string, network: string, extra?: string): string {
     const baseUrl = network === "testnet" ? "https://testnet.flowscan.io" : "https://flowscan.io";
     const txURL = `${baseUrl}/tx/${txId}/events`;
-    return `Transaction Sent: [${txId}](${txURL})\n${extra ?? ""}`;
+    return `Transaction Sent: <${txURL}>\n${extra ?? ""}`;
+}
+
+/**
+ * Format the FLOW spent message
+ * @param fromAddress
+ * @param spent
+ * @param gasFee
+ */
+export function formatFlowSpent(fromAddress: string, spent: number, agentAddr: string, gasFee: number): string {
+    let output = fromAddress ? `- FLOW spent from ${fromAddress}: ${spent} FLOW\n` : "";
+    if (gasFee > 0) {
+        output += `- GasFee spent from Agent[${agentAddr}]: ${gasFee} FLOW`;
+    }
+    return output;
 }

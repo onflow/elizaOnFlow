@@ -5,6 +5,7 @@ import {
     GetPriceAction,
     GetTokenInfoAction,
     EnsureUserAccountExistsAction,
+    EnsureTokenRegisteredAction,
 } from "./actions";
 import { AccountsPoolService } from "./services/acctPool.service";
 import { AccountProvider } from "./providers/account.provider";
@@ -21,6 +22,7 @@ export const basicFlowPlugin: PluginOptions = {
         GetPriceAction,
         GetTokenInfoAction,
         EnsureUserAccountExistsAction,
+        EnsureTokenRegisteredAction,
     ],
     providers: [AccountProvider],
     evaluators: [],
