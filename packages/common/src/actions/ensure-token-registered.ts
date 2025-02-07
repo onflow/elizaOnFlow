@@ -7,12 +7,13 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+import { isCadenceIdentifier, isEVMAddress, type FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { property, globalContainer, type ActionOptions } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction, FlowWalletService, type TransactionSentResponse } from "@fixes-ai/core";
+import { BaseFlowInjectableAction, TransactionCallbacks, type TransactionSentResponse } from "@fixes-ai/core";
 
-import { formatWalletCreated, formatWalletInfo } from "../formater";
-import { AccountsPoolService } from "../services/acctPool.service";
+import { scripts } from "../assets/scripts.defs";
+import { formatTransationSent, formatWalletCreated } from "../formater";
+import { transactions } from "../assets/transactions.defs";
 
 /**
  * The generated content for the transfer action
@@ -25,9 +26,9 @@ export class Content {
             "For Cadence resource identifier, the field should be 'A.1654653399040a61.ContractName'",
             "For ERC20 contract address, the field should be '0xe6ffc15a5bde7dd33c127670ba2b9fcb82db971a'",
         ],
-        schema: z.string().nullable(),
+        schema: z.string(),
     })
-    token: string | null;
+    token: string;
 
     @property({
         description:
@@ -39,6 +40,14 @@ export class Content {
         schema: z.string().refine((vm) => ["flow", "evm"].includes(vm)),
     })
     vm: "flow" | "evm";
+
+    @property({
+        description:
+            "The bridging requirement. If user mentioned the token doesn't need to be bridged, set this field to false. Default is true.",
+        examples: [],
+        schema: z.boolean().default(true),
+    })
+    bridging: boolean;
 }
 
 /**
@@ -59,7 +68,7 @@ const option: ActionOptions<Content> = {
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Register token A.1654653399040a61.FlowToken",
+                    text: "Register token A.1654653399040a61.FlowToken, no need to bridge",
                     action: "ENSURE_TOKEN_REGISTERED",
                 },
             },
@@ -86,10 +95,7 @@ const option: ActionOptions<Content> = {
  */
 @injectable()
 export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Content> {
-    constructor(
-        @inject(AccountsPoolService)
-        private readonly acctPoolService: AccountsPoolService,
-    ) {
+    constructor() {
         super(option);
     }
 
@@ -138,79 +144,159 @@ export class EnsureTokenRegisteredAction extends BaseFlowInjectableAction<Conten
 
         const accountName = `Account[${mainAddr}/${isSelf ? "root" : userId}]`;
 
-        // let acctInfo: FlowAccountBalanceInfo;
-        // try {
-        //     elizaLogger.debug("Querying account info for", accountName);
-        //     acctInfo = await this.acctPoolService.queryAccountInfo(isSelf ? null : userId);
-        // } catch (e) {
-        //     elizaLogger.error("Error:", e);
-        //     callback?.({
-        //         text: `Unable to fetch info for ${accountName}.`,
-        //         content: { error: e.message },
-        //         source: "FlowBlockchain",
-        //     });
-        //     return;
-        // }
+        // Check if token is registered
+        let isRegistered = false;
+        let errorMsg: string | undefined = undefined;
+        let address: string;
+        let contractName: string;
+        if (isCadenceIdentifier(content.token) && content.vm === "flow") {
+            const [_, tokenAddr, tokenContractName] = content.token.split(".");
+            address = `0x${tokenAddr}`;
+            contractName = tokenContractName;
 
-        // if (acctInfo) {
-        //     callback?.({
-        //         text: formatWalletInfo(message.userId, accountName, acctInfo),
-        //         content: { exists: true },
-        //         source: "FlowBlockchain",
-        //     });
-        //     return;
-        // }
+            elizaLogger.debug(
+                `${accountName}\n Check A.${tokenAddr}.${tokenContractName} in TokenList...`,
+            );
 
-        // // create a new account by sendinng transaction
-        // type TransactionResponse = {
-        //     txId: string;
-        //     keyIndex: number;
-        //     address: string;
-        // };
+            try {
+                isRegistered = await this.walletSerivce.executeScript(scripts.isTokenRegistered, (arg, t) => [
+                    arg(address, t.Address),
+                    arg(contractName, t.String),
+                ], false)
+            } catch (e) {
+                elizaLogger.error("Error in checking token registration:", e);
+                errorMsg = e.message;
+            }
+        } else if (isEVMAddress(content.token) && content.vm === "evm") {
+            elizaLogger.debug(
+                `${accountName}\n Check ${content.token} in EVMTokenList...`,
+            );
+            address = content.token;
 
-        // try {
-        //     const resp = await new Promise<TransactionResponse>((resolve, reject) => {
-        //         let txResp: TransactionSentResponse;
-        //         this.acctPoolService
-        //             .createNewAccount(userId, {
-        //                 onFinalized: async (txId, status, errorMsg) => {
-        //                     if (errorMsg) {
-        //                         reject(new Error(`Error in the creation transaction: ${errorMsg}`));
-        //                         return;
-        //                     }
-        //                     const addressCreateEvt = status.events.find(
-        //                         (e) => e.type === "flow.AccountCreated",
-        //                     );
-        //                     if (addressCreateEvt) {
-        //                         const address = addressCreateEvt.data.address;
-        //                         elizaLogger.log(`Account created for ${userId} at ${address}`);
-        //                         resolve({
-        //                             txId: txResp?.txId ?? txId,
-        //                             keyIndex: txResp?.index,
-        //                             address: address,
-        //                         });
-        //                     } else {
-        //                         reject(new Error("No account created event found."));
-        //                     }
-        //                 },
-        //             })
-        //             .then((tx) => {
-        //                 txResp = tx;
-        //             })
-        //             .catch((e) => reject(e));
-        //     });
-        //     callback?.({
-        //         text: formatWalletCreated(message.userId, accountName, resp.address),
-        //         content: resp,
-        //         source: "FlowBlockchain",
-        //     });
-        // } catch (e) {
-        //     callback?.({
-        //         text: `Failed to create account for ${accountName}, maybe the account already exists.`,
-        //         content: { error: e.message },
-        //         source: "FlowBlockchain",
-        //     });
-        // }
+            try {
+                isRegistered = await this.walletSerivce.executeScript(scripts.isEVMAssetRegistered, (arg, t) => [
+                    arg(content.token, t.String),
+                ], false)
+            } catch (e) {
+                elizaLogger.error("Error in checking token registration:", e);
+                errorMsg = e.message;
+            }
+        } else {
+            errorMsg = `Invalid token format or wrong VM type: ${content.token} (${content.vm})`;
+        }
+
+        // if error occurred, return the error message
+        if (errorMsg) {
+            callback?.({
+                text: `Unable to fetch info for ${content.token}.`,
+                content: { error: errorMsg },
+                source: "FlowBlockchain",
+            });
+            return;
+        }
+
+        if (isRegistered) {
+            callback?.({
+                text: `Token ${content.token} is already registered in TokenList.`,
+                content: { exists: true },
+                source: "FlowBlockchain",
+            });
+            return;
+        }
+
+        type RegisterTokenResponse = {
+            success: boolean;
+            txid: string;
+        }
+
+        // Register the token
+        try {
+            const resp = await new Promise<RegisterTokenResponse>((resolve, reject) => {
+                const transactionCallbacks: TransactionCallbacks = {
+                    onFinalized: async (txId, status, errorMsg) => {
+                        if (errorMsg) {
+                            reject(new Error(`Error in the creation transaction: ${errorMsg}`));
+                            return;
+                        }
+
+                        const validEventNames = [
+                            'EVMTokenList.EVMBridgedAssetRegistered',
+                            'TokenList.FungibleTokenRegistered',
+                            'NFTList.NFTCollectionRegistered'
+                        ]
+                        const hasValidEvent = status.events.some((e) => {
+                            const [_1, _2, contractName, eventName] = e.type.split('.');
+                            return validEventNames.includes(`${contractName}.${eventName}`);
+                        });
+                        if (hasValidEvent) {
+                            elizaLogger.log(`Token registered successfully: ${content.token}`);
+                            resolve({
+                                success: true,
+                                txid: txId,
+                            });
+                        } else {
+                            elizaLogger.error(`Failed to register token: ${content.token}, no valid event found.`);
+                            resolve({
+                                success: false,
+                                txid: txId,
+                            });
+                        }
+                    },
+                }
+
+                // send the transaction to register the token, based on the VM type
+                let transaction: Promise<TransactionSentResponse>;
+
+                if (content.vm === "flow") {
+                    if (content.bridging) {
+                        transaction = this.walletSerivce.sendTransaction(
+                            transactions.tlRegisterCadenceAsset,
+                            (arg, t) => [
+                                arg(address, t.Address),
+                                arg(contractName, t.String),
+                                arg(userId, t.String),
+                            ],
+                            transactionCallbacks,
+                        );
+                    } else {
+                        transaction = this.walletSerivce.sendTransaction(
+                            transactions.tlRegisterCadenceAssetNoBridge,
+                            (arg, t) => [
+                                arg(address, t.Address),
+                                arg(contractName, t.String),
+                            ],
+                            transactionCallbacks,
+                        )
+                    }
+                } else {
+                    transaction = this.walletSerivce.sendTransaction(
+                        transactions.tlRegisterEVMAsset,
+                        (arg, t) => [
+                            arg(content.token, t.String),
+                            arg(userId, t.String),
+                        ],
+                        transactionCallbacks,
+                    )
+                }
+                // wait for the transaction to be finalized
+                transaction.catch((e) => reject(e));
+            });
+            // return the response to the callback
+            const finalMsg = resp.success
+                    ? `Operator: ${accountName}\n Token ${content.token} registered successfully.`
+                    : `Operator: ${accountName}\n Failed to register token, no valid event found.`;
+            callback?.({
+                text: formatTransationSent(resp.txid, this.walletSerivce.connector.network, finalMsg),
+                content: resp,
+                source: "FlowBlockchain",
+            });
+        } catch (e) {
+            callback?.({
+                text: `Operator: ${accountName}\n Failed to register token, Error: ${e.message}`,
+                content: { error: e.message },
+                source: "FlowBlockchain",
+            });
+        }
 
         elizaLogger.log(`Finished ${this.name} handler.`);
     }
