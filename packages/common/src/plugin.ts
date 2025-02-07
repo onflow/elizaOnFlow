@@ -4,7 +4,6 @@ import {
     TransferAction,
     GetPriceAction,
     GetTokenInfoAction,
-    GetUserAccountInfoAction,
     EnsureUserAccountExistsAction,
 } from "./actions";
 import { AccountsPoolService } from "./services/acctPool.service";
@@ -21,7 +20,6 @@ export const basicFlowPlugin: PluginOptions = {
         TransferAction,
         GetPriceAction,
         GetTokenInfoAction,
-        GetUserAccountInfoAction,
         EnsureUserAccountExistsAction,
     ],
     providers: [AccountProvider],
