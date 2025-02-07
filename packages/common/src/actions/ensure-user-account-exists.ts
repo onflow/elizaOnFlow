@@ -12,7 +12,7 @@ import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
 import { globalContainer } from "@elizaos/plugin-di";
 import { FlowWalletService, type TransactionSentResponse } from "@fixes-ai/core";
 
-import { formatWalletCreated, formatWalletInfo } from "../formater";
+import { formatAgentWalletInfo, formatWalletCreated, formatWalletInfo } from "../formater";
 import { AccountsPoolService } from "../services/acctPool.service";
 
 /**
@@ -35,13 +35,16 @@ export class EnsureUserAccountExistsAction implements Action {
         @inject(AccountsPoolService)
         private readonly acctPoolSerivce: AccountsPoolService,
     ) {
-        this.name = "ENSURE_USER_ACCOUNT";
+        this.name = "FETCH_ACCOUNT_INFO";
         this.similes = [
+            "ENSURE_USER_ACCOUNT",
             "ENSURE_USER_ACCOUNT_EXISTS",
             "ENSURE_CHILD_ACCOUNT",
             "ENSURE_CHILD_ACCOUNT_EXISTS",
+            "GET_USER_ACCOUNT_INFO",
+            "GET_AGENT_ACCOUNT_INFO",
         ];
-        this.description = "Call this action to ensure user account exists on Flow blockchain.";
+        this.description = "Call this action to ensure user or agent's wallet account existing on Flow blockchain, and obtain the current wallet account information of it.";
         this.examples = [
             [
                 {
@@ -61,6 +64,45 @@ export class EnsureUserAccountExistsAction implements Action {
                     },
                 },
             ],
+            [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "Tell me about my Flow account, if no walelt, please create one.",
+                        action: "GET_USER_ACCOUNT_INFO",
+                    },
+                },
+            ],
+            [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "What's your wallet status?",
+                    },
+                },
+                {
+                    user: "{{user2}}",
+                    content: {
+                        text: "Let me check my wallet status.",
+                        action: "GET_AGENT_ACCOUNT_INFO",
+                    }
+                }
+            ],
+            [
+                {
+                    user: "{{user1}}",
+                    content: {
+                        text: "What's your balance?",
+                    },
+                },
+                {
+                    user: "{{user2}}",
+                    content: {
+                        text: "Let me check my wallet status.",
+                        action: "GET_AGENT_ACCOUNT_INFO",
+                    }
+                }
+            ],
         ];
         this.suppressInitialMessage = true;
     }
@@ -78,7 +120,7 @@ export class EnsureUserAccountExistsAction implements Action {
 
         if (!content) return false;
 
-        const keywords: string[] = ["create", "wallet", "account", "创建", "账号", "钱包"];
+        const keywords: string[] = ["create", "wallet", "account", "info", "balance", "status", "创建", "账号", "钱包", "余额", "账户"];
         // Check if the message contains the keywords
         return keywords.some((keyword) => content.toLowerCase().includes(keyword.toLowerCase()));
     }
@@ -97,10 +139,15 @@ export class EnsureUserAccountExistsAction implements Action {
         _options?: Record<string, unknown>,
         callback?: HandlerCallback,
     ) {
-        elizaLogger.log("Starting ENSURE_USER_ACCOUNT_EXISTS handler...");
+        elizaLogger.log(`Starting ${this.name} handler...`);
+
+        const content =
+            typeof message.content === "string" ? message.content : message.content?.text;
+        const keywords = ["you", "your", "agent", "agent's", "你", "你的", "代理"];
+        const isQueryAgent = keywords.some((keyword) => content.toLowerCase().includes(keyword));
 
         const userId = message.userId;
-        const isSelf = message.userId === runtime.agentId;
+        const isSelf = message.userId === runtime.agentId || isQueryAgent;
         const mainAddr = this.walletSerivce.address;
 
         const accountName = `Account[${mainAddr}/${isSelf ? "root" : userId}]`;
@@ -121,8 +168,10 @@ export class EnsureUserAccountExistsAction implements Action {
 
         if (acctInfo) {
             callback?.({
-                text: formatWalletInfo(message.userId, accountName, acctInfo),
-                content: { exists: true },
+                text: isSelf
+                    ? formatAgentWalletInfo(runtime.character, acctInfo)
+                    : formatWalletInfo(userId, accountName, acctInfo),
+                content: { success: true, exists: true, info: acctInfo },
                 source: "FlowBlockchain",
             });
             return;
@@ -179,7 +228,7 @@ export class EnsureUserAccountExistsAction implements Action {
             });
         }
 
-        elizaLogger.log("Completed ENSURE_USER_ACCOUNT_EXISTS handler.");
+        elizaLogger.log(`Completed ${this.name} handler.`);
     }
 }
 
