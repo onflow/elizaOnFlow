@@ -2,6 +2,7 @@
 !character.ts
 !index.ts
 !index.utils.ts
+!mainCharacter.ts
 .env
 *.env
 .env*
