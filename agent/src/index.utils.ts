@@ -41,6 +41,7 @@ import {
     stringToUuid,
     validateCharacterConfig,
 } from "@elizaos/core";
+
 import { PrimusAdapter } from "@elizaos/plugin-primus";
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
 import { ThreeDGenerationPlugin } from "@elizaos/plugin-3d-generation";
@@ -59,6 +60,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import yargs from "yargs";
 import { MongoClient } from "mongodb";
+import { mainCharacter } from "./mainCharacter";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -150,7 +152,7 @@ export async function loadCharacterFromOnchain(): Promise<Character[]> {
     const loadedCharacters = [];
     try {
         const character = JSON.parse(jsonText);
-        validateCharacterConfig(character);
+        validateCharacterConfig(mainCharacter);
 
         // .id isn't really valid
         const characterId = character.id || character.name;
@@ -186,7 +188,7 @@ export async function loadCharacterFromOnchain(): Promise<Character[]> {
             character.plugins = importedPlugins;
         }
 
-        loadedCharacters.push(character);
+        loadedCharacters.push(mainCharacter);
         elizaLogger.info(
             `Successfully loaded character from: ${process.env.IQ_WALLET_ADDRESS}`
         );
@@ -362,10 +364,10 @@ export async function loadCharacters(
     if (characterPaths?.length > 0) {
         for (const characterPath of characterPaths) {
             try {
-                const character: Character = await loadCharacterTryPath(
+                const mainCharacter: Character = await loadCharacterTryPath(
                     characterPath
                 );
-                loadedCharacters.push(character);
+                loadedCharacters.push(mainCharacter);
             } catch (e) {
                 process.exit(1);
             }
@@ -378,8 +380,8 @@ export async function loadCharacters(
             process.env.REMOTE_CHARACTER_URLS
         );
         for (const characterUrl of characterUrls) {
-            const characters = await loadCharactersFromUrl(characterUrl);
-            loadedCharacters.push(...characters);
+            const mainCharacters = await loadCharactersFromUrl(characterUrl);
+            loadedCharacters.push(...mainCharacters);
         }
     }
 

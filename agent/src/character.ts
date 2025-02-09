@@ -3,6 +3,7 @@ import {
     ModelProviderName,
     defaultCharacter as DefaultElizaCharacter,
 } from "@elizaos/core";
+import { mainCharacter } from "./mainCharacter";
 import { basicFlowPlugin } from "@fixes-ai/common";
 
 const localDefaultCharacter: Character = {
@@ -17,3 +18,4 @@ export const defaultCharacter: Character = Object.assign(
 );
 
 export default defaultCharacter;
+export { mainCharacter };

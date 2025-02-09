@@ -4,6 +4,7 @@ import { normalizeCharacter } from "@elizaos/plugin-di";
 import net from "node:net";
 
 import { defaultCharacter } from "./character";
+
 import {
     handlePluginImporting,
     hasValidRemoteUrls,
@@ -14,6 +15,8 @@ import {
     parseArguments,
     startAgent,
 } from "./index.utils";
+
+import { mainCharacter } from "./mainCharacter";
 
 const checkPortAvailable = (port: number): Promise<boolean> => {
     return new Promise((resolve) => {
