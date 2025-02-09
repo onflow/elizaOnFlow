@@ -1,5 +1,5 @@
 # plugin-incrementfi by Sharko
-
+> prototype version
 A plugin for interacting with IncrementFi DEX on Flow blockchain, providing functionality for pool creation, liquidity management, and token swaps.
 
 ## Features
