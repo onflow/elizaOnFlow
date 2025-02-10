@@ -165,7 +165,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
             return;
         }
 
-        elizaLogger.log("Starting Flow Plugin's SEND_COIN handler...");
+        elizaLogger.log(`Starting ${this.name} handler...`);
 
         // Use main account of the agent
         const walletAddress = this.walletSerivce.address;
@@ -289,7 +289,7 @@ export class TransferAction extends BaseFlowInjectableAction<TransferContent> {
             });
         }
 
-        elizaLogger.log("Completed Flow Plugin's SEND_COIN handler.");
+        elizaLogger.log(`Finished ${this.name} handler.`);
     }
 }
 
