@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import { elizaLogger, Service, type ServiceType, type IAgentRuntime } from "@elizaos/core";
-import type { FlowConnector, FlowWalletProvider } from "@elizaos/plugin-flow";
-import { globalContainer } from "@elizaos/plugin-di";
+import type { FlowConnector, FlowWalletProvider } from "@elizaos-plugins/plugin-flow";
+import { globalContainer } from "@elizaos-plugins/plugin-di";
 import * as fcl from "@onflow/fcl";
 import type {
     ArgumentFunction,

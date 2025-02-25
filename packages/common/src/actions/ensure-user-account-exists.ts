@@ -8,8 +8,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
-import { globalContainer } from "@elizaos/plugin-di";
+import type { FlowAccountBalanceInfo } from "@elizaos-plugins/plugin-flow";
+import { globalContainer } from "@elizaos-plugins/plugin-di";
 import { FlowWalletService, type TransactionSentResponse } from "@fixes-ai/core";
 
 import { formatAgentWalletInfo, formatWalletCreated, formatWalletInfo } from "../formater";

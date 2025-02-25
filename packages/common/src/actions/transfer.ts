@@ -7,8 +7,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { isCadenceIdentifier, isEVMAddress, isFlowAddress } from "@elizaos/plugin-flow";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { isCadenceIdentifier, isEVMAddress, isFlowAddress } from "@elizaos-plugins/plugin-flow";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
 
 import { formatTransationSent } from "../formater";

@@ -3,7 +3,7 @@ import { injectable } from "inversify";
 import { v4 } from "uuid";
 import type { IAgentRuntime, ICacheManager, Memory, Provider, State } from "@elizaos/core";
 import NodeCache from "node-cache";
-import { globalContainer, type InjectableProvider } from "@elizaos/plugin-di";
+import { globalContainer, type InjectableProvider } from "@elizaos-plugins/plugin-di";
 
 /**
  * Cache provider

@@ -28,10 +28,10 @@
         "test": "vitest run"
     },
     "dependencies": {
-        "@fixes-ai/common": "workspace:*", 
+        "@fixes-ai/common": "workspace:*",
         "@elizaos/core": "workspace:*",
-        "@elizaos/plugin-di": "workspace:*",
-        "@elizaos/plugin-flow": "workspace:*",
+        "@elizaos-plugins/plugin-di": "workspace:*",
+        "@elizaos-plugins/plugin-flow": "workspace:*",
         "@fixes-ai/core": "workspace:*",
         "zod": "3.23.8"
     },

@@ -1,19 +1,21 @@
-// src/actions/remove-liquidity.ts
+// src/actions/add-liquidity.ts
 import { z } from "zod";
 import { inject, injectable } from "inversify";
 import {
     elizaLogger,
+    type ActionExample,
     type HandlerCallback,
     type IAgentRuntime,
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
 import { IncrementService } from "../services/increment.service";
 import { formatTransationSent } from "../formater";
+import { isCadenceIdentifier, isEVMAddress, isFlowAddress } from "@elizaos-plugins/plugin-flow";
 
-export class RemoveLiquidityContent {
+export class AddLiquidityContent {
     @property({
         description: "The first token's identifier",
         schema: z.string(),
@@ -27,22 +29,28 @@ export class RemoveLiquidityContent {
     token1Key: string;
 
     @property({
-        description: "Amount of LP tokens to remove",
+        description: "Amount of first token to add",
         schema: z.number(),
     })
-    lpTokenAmount: number;
+    token0Amount: number;
 
     @property({
-        description: "Minimum amount of first token to receive",
+        description: "Amount of second token to add",
         schema: z.number(),
     })
-    token0OutMin: number;
+    token1Amount: number;
 
     @property({
-        description: "Minimum amount of second token to receive",
+        description: "Minimum amount of first token (slippage protection)",
         schema: z.number(),
     })
-    token1OutMin: number;
+    token0Min: number;
+
+    @property({
+        description: "Minimum amount of second token (slippage protection)",
+        schema: z.number(),
+    })
+    token1Min: number;
 
     @property({
         description: "Is this a stable pair?",
@@ -51,27 +59,27 @@ export class RemoveLiquidityContent {
     stableMode?: boolean;
 }
 
-const actionOpts: ActionOptions<RemoveLiquidityContent> = {
-    name: "REMOVE_LIQUIDITY_INCREMENTFI",
-    similes: ["WITHDRAW_LIQUIDITY_INCREMENTFI", "REMOVE_LP_INCREMENTFI"],
-    description: "Remove liquidity from an IncrementFi pool",
+const actionOpts: ActionOptions<AddLiquidityContent> = {
+    name: "ADD_LIQUIDITY_INCREMENTFI",
+    similes: ["PROVIDE_LIQUIDITY_INCREMENTFI", "ADD_LP_INCREMENTFI"],
+    description: "Add liquidity to an IncrementFi pool",
     examples: [
         [
             {
                 user: "{{user1}}",
                 content: {
-                    text: "Remove 5 LP tokens from FLOW-USDC pool",
-                    action: "REMOVE_LIQUIDITY_INCREMENTFI",
+                    text: "Add 10 FLOW and 20 USDC to the pool",
+                    action: "ADD_LIQUIDITY_INCREMENTFI",
                 },
             },
         ],
     ],
-    contentClass: RemoveLiquidityContent,
+    contentClass: AddLiquidityContent,
     suppressInitialMessage: true,
 };
 
 @injectable()
-export class RemoveLiquidityAction extends BaseFlowInjectableAction<RemoveLiquidityContent> {
+export class AddLiquidityAction extends BaseFlowInjectableAction<AddLiquidityContent> {
     constructor(
         @inject(IncrementService)
         private readonly incrementService: IncrementService,
@@ -81,26 +89,27 @@ export class RemoveLiquidityAction extends BaseFlowInjectableAction<RemoveLiquid
 
     async validate(_runtime: IAgentRuntime, message: Memory): Promise<boolean> {
         const content = typeof message.content === "string" ? message.content : message.content?.text;
-        const keywords = ["remove liquidity", "withdraw liquidity", "remove from pool"];
+        const keywords = ["add liquidity", "provide liquidity", "add to pool"];
         return keywords.some(keyword => content.toLowerCase().includes(keyword));
     }
 
     async execute(
-        content: RemoveLiquidityContent,
+        content: AddLiquidityContent,
         _runtime: IAgentRuntime,
         message: Memory,
         _state?: State,
         callback?: HandlerCallback,
     ) {
-        elizaLogger.log("Starting REMOVE_LIQUIDITY_INCREMENTFI handler...");
+        elizaLogger.log("Starting ADD_LIQUIDITY_INCREMENTFI handler...");
 
         try {
-            const result = await this.incrementService.removeLiquidity({
+            const result = await this.incrementService.addLiquidity({
                 token0Key: content.token0Key,
                 token1Key: content.token1Key,
-                lpTokenAmount: content.lpTokenAmount,
-                token0OutMin: content.token0OutMin,
-                token1OutMin: content.token1OutMin,
+                token0Amount: content.token0Amount,
+                token1Amount: content.token1Amount,
+                token0Min: content.token0Min,
+                token1Min: content.token1Min,
                 deadline: Math.floor(Date.now() / 1000) + 3600, // 1 hour deadline
                 stableMode: content.stableMode,
             });
@@ -109,8 +118,8 @@ export class RemoveLiquidityAction extends BaseFlowInjectableAction<RemoveLiquid
                 callback?.({
                     text: formatTransationSent(
                         result.txId,
-                        this.walletSerivce.wallet.network, // Fixed typo in walletService
-                        `Successfully removed liquidity from pool`
+                        this.walletSerivce.wallet.network,
+                        `Successfully added liquidity to pool ${result.pairAddress}`
                     ),
                     content: { success: true, ...result },
                     source: "IncrementFi",
@@ -120,15 +129,13 @@ export class RemoveLiquidityAction extends BaseFlowInjectableAction<RemoveLiquid
             }
         } catch (error) {
             callback?.({
-                text: `Failed to remove liquidity: ${error.message}`,
+                text: `Failed to add liquidity: ${error.message}`,
                 content: { error: error.message },
                 source: "IncrementFi",
             });
         }
 
-        elizaLogger.log("Completed REMOVE_LIQUIDITY_INCREMENTFI handler.");
+        elizaLogger.log("Completed ADD_LIQUIDITY_INCREMENTFI handler.");
     }
 }
-
-// Register the action with the global container
-globalContainer.bind(RemoveLiquidityAction).toSelf();
+globalContainer.bind(AddLiquidityAction).toSelf();

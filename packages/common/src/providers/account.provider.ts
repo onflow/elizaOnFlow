@@ -6,7 +6,7 @@ import {
     type Provider,
     type State,
 } from "@elizaos/core";
-import { globalContainer } from "@elizaos/plugin-di";
+import { globalContainer } from "@elizaos-plugins/plugin-di";
 import { AccountsPoolService } from "../services/acctPool.service";
 import { formatWalletInfo } from "../formater";
 

@@ -1,4 +1,4 @@
-import type { PluginOptions } from "@elizaos/plugin-di";
+import type { PluginOptions } from "@elizaos-plugins/plugin-di";
 import { FlowWalletService } from "@fixes-ai/core";
 import {
     TransferAction,

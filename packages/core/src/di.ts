@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { elizaLogger } from "@elizaos/core";
-import { globalContainer } from "@elizaos/plugin-di";
+import { globalContainer } from "@elizaos-plugins/plugin-di";
 import { CONSTANTS } from "./symbols";
 
 // Load flow.json file and bind it to the container
