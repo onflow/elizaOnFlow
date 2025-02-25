@@ -7,7 +7,7 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction, type ScriptQueryResponse } from "@fixes-ai/core";
 import { scripts } from "../assets/scripts.defs";
 
@@ -100,7 +100,7 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
             return;
         }
 
-        elizaLogger.log("Starting GET_FLOW_PRICE handler...");
+        elizaLogger.log(`Starting ${this.name} handler...`);
 
         const resp: ScriptQueryResponse = {
             ok: false,
@@ -150,7 +150,7 @@ export class GetPriceAction extends BaseFlowInjectableAction<GetPriceContent> {
             });
         }
 
-        elizaLogger.log("Completed GET_FLOW_PRICE handler.");
+        elizaLogger.log(`Finished ${this.name} handler.`);
 
         return resp;
     }

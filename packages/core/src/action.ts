@@ -8,8 +8,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type TransactionResponse, validateFlowConfig } from "@elizaos/plugin-flow";
-import { type ActionOptions, BaseInjectableAction } from "@elizaos/plugin-di";
+import { type TransactionResponse, validateFlowConfig } from "@elizaos-plugins/plugin-flow";
+import { type ActionOptions, BaseInjectableAction } from "@elizaos-plugins/plugin-di";
 import { FlowWalletService } from "./services";
 import { WalletProvider } from "./providers";
 

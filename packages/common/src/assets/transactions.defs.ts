@@ -9,6 +9,10 @@ import acctPoolCreateChildAccount from "./cadence/transactions/account-pool/crea
 import acctPoolEVMTransferERC20 from "./cadence/transactions/account-pool/evm/transfer_erc20_from.cdc?raw";
 import acctPoolFlowTokenDynamicTransfer from "./cadence/transactions/account-pool/flow-token/dynamic_vm_transfer_from.cdc?raw";
 import acctPoolFTGenericTransfer from "./cadence/transactions/account-pool/ft/generic_transfer_with_address_from.cdc?raw";
+// TokenList related transactions
+import tlRegisterEVMAsset from './cadence/transactions/account-pool/token-list/register_evm_asset_from.cdc?raw';
+import tlRegisterCadenceAsset from './cadence/transactions/account-pool/token-list/register_standard_asset_from.cdc?raw';
+import tlRegisterCadenceAssetNoBridge from './cadence/transactions/token-list/register_standard_asset_no_bridge.cdc?raw';
 
 export const transactions = {
     initAgentAccount,
@@ -16,4 +20,7 @@ export const transactions = {
     acctPoolEVMTransferERC20,
     acctPoolFlowTokenDynamicTransfer,
     acctPoolFTGenericTransfer,
+    tlRegisterEVMAsset,
+    tlRegisterCadenceAsset,
+    tlRegisterCadenceAssetNoBridge,
 };

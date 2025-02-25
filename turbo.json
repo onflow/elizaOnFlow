@@ -20,8 +20,9 @@
         },
         "@fixes-ai/core#build": {
             "dependsOn": [
-                "@elizaos/plugin-di#build",
-                "@elizaos/plugin-flow#build"
+                "@elizaos/core#build",
+                "@elizaos-plugins/plugin-di#build",
+                "@elizaos-plugins/plugin-flow#build"
             ]
         },
         "@fixes-ai/common#build": {

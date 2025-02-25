@@ -1,11 +1,11 @@
-import type { PluginOptions } from "@elizaos/plugin-di";
+import type { PluginOptions } from "@elizaos-plugins/plugin-di";
 import { FlowWalletService } from "@fixes-ai/core";
 import {
     TransferAction,
     GetPriceAction,
     GetTokenInfoAction,
-    GetUserAccountInfoAction,
     EnsureUserAccountExistsAction,
+    EnsureTokenRegisteredAction,
 } from "./actions";
 import { AccountsPoolService } from "./services/acctPool.service";
 import { AccountProvider } from "./providers/account.provider";
@@ -21,8 +21,8 @@ export const basicFlowPlugin: PluginOptions = {
         TransferAction,
         GetPriceAction,
         GetTokenInfoAction,
-        GetUserAccountInfoAction,
         EnsureUserAccountExistsAction,
+        EnsureTokenRegisteredAction,
     ],
     providers: [AccountProvider],
     evaluators: [],

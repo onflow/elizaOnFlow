@@ -7,7 +7,7 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction, CacheProvider, type ScriptQueryResponse } from "@fixes-ai/core";
 import { scripts } from "../assets/scripts.defs";
 import type { TokenDetailsFromTokenList, TokenInfo } from "../types";
@@ -147,18 +147,19 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
             return;
         }
 
-        elizaLogger.log("Starting GET_TOKEN_INFO handler...");
+        elizaLogger.log(`Starting ${this.name} handler...`);
 
         // Get token list from cache
-        const tokenListStr = await this.cache.getCachedData<string>("flow-token-list");
+        const network = this.walletSerivce.connector.network;
+        const cacheKey = `flow-tokenlist-${network}`
+        const tokenListStr = await this.cache.getCachedData<string>(cacheKey);
         let tokenList: TokenDetailsFromTokenList[] = [];
         if (!tokenListStr) {
-            tokenList = await fetchTokenList();
-            await this.cache.setCachedData(
-                "flow-token-list",
-                JSON.stringify(tokenList),
-                60 * 60 * 24, // 24 hours
-            );
+            tokenList = await fetchTokenList(network);
+            // 24 hours cache
+            if (tokenList?.length > 0) {
+                await this.cache.setCachedData(cacheKey, JSON.stringify(tokenList), 60 * 60 * 24);
+            }
         } else {
             tokenList = JSON.parse(tokenListStr);
         }
@@ -217,6 +218,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                 if (!tokenDetails) {
                     resp.error = `Token info not found for $${content.symbol}`;
                 } else {
+                    elizaLogger.debug(`Loading token info for $${content.symbol}:`, tokenDetails);
                     try {
                         const info = await this.walletSerivce.executeScript(
                             scripts.getTokenInfoCadence,
@@ -226,7 +228,7 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
                             ],
                             undefined,
                         );
-                        elizaLogger.debug("Loaded token info:", info);
+                        elizaLogger.debug(`Loaded token info for ${content.symbol}:`, info);
                         if (
                             info &&
                             info.address === tokenDetails.flowAddress &&
@@ -295,17 +297,22 @@ export class GetTokenInfoAction extends BaseFlowInjectableAction<GetTokenInfoCon
             });
         }
 
-        elizaLogger.log("Completed GET_TOKEN_INFO handler.");
+        elizaLogger.log(`Finished ${this.name} handler.`);
 
         return resp;
     }
 }
 
-const TOKEN_LIST_REQUEST_URL =
-    "https://raw.githubusercontent.com/fixes-world/token-list-jsons/refs/heads/main/jsons/mainnet/flow/reviewers/0xa2de93114bae3e73.json";
+const TOKEN_LIST_REQUEST_URLS = {
+    mainnet: "https://raw.githubusercontent.com/fixes-world/token-list-jsons/refs/heads/main/jsons/mainnet/flow/reviewers/0xa2de93114bae3e73.json",
+    testnet: "https://raw.githubusercontent.com/fixes-world/token-list-jsons/refs/heads/main/jsons/testnet/flow/default.json",
+};
 
-const fetchTokenList = async () => {
-    const response = await fetch(TOKEN_LIST_REQUEST_URL);
+const fetchTokenList = async (network: string) => {
+    const jsonUrl = TOKEN_LIST_REQUEST_URLS[network]
+    if (!jsonUrl) { return []; }
+
+    const response = await fetch(jsonUrl);
     try {
         const rawdata = await response.json();
         return rawdata?.tokens ?? [];

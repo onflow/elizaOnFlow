@@ -29,8 +29,8 @@
     },
     "dependencies": {
         "@elizaos/core": "workspace:*",
-        "@elizaos/plugin-di": "workspace:*",
-        "@elizaos/plugin-flow": "workspace:*",
+        "@elizaos-plugins/plugin-di": "workspace:*",
+        "@elizaos-plugins/plugin-flow": "workspace:*",
         "@onflow/fcl": "1.13.4",
         "@onflow/typedefs": "1.4.0",
         "@onflow/types": "1.4.1",
