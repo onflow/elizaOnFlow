@@ -8,10 +8,10 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
 import { formatTransationSent } from "../formater";
-import { isFlowAddress } from "@elizaos/plugin-flow";
+import { isFlowAddress } from "@elizaos-plugins/plugin-flow";
 import { IncrementService } from "../services/increment.service";
 import { TESTNET_TOKENS } from "../constants/tokens";
 

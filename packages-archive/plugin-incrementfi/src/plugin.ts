@@ -1,5 +1,5 @@
 // src/plugin.ts
-import type { PluginOptions } from "@elizaos/plugin-di";
+import type { PluginOptions } from "@elizaos-plugins/plugin-di";
 import {
     AddLiquidityAction,
     RemoveLiquidityAction,

@@ -1,5 +1,5 @@
 import type { Character } from "@elizaos/core";
-import type { FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
+import type { FlowAccountBalanceInfo } from "@elizaos-plugins/plugin-flow";
 
 /**
  * Format the agent wallet information

@@ -8,7 +8,7 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
 import { IncrementService } from "../services/increment.service";
 
@@ -101,7 +101,7 @@ export class GetPoolInfoAction extends BaseFlowInjectableAction<GetPoolInfoConte
     }
 
     private formatPoolList(pools: any[]): string {
-        return `Available Pools:\n${pools.map(pool => 
+        return `Available Pools:\n${pools.map(pool =>
             `- ${pool.token0Key}/${pool.token1Key} (${pool.stableMode ? 'Stable' : 'Volatile'})\n` +
             `  Address: ${pool.address}\n` +
             `  Reserves: ${pool.token0Reserve} ${pool.token0Key}, ${pool.token1Reserve} ${pool.token1Key}\n`

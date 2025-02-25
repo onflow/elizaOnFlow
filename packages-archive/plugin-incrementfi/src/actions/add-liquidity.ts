@@ -9,11 +9,11 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction } from "@fixes-ai/core";
 import { IncrementService } from "../services/increment.service";
 import { formatTransationSent } from "../formater";
-import { isCadenceIdentifier, isEVMAddress, isFlowAddress } from "@elizaos/plugin-flow";
+import { isCadenceIdentifier, isEVMAddress, isFlowAddress } from "@elizaos-plugins/plugin-flow";
 
 export class AddLiquidityContent {
     @property({

@@ -15,9 +15,9 @@ import type {
 import { DEFAULT_SLIPPAGE } from "../constants/tokens"
 import { scripts } from "../assets/cadence/scripts.defs";
 import { transactions } from "../assets/cadence/transactions.def";
-import { globalContainer } from "@elizaos/plugin-di";
+import { globalContainer } from "@elizaos-plugins/plugin-di";
 import { DEFAULT_DEADLINE } from "../constants/tokens";
-import { isFlowAddress } from "@elizaos/plugin-flow";
+import { isFlowAddress } from "@elizaos-plugins/plugin-flow";
 
 @injectable()
 export class IncrementService extends Service {
