@@ -6,8 +6,8 @@ import {
     type Provider,
     type State,
 } from "@elizaos/core";
-import { type FlowConnector, getFlowConnectorInstance } from "@elizaos/plugin-flow";
-import { globalContainer, type InjectableProvider } from "@elizaos/plugin-di";
+import { type FlowConnector, getFlowConnectorInstance } from "@elizaos-plugins/plugin-flow";
+import { globalContainer, type InjectableProvider } from "@elizaos-plugins/plugin-di";
 import { CONSTANTS } from "../symbols";
 
 /**

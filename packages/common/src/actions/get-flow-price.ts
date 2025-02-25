@@ -7,7 +7,7 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction, type ScriptQueryResponse } from "@fixes-ai/core";
 import { scripts } from "../assets/scripts.defs";
 

@@ -7,8 +7,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { isCadenceIdentifier, isEVMAddress, type FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
-import { property, globalContainer, type ActionOptions } from "@elizaos/plugin-di";
+import { isCadenceIdentifier, isEVMAddress, type FlowAccountBalanceInfo } from "@elizaos-plugins/plugin-flow";
+import { property, globalContainer, type ActionOptions } from "@elizaos-plugins/plugin-di";
 import { BaseFlowInjectableAction, type TransactionCallbacks, type TransactionSentResponse } from "@fixes-ai/core";
 
 import { scripts } from "../assets/scripts.defs";

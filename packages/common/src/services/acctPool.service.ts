@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import { elizaLogger, Service, type ServiceType, type IAgentRuntime } from "@elizaos/core";
-import { queries as defaultQueries, type FlowAccountBalanceInfo } from "@elizaos/plugin-flow";
-import { globalContainer } from "@elizaos/plugin-di";
+import { queries as defaultQueries, type FlowAccountBalanceInfo } from "@elizaos-plugins/plugin-flow";
+import { globalContainer } from "@elizaos-plugins/plugin-di";
 import {
     FlowWalletService,
     type TransactionCallbacks,
