@@ -1,7 +1,12 @@
 import { Plugin } from '@eliza/core';
 import * as fcl from '@onflow/fcl';
-import { TopShotService } from './services/topshot.service';
-import { MarketService } from './services/market.service';
+import {
+  getMoments,
+  listMoment,
+  purchaseMoment,
+  cancelSale,
+  getMarketPrices
+} from './actions';
 
 export interface TopShotPluginConfig {
   network: 'mainnet' | 'testnet';
@@ -10,22 +15,20 @@ export interface TopShotPluginConfig {
 }
 
 export class TopShotPlugin implements Plugin {
-  private topShotService: TopShotService;
-  private marketService: MarketService;
-
   constructor(config: TopShotPluginConfig) {
+    // Configure Flow Client Library
     fcl.config()
       .put('accessNode.api', config.accessNode)
       .put('discovery.wallet', config.walletDiscovery)
       .put('flow.network', config.network);
-
-    this.topShotService = new TopShotService();
-    this.marketService = new MarketService();
   }
 
   async initialize(): Promise<void> {
-    await this.topShotService.initialize();
-    await this.marketService.initialize();
+    // Verify FCL configuration
+    const network = await fcl.config().get('flow.network');
+    if (!network) {
+      throw new Error('Flow network not configured');
+    }
   }
 
   getName(): string {
@@ -36,24 +39,24 @@ export class TopShotPlugin implements Plugin {
     return 'NBA TopShot trading plugin for Eliza';
   }
 
-
+  // Plugin methods using actions
   async getMoments(address: string) {
-    return this.topShotService.getMoments(address);
+    return getMoments({ address });
   }
 
   async listMomentForSale(momentId: number, price: number) {
-    return this.marketService.listForSale(momentId, price);
+    return listMoment({ momentId, price });
   }
 
   async purchaseMoment(momentId: number) {
-    return this.marketService.purchase(momentId);
+    return purchaseMoment({ momentId });
   }
 
   async cancelSale(momentId: number) {
-    return this.marketService.cancelSale(momentId);
+    return cancelSale({ momentId });
   }
 
   async getMarketPrices(setId?: number, playId?: number) {
-    return this.marketService.getPrices(setId, playId);
+    return getMarketPrices({ setId, playId });
   }
 }
