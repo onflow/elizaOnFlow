@@ -3,7 +3,7 @@
 	url = https://github.com/elizaOS/eliza.git
 [submodule "packages/plugin-flow"]
 	path = packages/plugin-flow
-	url=https://github.com/fixes-world/eliza-plugin-flow.git
+	url=https://github.com/fixes-world/plugin-flow.git
 [submodule "packages/plugin-di"]
 	path = packages/plugin-di
-	url = https://github.com/fixes-world/eliza-plugin-di.git
+	url = https://github.com/fixes-world/plugin-di.git
