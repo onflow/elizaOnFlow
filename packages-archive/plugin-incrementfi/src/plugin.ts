@@ -26,5 +26,4 @@ export const incrementfiPlugin: PluginOptions = {
     providers: [],
     evaluators: [],
     services: [IncrementService],
-    //dependencies: ["@fixes-ai/common"], // This ensures common plugin is loaded first
 };
