@@ -31,7 +31,6 @@
         "@elizaos/core": "workspace:*",
         "@elizaos-plugins/plugin-di": "workspace:*",
         "@elizaos-plugins/plugin-flow": "workspace:*",
-        "@fixes-ai/core": "workspace:*",
         "zod": "3.23.8"
     },
     "devDependencies": {

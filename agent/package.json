@@ -23,7 +23,7 @@
         "@elizaos/plugin-bootstrap": "workspace:*",
         "@elizaos-plugins/adapter-sqlite": "github:elizaos-plugins/adapter-sqlite",
         "@elizaos-plugins/plugin-di": "workspace:*",
-        "@fixes-ai/core": "workspace:*",
+        "@elizaos-plugins/plugin-flow": "workspace:*",
         "@fixes-ai/common": "workspace:*",
         "readline": "1.3.0",
         "ws": "8.18.0",

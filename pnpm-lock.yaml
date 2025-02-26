@@ -106,6 +106,9 @@ importers:
       '@elizaos-plugins/plugin-di':
         specifier: workspace:*
         version: link:../packages/plugin-di
+      '@elizaos-plugins/plugin-flow':
+        specifier: workspace:*
+        version: link:../packages/plugin-flow
       '@elizaos/client-direct':
         specifier: workspace:*
         version: link:../deps/eliza/packages/client-direct
@@ -118,9 +121,6 @@ importers:
       '@fixes-ai/common':
         specifier: workspace:*
         version: link:../packages/common
-      '@fixes-ai/core':
-        specifier: workspace:*
-        version: link:../packages/core
       readline:
         specifier: 1.3.0
         version: 1.3.0
@@ -594,9 +594,6 @@ importers:
       '@elizaos/core':
         specifier: workspace:*
         version: link:../../deps/eliza/packages/core
-      '@fixes-ai/core':
-        specifier: workspace:*
-        version: link:../core
       inversify:
         specifier: 6.2.1
         version: 6.2.1(reflect-metadata@0.2.2)
@@ -619,52 +616,6 @@ importers:
       vitest:
         specifier: 2.1.4
         version: 2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
-
-  packages/core:
-    dependencies:
-      '@elizaos-plugins/plugin-di':
-        specifier: workspace:*
-        version: link:../plugin-di
-      '@elizaos-plugins/plugin-flow':
-        specifier: workspace:*
-        version: link:../plugin-flow
-      '@elizaos/core':
-        specifier: workspace:*
-        version: link:../../deps/eliza/packages/core
-      '@onflow/fcl':
-        specifier: 1.13.4
-        version: 1.13.4(@types/react@19.0.6)(bufferutil@4.0.9)(encoding@0.1.13)(google-protobuf@3.21.4)(ioredis@5.4.2)(jiti@2.4.2)(postcss@8.4.49)(react@19.0.0)(tsx@4.19.2)(utf-8-validate@5.0.10)
-      '@onflow/typedefs':
-        specifier: 1.4.0
-        version: 1.4.0
-      '@onflow/types':
-        specifier: 1.4.1
-        version: 1.4.1
-      inversify:
-        specifier: 6.2.1
-        version: 6.2.1(reflect-metadata@0.2.2)
-      node-cache:
-        specifier: 5.1.2
-        version: 5.1.2
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
-      zod:
-        specifier: 3.23.8
-        version: 3.23.8
-    devDependencies:
-      '@biomejs/biome':
-        specifier: 1.9.4
-        version: 1.9.4
-      dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
-      tsup:
-        specifier: 8.3.5
-        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
-      vitest:
-        specifier: 2.1.4
-        version: 2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.37.0)
 
   packages/plugin-di:
     dependencies:
@@ -702,6 +653,9 @@ importers:
 
   packages/plugin-flow:
     dependencies:
+      '@elizaos-plugins/plugin-di':
+        specifier: github:fixes-world/plugin-di
+        version: https://codeload.github.com/fixes-world/plugin-di/tar.gz/c8f98340b10d3d4f7a644217c07cdaa9e1005b85(encoding@0.1.13)(react@19.0.0)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@elizaos/core':
         specifier: 0.25.8
         version: 0.25.8(encoding@0.1.13)(react@19.0.0)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.23.8)
@@ -714,18 +668,18 @@ importers:
       '@onflow/typedefs':
         specifier: 1.4.0
         version: 1.4.0
-      bignumber.js:
-        specifier: 9.1.2
-        version: 9.1.2
-      bs58:
-        specifier: 5.0.0
-        version: 5.0.0
       elliptic:
         specifier: 6.6.1
         version: 6.6.1
+      inversify:
+        specifier: ^6.2.1
+        version: 6.2.1(reflect-metadata@0.2.2)
       node-cache:
         specifier: 5.1.2
         version: 5.1.2
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
       sha3:
         specifier: 2.1.4
         version: 2.1.4
@@ -751,6 +705,9 @@ importers:
       '@types/uuid':
         specifier: 10.0.0
         version: 10.0.0
+      dotenv:
+        specifier: 16.4.5
+        version: 16.4.5
       tsup:
         specifier: 8.3.5
         version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
@@ -1331,6 +1288,10 @@ packages:
     version: 0.25.6-alpha.1
     peerDependencies:
       whatwg-url: 7.1.0
+
+  '@elizaos-plugins/plugin-di@https://codeload.github.com/fixes-world/plugin-di/tar.gz/c8f98340b10d3d4f7a644217c07cdaa9e1005b85':
+    resolution: {tarball: https://codeload.github.com/fixes-world/plugin-di/tar.gz/c8f98340b10d3d4f7a644217c07cdaa9e1005b85}
+    version: 0.1.9
 
   '@elizaos/core@0.25.8':
     resolution: {integrity: sha512-I5NUSSbSrvMteKUsgUFC7OSe13YfI1otfyy/sEj5UDd56FEbahCFx8Li0xtjVP8ADALgwSl18OWNonpz+GxjLA==}
@@ -5216,10 +5177,6 @@ packages:
 
   dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
-    engines: {node: '>=12'}
-
-  dotenv@16.4.7:
-    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -11056,6 +11013,21 @@ snapshots:
       sqlite-vec: 0.1.6
       whatwg-url: 14.1.0
 
+  '@elizaos-plugins/plugin-di@https://codeload.github.com/fixes-world/plugin-di/tar.gz/c8f98340b10d3d4f7a644217c07cdaa9e1005b85(encoding@0.1.13)(react@19.0.0)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))':
+    dependencies:
+      '@elizaos/core': 0.25.8(encoding@0.1.13)(react@19.0.0)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.23.8)
+      inversify: 6.2.1(reflect-metadata@0.2.2)
+      reflect-metadata: 0.2.2
+      uuid: 11.0.3
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - aws-crt
+      - debug
+      - encoding
+      - react
+      - supports-color
+      - ws
+
   '@elizaos/core@0.25.8(encoding@0.1.13)(react@19.0.0)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.23.8)':
     dependencies:
       '@ai-sdk/amazon-bedrock': 1.1.6(zod@3.23.8)
@@ -15913,8 +15885,6 @@ snapshots:
 
   dotenv@16.4.5: {}
 
-  dotenv@16.4.7: {}
-
   dunder-proto@1.0.1:
     dependencies:
       call-bind-apply-helpers: 1.0.1
@@ -19023,7 +18993,7 @@ snapshots:
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       cliui: 8.0.1
-      dotenv: 16.4.7
+      dotenv: 16.4.5
       dotenv-expand: 11.0.7
       enquirer: 2.3.6
       figures: 3.2.0
@@ -21664,42 +21634,6 @@ snapshots:
       terser: 5.37.0
       tsx: 4.19.2
       yaml: 2.7.0
-
-  vitest@2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10))(terser@5.37.0):
-    dependencies:
-      '@vitest/expect': 2.1.4
-      '@vitest/mocker': 2.1.4(vite@5.4.11(@types/node@22.13.5)(terser@5.37.0))
-      '@vitest/pretty-format': 2.1.8
-      '@vitest/runner': 2.1.4
-      '@vitest/snapshot': 2.1.4
-      '@vitest/spy': 2.1.4
-      '@vitest/utils': 2.1.4
-      chai: 5.1.2
-      debug: 4.4.0(supports-color@5.5.0)
-      expect-type: 1.1.0
-      magic-string: 0.30.17
-      pathe: 1.1.2
-      std-env: 3.8.0
-      tinybench: 2.9.0
-      tinyexec: 0.3.2
-      tinypool: 1.0.2
-      tinyrainbow: 1.2.0
-      vite: 5.4.11(@types/node@22.13.5)(terser@5.37.0)
-      vite-node: 2.1.4(@types/node@22.13.5)(terser@5.37.0)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 22.13.5
-      jsdom: 25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - msw
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
 
   vitest@2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0):
     dependencies:
