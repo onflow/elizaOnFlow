@@ -2,7 +2,7 @@ import {
     type Character,
     ModelProviderName,
 } from "@elizaos/core";
-import { basicFlowPlugin } from "@fixes-ai/common";
+import { basicFlowPlugin } from "@elizaos-plugins/plugin-flow-advanced";
 import { defaultCharacter as elizaDefaultCharacter } from "./defaultCharacter";
 
 const localDefaultCharacter: Character = {

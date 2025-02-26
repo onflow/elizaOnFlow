@@ -18,7 +18,7 @@
                 "^@elizaos/core#build"
             ]
         },
-        "@fixes-ai/common#build": {
+        "@elizaos-plugins/plugin-flow-advanced#build": {
             "dependsOn": [
                 "@elizaos/core#build",
                 "@elizaos-plugins/plugin-di#build",

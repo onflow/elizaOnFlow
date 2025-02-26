@@ -24,7 +24,7 @@
         "@elizaos-plugins/adapter-sqlite": "github:elizaos-plugins/adapter-sqlite",
         "@elizaos-plugins/plugin-di": "workspace:*",
         "@elizaos-plugins/plugin-flow": "workspace:*",
-        "@fixes-ai/common": "workspace:*",
+        "@elizaos-plugins/plugin-flow-advanced": "workspace:*",
         "readline": "1.3.0",
         "ws": "8.18.0",
         "yargs": "17.7.2"
