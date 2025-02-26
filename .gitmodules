@@ -7,3 +7,6 @@
 [submodule "packages/plugin-di"]
 	path = packages/plugin-di
 	url = https://github.com/fixes-world/plugin-di.git
+[submodule "packages/plugin-flow-advanced"]
+	path = packages/plugin-flow-advanced
+	url = https://github.com/fixes-world/plugin-flow-advanced.git
