@@ -38,6 +38,8 @@
     },
     "dependencies": {
         "@deepgram/sdk": "^3.9.0",
+        "@elizaos/core": "workspace:*",
+        "@elizaos-plugins/adapter-sqlite": "workspace:*",
         "amqplib": "0.10.5",
         "csv-parse": "5.6.0",
         "inversify": "^6.2.1",
@@ -45,7 +47,9 @@
         "pnpm": "9.15.2",
         "reflect-metadata": "^0.2.2",
         "sharp": "0.33.5",
-        "tslog": "4.9.3"
+        "tslog": "4.9.3",
+        "ws": "8.18.0",
+        "zod": "3.24.1"
     },
     "pnpm": {
         "overrides": {

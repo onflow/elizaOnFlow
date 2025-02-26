@@ -21,7 +21,7 @@
         "@elizaos/client-direct": "workspace:*",
         "@elizaos/core": "workspace:*",
         "@elizaos/plugin-bootstrap": "workspace:*",
-        "@elizaos-plugins/adapter-sqlite": "github:elizaos-plugins/adapter-sqlite",
+        "@elizaos-plugins/adapter-sqlite": "workspace:*",
         "@elizaos-plugins/plugin-di": "workspace:*",
         "@elizaos-plugins/plugin-flow": "workspace:*",
         "@elizaos-plugins/plugin-flow-advanced": "workspace:*",
