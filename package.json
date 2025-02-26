@@ -38,8 +38,8 @@
     },
     "dependencies": {
         "@deepgram/sdk": "^3.9.0",
-        "@elizaos/core": "workspace:*",
         "@elizaos-plugins/adapter-sqlite": "workspace:*",
+        "@elizaos-plugins/plugin-di": "workspace:*",
         "amqplib": "0.10.5",
         "csv-parse": "5.6.0",
         "inversify": "^6.2.1",
@@ -63,7 +63,8 @@
             "axios@>=0.8.1 <0.28.0": ">=0.28.0",
             "undici@>=6.0.0 <6.21.1": ">=6.21.1",
             "path-to-regexp@<0.1.12": ">=0.1.12",
-            "secp256k1": "5.0.1"
+            "secp256k1": "5.0.1",
+            "zod": "3.24.1"
         }
     },
     "engines": {
