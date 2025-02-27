@@ -1,5 +1,5 @@
 {
-    "name": "@fixes-ai/plugin-incrementfi",
+    "name": "@elizaos-plugins/plugin-incrementfi",
     "version": "0.1.0-alpha.0",
     "type": "module",
     "main": "dist/index.js",
@@ -28,11 +28,9 @@
         "test": "vitest run"
     },
     "dependencies": {
-        "@fixes-ai/common": "workspace:*",
         "@elizaos/core": "workspace:*",
         "@elizaos-plugins/plugin-di": "workspace:*",
         "@elizaos-plugins/plugin-flow": "workspace:*",
-        "@fixes-ai/core": "workspace:*",
         "zod": "3.23.8"
     },
     "devDependencies": {

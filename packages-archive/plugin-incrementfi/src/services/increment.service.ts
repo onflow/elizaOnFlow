@@ -1,7 +1,7 @@
 // src/services/increment.service.ts
 import { injectable, inject } from "inversify";
 import { elizaLogger, Service, type ServiceType, type IAgentRuntime } from "@elizaos/core";
-import { FlowWalletService, type TransactionSentResponse } from "@fixes-ai/core";
+import { FlowWalletService, type TransactionSentResponse } from "@elizaos-plugins/plugin-flow";
 import type {
     PairInfo,
     LiquidityParams,

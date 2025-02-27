@@ -1,9 +1,15 @@
 {
-    "version": "0.1.0-alpha.0",
+    "version": "0.1.0",
     "packages": [
         "packages/*",
-        "agent",
-        "!packages/_examples"
+        "agent"
     ],
-    "npmClient": "pnpm"
+    "npmClient": "pnpm",
+    "command": {
+        "publish": {
+            "registry": "https://registry.npmjs.org/",
+            "access": "public",
+            "allowBranch": "main"
+        }
+    }
 }

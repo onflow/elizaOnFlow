@@ -9,7 +9,7 @@ import {
     type State,
 } from "@elizaos/core";
 import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
-import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { IncrementService } from "../services/increment.service";
 
 export class GetPoolInfoContent {
