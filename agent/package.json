@@ -18,6 +18,9 @@
         "exec": "node --enable-source-maps --loader ts-node/esm src/index.ts"
     },
     "dependencies": {
+        "@elizaos-plugins/plugin-di": "workspace:*",
+        "@elizaos-plugins/plugin-flow": "workspace:*",
+        "@elizaos-plugins/plugin-flow-advanced": "workspace:*",
         "@elizaos/client-direct": "workspace:*",
         "@elizaos/core": "workspace:*",
         "@elizaos/plugin-bootstrap": "workspace:*",

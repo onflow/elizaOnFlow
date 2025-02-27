@@ -39,9 +39,6 @@
     },
     "dependencies": {
         "@elizaos-plugins/adapter-sqlite": "workspace:*",
-        "@elizaos-plugins/plugin-di": "workspace:*",
-        "@elizaos-plugins/plugin-flow": "workspace:*",
-        "@elizaos-plugins/plugin-flow-advanced": "workspace:*",
         "amqplib": "0.10.5",
         "csv-parse": "5.6.0",
         "inversify": "^6.2.1",

@@ -25,15 +25,6 @@ importers:
       '@elizaos-plugins/adapter-sqlite':
         specifier: workspace:*
         version: link:deps/eliza/packages/adapter-sqlite
-      '@elizaos-plugins/plugin-di':
-        specifier: workspace:*
-        version: link:packages/plugin-di
-      '@elizaos-plugins/plugin-flow':
-        specifier: workspace:*
-        version: link:packages/plugin-flow
-      '@elizaos-plugins/plugin-flow-advanced':
-        specifier: workspace:*
-        version: link:packages/plugin-flow-advanced
       amqplib:
         specifier: 0.10.5
         version: 0.10.5
@@ -119,6 +110,15 @@ importers:
 
   agent:
     dependencies:
+      '@elizaos-plugins/plugin-di':
+        specifier: workspace:*
+        version: link:../packages/plugin-di
+      '@elizaos-plugins/plugin-flow':
+        specifier: workspace:*
+        version: link:../packages/plugin-flow
+      '@elizaos-plugins/plugin-flow-advanced':
+        specifier: workspace:*
+        version: link:../packages/plugin-flow-advanced
       '@elizaos/client-direct':
         specifier: workspace:*
         version: link:../deps/eliza/packages/client-direct
