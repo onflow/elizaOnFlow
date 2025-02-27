@@ -23,6 +23,7 @@
         "@commitlint/cli": "18.6.1",
         "@commitlint/config-conventional": "18.6.3",
         "@types/jest": "^29.5.11",
+        "cli": "workspace:*",
         "concurrently": "9.1.0",
         "cross-env": "7.0.3",
         "husky": "9.1.7",
@@ -37,7 +38,7 @@
         "vitest": "2.1.5"
     },
     "dependencies": {
-        "@deepgram/sdk": "^3.9.0",
+        "@elizaos-plugins/adapter-sqlite": "workspace:*",
         "amqplib": "0.10.5",
         "csv-parse": "5.6.0",
         "inversify": "^6.2.1",
@@ -45,7 +46,9 @@
         "pnpm": "9.15.2",
         "reflect-metadata": "^0.2.2",
         "sharp": "0.33.5",
-        "tslog": "4.9.3"
+        "tslog": "4.9.3",
+        "ws": "8.18.0",
+        "zod": "3.24.1"
     },
     "pnpm": {
         "overrides": {
@@ -59,7 +62,8 @@
             "axios@>=0.8.1 <0.28.0": ">=0.28.0",
             "undici@>=6.0.0 <6.21.1": ">=6.21.1",
             "path-to-regexp@<0.1.12": ">=0.1.12",
-            "secp256k1": "5.0.1"
+            "secp256k1": "5.0.1",
+            "zod": "3.24.1"
         }
     },
     "engines": {

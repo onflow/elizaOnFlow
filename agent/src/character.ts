@@ -2,18 +2,18 @@ import {
     type Character,
     ModelProviderName,
 } from "@elizaos/core";
-import { basicFlowPlugin } from "@fixes-ai/common";
+import diPlugin from "@elizaos-plugins/plugin-di";
+import { advancedFlowPlugin } from "@elizaos-plugins/plugin-flow-advanced";
 import { defaultCharacter as elizaDefaultCharacter } from "./defaultCharacter";
-
-const localDefaultCharacter: Character = {
-    modelProvider: ModelProviderName.DEEPSEEK,
-    plugins: [basicFlowPlugin],
-} as Character;
 
 export const defaultCharacter: Character = Object.assign(
     {},
     elizaDefaultCharacter,
-    localDefaultCharacter
+    {
+        modelProvider: ModelProviderName.DEEPSEEK,
+        plugins: [advancedFlowPlugin],
+        postProcessors: [diPlugin],
+    }
 );
 
 export default defaultCharacter;
