@@ -1,0 +1,29 @@
+{
+    "name": "@eliza/plugin-nba-topshot",
+    "version": "0.1.0",
+    "description": "NBA TopShot trading plugin for Eliza",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest watch"
+    },
+    "dependencies": {
+        "@eliza/common": "workspace:*",
+        "@eliza/core": "workspace:*",
+        "@onflow/fcl": "^1.9.0",
+        "@onflow/types": "^1.2.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "tsup": "^7.2.0",
+        "vitest": "^0.34.6"
+    },
+    "peerDependencies": {
+        "@eliza/common": "workspace:*",
+        "@eliza/core": "workspace:*"
+    }
+}
