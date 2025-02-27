@@ -144,6 +144,12 @@ You can load multiple characters with a comma-separated list:
 pnpm start --characters="characters/deep-thought.character.json, deps/eliza/characters/sbf.character.json"
 ```
 
+### Add more plugins
+
+run `npx elizaos plugins list` to get a list of available plugins or visit <https://elizaos.github.io/registry/>
+
+run `npx elizaos plugins add @elizaos-plugins/plugin-NAME` to install the plugin into your instance
+
 #### Additional Requirements
 
 You may need to install Sharp. If you see an error when starting up, try installing it with the following command:
@@ -169,16 +175,6 @@ Once the client is running, you'll see a message like this:
 ```
 
 Simply click the link or open your browser to `http://localhost:5173/`. You'll see the chat interface connect to the system, and you can begin interacting with your character.
-
-## Social Platform Integration
-
-You can also connect your agent to social platforms like Twitter, Discord, and Telegram.
-
-For example, connect with X (Twitter) by using `@elizaos/client-twitter`:
-
-- change `"clients": []` to `"clients": ["twitter"]` in the character file to connect with X
-
-For more details, please check the orgin Eliza's [Platform Integration](https://elizaos.github.io/eliza/docs/quickstart/#platform-integration)
 
 ## Common Issues & Solutions
 
