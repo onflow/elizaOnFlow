@@ -31,6 +31,12 @@ importers:
       '@elizaos-plugins/plugin-di':
         specifier: workspace:*
         version: link:packages/plugin-di
+      '@elizaos-plugins/plugin-flow':
+        specifier: workspace:*
+        version: link:packages/plugin-flow
+      '@elizaos-plugins/plugin-flow-advanced':
+        specifier: workspace:*
+        version: link:packages/plugin-flow-advanced
       amqplib:
         specifier: 0.10.5
         version: 0.10.5
@@ -113,18 +119,6 @@ importers:
 
   agent:
     dependencies:
-      '@elizaos-plugins/adapter-sqlite':
-        specifier: workspace:*
-        version: link:../deps/eliza/packages/adapter-sqlite
-      '@elizaos-plugins/plugin-di':
-        specifier: workspace:*
-        version: link:../packages/plugin-di
-      '@elizaos-plugins/plugin-flow':
-        specifier: workspace:*
-        version: link:../packages/plugin-flow
-      '@elizaos-plugins/plugin-flow-advanced':
-        specifier: workspace:*
-        version: link:../packages/plugin-flow-advanced
       '@elizaos/client-direct':
         specifier: workspace:*
         version: link:../deps/eliza/packages/client-direct
@@ -134,6 +128,9 @@ importers:
       '@elizaos/plugin-bootstrap':
         specifier: workspace:*
         version: link:../deps/eliza/packages/plugin-bootstrap
+      json5:
+        specifier: 2.2.3
+        version: 2.2.3
       readline:
         specifier: 1.3.0
         version: 1.3.0
@@ -14394,14 +14391,6 @@ snapshots:
     optionalDependencies:
       vite: 5.4.11(@types/node@22.13.5)(terser@5.37.0)
 
-  '@vitest/mocker@2.1.9(vite@5.4.12(@types/node@20.17.9)(terser@5.37.0))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.17
-    optionalDependencies:
-      vite: 5.4.12(@types/node@20.17.9)(terser@5.37.0)
-
   '@vitest/mocker@2.1.9(vite@5.4.12(@types/node@22.13.5)(terser@5.37.0))':
     dependencies:
       '@vitest/spy': 2.1.9
@@ -21856,7 +21845,7 @@ snapshots:
   vitest@2.1.9(@types/node@20.17.9)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@5.4.12(@types/node@20.17.9)(terser@5.37.0))
+      '@vitest/mocker': 2.1.9(vite@5.4.12(@types/node@22.13.5)(terser@5.37.0))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9
