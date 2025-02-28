@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import * as fcl from '@onflow/fcl';
 import * as t from '@onflow/types';
 
@@ -15,6 +16,11 @@ export interface Moment {
   };
 }
 
+export interface GetMomentsResult {
+  moments: Moment[];
+}
+
+@injectable()
 export class TopShotService {
   private readonly CONTRACT_ADDRESSES = {
     TopShot: '0x0b2a3299cc857e29',
@@ -48,7 +54,7 @@ export class TopShotService {
     }
   }
 
-  async getMoments(address: string): Promise<Moment[]> {
+  async getMoments(address: string): Promise<GetMomentsResult> {
     const script = `
       import TopShot from 0xTOPSHOTADDRESS
       import MetadataViews from 0xMETADATAVIEWSADDRESS
@@ -80,7 +86,9 @@ export class TopShotService {
         args: (arg: any, t: any) => [arg(address, t.Address)]
       });
 
-      return this.transformMomentData(response);
+      return {
+        moments: this.transformMomentData(response)
+      };
     } catch (error) {
       console.error('Error fetching moments:', error);
       throw error;

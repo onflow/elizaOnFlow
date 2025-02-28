@@ -1,7 +1,91 @@
-import * as fcl from '@onflow/fcl';
-import * as t from '@onflow/types';
-import { MarketItem } from '../services/market.service';
+import { z } from "zod";
+import { inject, injectable } from "inversify";
+import {
+    elizaLogger,
+    type ActionExample,
+    type HandlerCallback,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@elizaos/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { MarketService } from "../services/market.service";
+import { MarketItem } from "../services/market.service";
 
+export class GetMarketPricesContent {
+    @property({
+        description: "Optional set ID to filter by",
+        schema: z.number().optional(),
+    })
+    setId?: number;
+
+    @property({
+        description: "Optional play ID to filter by",
+        schema: z.number().optional(),
+    })
+    playId?: number;
+}
+
+@injectable()
+export class GetMarketPricesAction extends BaseFlowInjectableAction<GetMarketPricesContent> {
+    constructor(
+        @inject(MarketService)
+        private readonly marketService: MarketService,
+    ) {
+        super({
+            name: "get-market-prices",
+            description: "Get NBA TopShot market listings with optional filters",
+            examples: [
+                {
+                    content: {
+                        setId: 12345,
+                    },
+                },
+                {
+                    content: {
+                        playId: 67890,
+                    },
+                },
+                {
+                    content: {
+                        setId: 12345,
+                        playId: 67890,
+                    },
+                },
+            ],
+            contentClass: GetMarketPricesContent,
+        });
+    }
+
+    async validate(_runtime: IAgentRuntime, _message: Memory): Promise<boolean> {
+        return true;
+    }
+
+    async execute(
+        content: GetMarketPricesContent,
+        _runtime: IAgentRuntime,
+        _message: Memory,
+        _state?: State,
+        _callback?: HandlerCallback,
+    ) {
+        try {
+            const result = await this.marketService.getMarketPrices(content.setId, content.playId);
+            return {
+                success: true,
+                data: result,
+            };
+        } catch (error) {
+            elizaLogger.error("Error getting market prices:", error);
+            return {
+                success: false,
+                error: `Failed to get market prices: ${error}`,
+            };
+        }
+    }
+}
+
+// Keep the original function for backward compatibility
 export interface GetMarketPricesParams {
   setId?: number;
   playId?: number;
@@ -12,78 +96,11 @@ export interface GetMarketPricesResult {
 }
 
 export async function getMarketPrices({ setId, playId }: GetMarketPricesParams): Promise<GetMarketPricesResult> {
-  const script = `
-    import TopShot from 0xTOPSHOTADDRESS
-    import TopShotMarketV3 from 0xMARKETADDRESS
-
-    pub fun main(setId: UInt32?, playId: UInt32?): [{String: AnyStruct}] {
-      let marketCollection = getAccount(0xMARKETADDRESS)
-        .getCapability(/public/TopShotSaleCollection)
-        .borrow<&TopShotMarketV3.SaleCollection{TopShotMarketV3.SalePublic}>()
-        ?? panic("Could not borrow market collection")
-
-      let items: [{String: AnyStruct}] = []
-      let momentIds = marketCollection.getIDs()
-
-      for id in momentIds {
-        if let price = marketCollection.getPrice(tokenID: id) {
-          if let moment = marketCollection.borrowMoment(id: id) {
-            let data = moment.data
-
-            // Filter by setId and playId if provided
-            if let setId = setId {
-              if data.setID != setId {
-                continue
-              }
-            }
-
-            if let playId = playId {
-              if data.playID != playId {
-                continue
-              }
-            }
-
-            items.append({
-              "momentId": data.id,
-              "price": price,
-              "seller": marketCollection.owner?.address,
-              "metadata": data.metadata
-            })
-          }
-        }
-      }
-
-      return items
-    }
-  `;
-
   try {
-    const response = await fcl.query({
-      cadence: script,
-      args: (arg: any, t: any) => [
-        arg(setId, t.Optional(t.UInt32)),
-        arg(playId, t.Optional(t.UInt32))
-      ]
-    });
-
-    return {
-      items: transformMarketData(response)
-    };
+    const marketService = globalContainer.get(MarketService);
+    return await marketService.getMarketPrices(setId, playId);
   } catch (error) {
     console.error('Error fetching market prices:', error);
     throw error;
   }
-}
-
-function transformMarketData(rawItems: any[]): MarketItem[] {
-  return rawItems.map(item => ({
-    momentId: Number(item.momentId),
-    price: Number(item.price),
-    seller: item.seller,
-    metadata: {
-      playerName: item.metadata.PlayerName || '',
-      playType: item.metadata.PlayType || '',
-      serialNumber: Number(item.metadata.SerialNumber) || 0
-    }
-  }));
 }

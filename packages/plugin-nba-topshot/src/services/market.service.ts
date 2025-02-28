@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import * as fcl from '@onflow/fcl';
 import * as t from '@onflow/types';
 
@@ -12,6 +13,11 @@ export interface MarketItem {
   };
 }
 
+export interface GetMarketPricesResult {
+  items: MarketItem[];
+}
+
+@injectable()
 export class MarketService {
   private readonly CONTRACT_ADDRESSES = {
     TopShot: '0x0b2a3299cc857e29',
@@ -66,7 +72,71 @@ export class MarketService {
     }
   }
 
-  async listForSale(momentId: number, price: number): Promise<boolean> {
+  async getMarketPrices(setId?: number, playId?: number): Promise<GetMarketPricesResult> {
+    const script = `
+      import TopShot from 0xTOPSHOTADDRESS
+      import TopShotMarketV3 from 0xMARKETADDRESS
+
+      pub fun main(setId: UInt32?, playId: UInt32?): [{String: AnyStruct}] {
+        let marketCollection = getAccount(0xMARKETADDRESS)
+          .getCapability(/public/TopShotSaleCollection)
+          .borrow<&TopShotMarketV3.SaleCollection{TopShotMarketV3.SalePublic}>()
+          ?? panic("Could not borrow market collection")
+
+        let items: [{String: AnyStruct}] = []
+        let momentIds = marketCollection.getIDs()
+
+        for id in momentIds {
+          if let price = marketCollection.getPrice(tokenID: id) {
+            if let moment = marketCollection.borrowMoment(id: id) {
+              let data = moment.data
+
+              // Filter by setId and playId if provided
+              if let setId = setId {
+                if data.setID != setId {
+                  continue
+                }
+              }
+
+              if let playId = playId {
+                if data.playID != playId {
+                  continue
+                }
+              }
+
+              items.append({
+                "momentId": data.id,
+                "price": price,
+                "seller": marketCollection.owner?.address,
+                "metadata": data.metadata
+              })
+            }
+          }
+        }
+
+        return items
+      }
+    `;
+
+    try {
+      const response = await fcl.query({
+        cadence: script,
+        args: (arg: any, t: any) => [
+          arg(setId, t.Optional(t.UInt32)),
+          arg(playId, t.Optional(t.UInt32))
+        ]
+      });
+
+      return {
+        items: this.transformMarketData(response)
+      };
+    } catch (error) {
+      console.error('Error fetching market prices:', error);
+      throw error;
+    }
+  }
+
+  async listMoment(momentId: number, price: number): Promise<{ transactionId: string; success: boolean }> {
     const transaction = `
       import TopShot from 0xTOPSHOTADDRESS
       import TopShotMarketV3 from 0xMARKETADDRESS
@@ -99,14 +169,19 @@ export class MarketService {
         limit: 1000
       });
 
-      return await fcl.tx(txId).onceSealed();
+      const sealed = await fcl.tx(txId).onceSealed();
+
+      return {
+        transactionId: txId,
+        success: sealed.status === 4 // 4 means SEALED in FCL
+      };
     } catch (error) {
       console.error('Error listing moment for sale:', error);
       throw error;
     }
   }
 
-  async purchase(momentId: number): Promise<boolean> {
+  async purchaseMoment(momentId: number): Promise<{ transactionId: string; success: boolean }> {
     const transaction = `
       import TopShot from 0xTOPSHOTADDRESS
       import TopShotMarketV3 from 0xMARKETADDRESS
@@ -163,14 +238,19 @@ export class MarketService {
         limit: 1000
       });
 
-      return await fcl.tx(txId).onceSealed();
+      const sealed = await fcl.tx(txId).onceSealed();
+
+      return {
+        transactionId: txId,
+        success: sealed.status === 4
+      };
     } catch (error) {
       console.error('Error purchasing moment:', error);
       throw error;
     }
   }
 
-  async cancelSale(momentId: number): Promise<boolean> {
+  async cancelSale(momentId: number): Promise<{ transactionId: string; success: boolean }> {
     const transaction = `
       import TopShotMarketV3 from 0xMARKETADDRESS
 
@@ -196,71 +276,14 @@ export class MarketService {
         limit: 1000
       });
 
-      return await fcl.tx(txId).onceSealed();
+      const sealed = await fcl.tx(txId).onceSealed();
+
+      return {
+        transactionId: txId,
+        success: sealed.status === 4
+      };
     } catch (error) {
       console.error('Error canceling sale:', error);
-      throw error;
-    }
-  }
-
-  async getPrices(setId?: number, playId?: number): Promise<MarketItem[]> {
-    const script = `
-      import TopShot from 0xTOPSHOTADDRESS
-      import TopShotMarketV3 from 0xMARKETADDRESS
-
-      pub fun main(setId: UInt32?, playId: UInt32?): [{String: AnyStruct}] {
-        let marketCollection = getAccount(0xMARKETADDRESS)
-          .getCapability(/public/TopShotSaleCollection)
-          .borrow<&TopShotMarketV3.SaleCollection{TopShotMarketV3.SalePublic}>()
-          ?? panic("Could not borrow market collection")
-
-        let items: [{String: AnyStruct}] = []
-        let momentIds = marketCollection.getIDs()
-
-        for id in momentIds {
-          if let price = marketCollection.getPrice(tokenID: id) {
-            if let moment = marketCollection.borrowMoment(id: id) {
-              let data = moment.data
-
-              // Filter by setId and playId if provided
-              if let setId = setId {
-                if data.setID != setId {
-                  continue
-                }
-              }
-
-              if let playId = playId {
-                if data.playID != playId {
-                  continue
-                }
-              }
-
-              items.append({
-                "momentId": data.id,
-                "price": price,
-                "seller": marketCollection.owner?.address,
-                "metadata": data.metadata
-              })
-            }
-          }
-        }
-
-        return items
-      }
-    `;
-
-    try {
-      const response = await fcl.query({
-        cadence: script,
-        args: (arg: any, t: any) => [
-          arg(setId, t.Optional(t.UInt32)),
-          arg(playId, t.Optional(t.UInt32))
-        ]
-      });
-
-      return this.transformMarketData(response);
-    } catch (error) {
-      console.error('Error fetching market prices:', error);
       throw error;
     }
   }

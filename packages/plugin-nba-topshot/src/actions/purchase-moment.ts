@@ -1,6 +1,73 @@
-import * as fcl from '@onflow/fcl';
-import * as t from '@onflow/types';
+import { z } from "zod";
+import { inject, injectable } from "inversify";
+import {
+    elizaLogger,
+    type ActionExample,
+    type HandlerCallback,
+    type IAgentRuntime,
+    type Memory,
+    type State,
+} from "@elizaos/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
+import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { MarketService } from "../services/market.service";
 
+export class PurchaseMomentContent {
+    @property({
+        description: "The ID of the moment to purchase",
+        schema: z.number(),
+    })
+    momentId: number;
+}
+
+@injectable()
+export class PurchaseMomentAction extends BaseFlowInjectableAction<PurchaseMomentContent> {
+    constructor(
+        @inject(MarketService)
+        private readonly marketService: MarketService,
+    ) {
+        super({
+            name: "purchase-moment",
+            description: "Purchase an NBA TopShot moment from the marketplace",
+            examples: [
+                {
+                    content: {
+                        momentId: 12345,
+                    },
+                },
+            ],
+            contentClass: PurchaseMomentContent,
+        });
+    }
+
+    async validate(_runtime: IAgentRuntime, _message: Memory): Promise<boolean> {
+        return true;
+    }
+
+    async execute(
+        content: PurchaseMomentContent,
+        _runtime: IAgentRuntime,
+        _message: Memory,
+        _state?: State,
+        _callback?: HandlerCallback,
+    ) {
+        try {
+            const result = await this.marketService.purchaseMoment(content.momentId);
+            return {
+                success: result.success,
+                data: result,
+            };
+        } catch (error) {
+            elizaLogger.error("Error purchasing moment:", error);
+            return {
+                success: false,
+                error: `Failed to purchase moment: ${error}`,
+            };
+        }
+    }
+}
+
+// Keep the original function for backward compatibility
 export interface PurchaseMomentParams {
   momentId: number;
 }
@@ -11,68 +78,9 @@ export interface PurchaseMomentResult {
 }
 
 export async function purchaseMoment({ momentId }: PurchaseMomentParams): Promise<PurchaseMomentResult> {
-  const transaction = `
-    import TopShot from 0xTOPSHOTADDRESS
-    import TopShotMarketV3 from 0xMARKETADDRESS
-    import FungibleToken from 0xFUNGIBLETOKENADDRESS
-    import DapperUtilityCoin from 0xDUCADDRESS
-
-    transaction(momentId: UInt64) {
-      let marketCollection: &TopShotMarketV3.SaleCollection{TopShotMarketV3.SalePublic}
-      let buyerCollection: &TopShot.Collection
-      let ducVault: &DapperUtilityCoin.Vault
-
-      prepare(acct: AuthAccount) {
-        // Get the references to the buyer's collection
-        self.buyerCollection = acct.borrow<&TopShot.Collection>(
-          from: /storage/MomentCollection
-        ) ?? panic("Could not borrow buyer's collection")
-
-        // Get DUC vault reference
-        self.ducVault = acct.borrow<&DapperUtilityCoin.Vault>(
-          from: /storage/dapperUtilityCoinVault
-        ) ?? panic("Could not borrow DUC vault")
-
-        // Get a reference to the market collection
-        self.marketCollection = getAccount(0xMARKETADDRESS)
-          .getCapability(/public/TopShotSaleCollection)
-          .borrow<&TopShotMarketV3.SaleCollection{TopShotMarketV3.SalePublic}>()
-          ?? panic("Could not borrow market collection")
-      }
-
-      execute {
-        // Get the price of the moment
-        let price = self.marketCollection.getPrice(tokenID: momentId)
-          ?? panic("No price found for moment")
-
-        // Withdraw the tokens to purchase the moment
-        let tokens <- self.ducVault.withdraw(amount: price)
-
-        // Purchase the moment
-        let moment <- self.marketCollection.purchase(
-          tokenID: momentId,
-          buyTokens: <-tokens
-        )
-
-        // Deposit the purchased moment into the buyer's collection
-        self.buyerCollection.deposit(token: <-moment)
-      }
-    }
-  `;
-
   try {
-    const txId = await fcl.mutate({
-      cadence: transaction,
-      args: (arg: any, t: any) => [arg(momentId, t.UInt64)],
-      limit: 1000
-    });
-
-    const sealed = await fcl.tx(txId).onceSealed();
-
-    return {
-      transactionId: txId,
-      success: sealed.status === 4
-    };
+    const marketService = globalContainer.get(MarketService);
+    return await marketService.purchaseMoment(momentId);
   } catch (error) {
     console.error('Error purchasing moment:', error);
     throw error;
