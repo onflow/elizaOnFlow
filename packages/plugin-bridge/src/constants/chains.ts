@@ -1,7 +1,8 @@
 import { ChainConfig } from '../types';
 
-// LayerZero endpoint IDs for mainnet chains
+// I tool LayerZero endpoint IDs for mainnet chains from the docs
 // Reference: https://docs.layerzero.network/v2/developers/evm/endpoints
+
 export const CHAIN_CONFIGS: Record<string, ChainConfig> = {
     'flow-evm': {
         name: 'Flow EVM',
