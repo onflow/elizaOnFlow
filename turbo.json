@@ -18,15 +18,11 @@
                 "^@elizaos/core#build"
             ]
         },
-        "@fixes-ai/core#build": {
+        "@elizaos-plugins/plugin-flow-advanced#build": {
             "dependsOn": [
-                "@elizaos/plugin-di#build",
-                "@elizaos/plugin-flow#build"
-            ]
-        },
-        "@fixes-ai/common#build": {
-            "dependsOn": [
-                "@fixes-ai/core#build"
+                "@elizaos/core#build",
+                "@elizaos-plugins/plugin-di#build",
+                "@elizaos-plugins/plugin-flow#build"
             ]
         }
     }
