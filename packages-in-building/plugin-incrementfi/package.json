@@ -1,6 +1,5 @@
 {
     "name": "@elizaos-plugins/plugin-incrementfi",
-    "version": "0.1.0-alpha.0",
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.js",
@@ -9,38 +8,59 @@
         "./package.json": "./package.json",
         ".": {
             "import": {
+                "@elizaos/source": "./src/index.ts",
                 "types": "./dist/index.d.ts",
                 "default": "./dist/index.js"
             }
         }
     },
-    "files": [
-        "dist"
-    ],
     "scripts": {
         "build": "tsup --format esm --dts",
         "dev": "tsup --format esm --dts --watch",
+        "test": "vitest run",
         "clean": "rm -rf dist",
         "lint": "biome lint .",
-        "lint:fix": "biome check --write .",
+        "lint:fix": "biome check --apply .",
         "format": "biome format .",
-        "format:fix": "biome format --write .",
-        "test": "vitest run"
+        "format:fix": "biome format --write ."
     },
-    "dependencies": {
-        "@elizaos/core": "workspace:*",
-        "@elizaos-plugins/plugin-di": "workspace:*",
-        "@elizaos-plugins/plugin-flow": "workspace:*",
-        "zod": "3.23.8"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
         "tsup": "8.3.5",
         "vitest": "2.1.4"
     },
     "peerDependencies": {
+        "@elizaos/core": "workspace:*",
+        "@elizaos-plugins/plugin-di": "workspace:*",
+        "@elizaos-plugins/plugin-flow": "workspace:*",
+        "axios": "*",
         "inversify": "6.2.1",
         "reflect-metadata": "0.2.2",
-        "uuid": "11.0.3"
+        "uuid": "11.0.3",
+        "zod": "3.24.1"
+    },
+    "agentConfig": {
+        "pluginType": "elizaos:client:1.0.0",
+        "pluginParameters": {
+            "FLOW_ADDRESS": {
+                "type": "string",
+                "description": "Flow native address is required and must start with 0x"
+            },
+            "FLOW_PRIVATE_KEY": {
+                "type": "string",
+                "description": "Flow private key for the address is required and must start with 0x"
+            },
+            "FLOW_NETWORK": {
+                "type": "string",
+                "default": "mainnet",
+                "description": "Optional network specification"
+            },
+            "FLOW_ENDPOINT_URL": {
+                "type": "string",
+                "default": "https://rest-mainnet.onflow.org",
+                "description": "Optional Flow RPC endpoint URL"
+            }
+        }
     }
 }

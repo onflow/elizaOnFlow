@@ -520,6 +520,117 @@ importers:
         specifier: 8.3.5
         version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
 
+  packages-in-building/plugin-bridge:
+    dependencies:
+      '@elizaos-plugins/plugin-di':
+        specifier: workspace:*
+        version: link:../../packages/plugin-di
+      '@elizaos-plugins/plugin-flow':
+        specifier: workspace:*
+        version: link:../../packages/plugin-flow
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../../deps/eliza/packages/core
+      axios:
+        specifier: '>=0.28.0'
+        version: 1.7.9
+      inversify:
+        specifier: 6.2.1
+        version: 6.2.1(reflect-metadata@0.2.2)
+      reflect-metadata:
+        specifier: 0.2.2
+        version: 0.2.2
+      uuid:
+        specifier: 11.0.3
+        version: 11.0.3
+      zod:
+        specifier: 3.24.1
+        version: 3.24.1
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+      vitest:
+        specifier: 2.1.4
+        version: 2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+
+  packages-in-building/plugin-incrementfi:
+    dependencies:
+      '@elizaos-plugins/plugin-di':
+        specifier: workspace:*
+        version: link:../../packages/plugin-di
+      '@elizaos-plugins/plugin-flow':
+        specifier: workspace:*
+        version: link:../../packages/plugin-flow
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../../deps/eliza/packages/core
+      axios:
+        specifier: '>=0.28.0'
+        version: 1.7.9
+      inversify:
+        specifier: 6.2.1
+        version: 6.2.1(reflect-metadata@0.2.2)
+      reflect-metadata:
+        specifier: 0.2.2
+        version: 0.2.2
+      uuid:
+        specifier: 11.0.3
+        version: 11.0.3
+      zod:
+        specifier: 3.24.1
+        version: 3.24.1
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+      vitest:
+        specifier: 2.1.4
+        version: 2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+
+  packages-in-building/plugin-nba-topshot:
+    dependencies:
+      '@elizaos-plugins/plugin-di':
+        specifier: workspace:*
+        version: link:../../packages/plugin-di
+      '@elizaos-plugins/plugin-flow':
+        specifier: workspace:*
+        version: link:../../packages/plugin-flow
+      '@elizaos/core':
+        specifier: workspace:*
+        version: link:../../deps/eliza/packages/core
+      axios:
+        specifier: '>=0.28.0'
+        version: 1.7.9
+      inversify:
+        specifier: 6.2.1
+        version: 6.2.1(reflect-metadata@0.2.2)
+      reflect-metadata:
+        specifier: 0.2.2
+        version: 0.2.2
+      uuid:
+        specifier: 11.0.3
+        version: 11.0.3
+      zod:
+        specifier: 3.24.1
+        version: 3.24.1
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 1.9.4
+        version: 1.9.4
+      tsup:
+        specifier: 8.3.5
+        version: 8.3.5(@swc/core@1.10.4(@swc/helpers@0.5.15))(jiti@2.4.2)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.3)(yaml@2.7.0)
+      vitest:
+        specifier: 2.1.4
+        version: 2.1.4(@types/node@22.13.5)(jsdom@25.0.1(bufferutil@4.0.9)(canvas@2.11.2(encoding@0.1.13))(utf-8-validate@6.0.5))(terser@5.37.0)
+
   packages/plugin-di:
     dependencies:
       '@elizaos/core':
@@ -10422,7 +10533,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
-      semver: 7.6.3
+      semver: 7.7.1
       tar: 6.2.1
     transitivePeerDependencies:
       - encoding

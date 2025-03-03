@@ -18,9 +18,13 @@
                 "^@elizaos/core#build"
             ]
         },
+        "@elizaos-plugins/plugin-flow#build": {
+            "dependsOn": [
+                "@elizaos-plugins/plugin-di#build"
+            ]
+        },
         "@elizaos-plugins/plugin-flow-advanced#build": {
             "dependsOn": [
-                "@elizaos/core#build",
                 "@elizaos-plugins/plugin-di#build",
                 "@elizaos-plugins/plugin-flow#build"
             ]
