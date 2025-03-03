@@ -1,4 +1,4 @@
-import type { PluginOptions } from "@elizaos/plugin-di";
+import type { PluginOptions } from "@elizaos-plugins/plugin-di";
 import {
     GetMomentsAction,
     ListMomentAction,
@@ -26,5 +26,4 @@ export const nbaTopShotPlugin: PluginOptions = {
     providers: [],
     evaluators: [],
     services: [TopShotService, MarketService],
-    //dependencies: ["@fixes-ai/common"], // This ensures common plugin is loaded first
 };

@@ -1,35 +1,23 @@
-import { injectable } from 'inversify';
-import * as fcl from '@onflow/fcl';
-import * as t from '@onflow/types';
-
-export interface Moment {
-  id: number;
-  playId: number;
-  setId: number;
-  serialNumber: number;
-  metadata: {
-    playerName: string;
-    playType: string;
-    teamAtMoment: string;
-    dateOfMoment: string;
-    description: string;
-  };
-}
-
-export interface GetMomentsResult {
-  moments: Moment[];
-}
+import { inject, injectable } from 'inversify';
+import { Service } from '@elizaos/core';
+import type { GetMomentsResult, Moment } from '../types';
+import { FlowWalletService } from '@elizaos-plugins/plugin-flow';
+import { globalContainer } from '@elizaos-plugins/plugin-di';
 
 @injectable()
-export class TopShotService {
-  private readonly CONTRACT_ADDRESSES = {
-    TopShot: '0x0b2a3299cc857e29',
-    MetadataViews: '0x1d7e57aa55817448'
-  };
+export class TopShotService extends Service {
+    // Inject the Flow Eliza Provider
+    @inject(FlowWalletService)
+    private readonly walletService: FlowWalletService;
+
+    private readonly CONTRACT_ADDRESSES = {
+        TopShot: '0x0b2a3299cc857e29',
+        MetadataViews: '0x1d7e57aa55817448'
+    };
 
   async initialize(): Promise<void> {
     // Configure contract addresses based on network
-    const network = await fcl.config().get('flow.network');
+    const network = this.walletService.connector.network;
 
     if (network === 'testnet') {
       this.CONTRACT_ADDRESSES.TopShot = '0x877931736ee77cff';
@@ -46,9 +34,7 @@ export class TopShotService {
         }
       `;
 
-      await fcl.query({
-        cadence: script
-      });
+      await this.walletService.executeScript(script, () => [], false);
     } catch (error) {
       throw new Error('Failed to initialize TopShot service: Unable to access TopShot contract');
     }
@@ -81,11 +67,7 @@ export class TopShotService {
     `;
 
     try {
-      const response = await fcl.query({
-        cadence: script,
-        args: (arg: any, t: any) => [arg(address, t.Address)]
-      });
-
+      const response = await this.walletService.executeScript(script, (arg, t) => [arg(address, t.Address)], []);
       return {
         moments: this.transformMomentData(response)
       };
@@ -115,10 +97,7 @@ export class TopShotService {
     `;
 
     try {
-      return await fcl.query({
-        cadence: script,
-        args: (arg: any, t: any) => [arg(momentId, t.UInt64)]
-      });
+      return await this.walletService.executeScript(script, (arg, t) => [arg(momentId, t.UInt64)], {});
     } catch (error) {
       console.error('Error fetching moment metadata:', error);
       throw error;
@@ -141,3 +120,5 @@ export class TopShotService {
     }));
   }
 }
+
+globalContainer.bind<TopShotService>(TopShotService).toSelf();

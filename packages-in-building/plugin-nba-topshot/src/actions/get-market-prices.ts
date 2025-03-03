@@ -8,10 +8,10 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
+import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { MarketService } from "../services/market.service";
-import { MarketItem } from "../services/market.service";
+import type { GetMarketPricesParams, GetMarketPricesResult, MarketItem } from "../types";
 
 export class GetMarketPricesContent {
     @property({
@@ -34,25 +34,19 @@ export class GetMarketPricesAction extends BaseFlowInjectableAction<GetMarketPri
         private readonly marketService: MarketService,
     ) {
         super({
-            name: "get-market-prices",
+            name: "GET_TOPSHOT_MARKET_PRICES",
+            similes: [],
             description: "Get NBA TopShot market listings with optional filters",
             examples: [
-                {
-                    content: {
-                        setId: 12345,
+                [
+                    {
+                        user: "{{user1}}",
+                        content: {
+                            text: "I want to get TopShot market prices for set 12345 and playId 67890",
+                            action: "GET_TOPSHOT_MARKET_PRICES",
+                        },
                     },
-                },
-                {
-                    content: {
-                        playId: 67890,
-                    },
-                },
-                {
-                    content: {
-                        setId: 12345,
-                        playId: 67890,
-                    },
-                },
+                ]
             ],
             contentClass: GetMarketPricesContent,
         });
@@ -85,17 +79,7 @@ export class GetMarketPricesAction extends BaseFlowInjectableAction<GetMarketPri
     }
 }
 
-// Keep the original function for backward compatibility
-export interface GetMarketPricesParams {
-  setId?: number;
-  playId?: number;
-}
-
-export interface GetMarketPricesResult {
-  items: MarketItem[];
-}
-
-export async function getMarketPrices({ setId, playId }: GetMarketPricesParams): Promise<GetMarketPricesResult> {
+export async function getMarketPrices(setId?: number, playId?: number) {
   try {
     const marketService = globalContainer.get(MarketService);
     return await marketService.getMarketPrices(setId, playId);

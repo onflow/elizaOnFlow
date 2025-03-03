@@ -1,79 +1,65 @@
-import { injectable } from 'inversify';
-import * as fcl from '@onflow/fcl';
-import * as t from '@onflow/types';
-
-export interface MarketItem {
-  momentId: number;
-  price: number;
-  seller: string;
-  metadata: {
-    playerName: string;
-    playType: string;
-    serialNumber: number;
-  };
-}
-
-export interface GetMarketPricesResult {
-  items: MarketItem[];
-}
+import { inject, injectable } from 'inversify';
+import { Service } from '@elizaos/core';
+import type { GetMarketPricesResult, MarketItem } from '../types';
+import { FlowWalletService, TransactionSentResponse } from '@elizaos-plugins/plugin-flow';
+import { globalContainer } from '@elizaos-plugins/plugin-di';
 
 @injectable()
-export class MarketService {
-  private readonly CONTRACT_ADDRESSES = {
-    TopShot: '0x0b2a3299cc857e29',
-    TopShotMarketV3: '0xc1e4f4f4c4257510',
-    DapperUtilityCoin: '0x82ec283f88a62e65',
-    FungibleToken: '0xf233dcee88fe0abe'
-  };
+export class MarketService extends Service {
+    // Inject the Flow Eliza Provider
+    @inject(FlowWalletService)
+    private readonly walletService: FlowWalletService;
 
-  async initialize(): Promise<void> {
-    // Configure contract addresses based on network
-    const network = await fcl.config().get('flow.network');
+    private readonly CONTRACT_ADDRESSES = {
+        TopShot: '0x0b2a3299cc857e29',
+        TopShotMarketV3: '0xc1e4f4f4c4257510',
+        DapperUtilityCoin: '0x82ec283f88a62e65',
+        FungibleToken: '0xf233dcee88fe0abe'
+    };
 
-    if (network === 'testnet') {
-      this.CONTRACT_ADDRESSES.TopShot = '0x877931736ee77cff';
-      this.CONTRACT_ADDRESSES.TopShotMarketV3 = '0x547f93a11d1cc9c9';
-      this.CONTRACT_ADDRESSES.DapperUtilityCoin = '0xead892083b3e2c6c';
-      this.CONTRACT_ADDRESSES.FungibleToken = '0x9a0766d93b6608b7';
-    }
+    async initialize(): Promise<void> {
+        // Configure contract addresses based on network
+        const network = this.walletService.connector.network;
 
-    // Verify market contract access
-    try {
-      const script = `
+        if (network === 'testnet') {
+            this.CONTRACT_ADDRESSES.TopShot = '0x877931736ee77cff';
+            this.CONTRACT_ADDRESSES.TopShotMarketV3 = '0x547f93a11d1cc9c9';
+            this.CONTRACT_ADDRESSES.DapperUtilityCoin = '0xead892083b3e2c6c';
+            this.CONTRACT_ADDRESSES.FungibleToken = '0x9a0766d93b6608b7';
+        }
+
+        // Verify market contract access
+        try {
+            const script = `
         import TopShotMarketV3 from ${this.CONTRACT_ADDRESSES.TopShotMarketV3}
 
         pub fun main(): Bool {
-          return true
+            return true
         }
-      `;
+        `;
 
-      await fcl.query({
-        cadence: script
-      });
-    } catch (error) {
-      throw new Error('Failed to initialize Market service: Unable to access TopShotMarketV3 contract');
-    }
+            await this.walletService.executeScript(script, () => [], true);
+        } catch (error) {
+            throw new Error('Failed to initialize Market service: Unable to access TopShotMarketV3 contract');
+        }
 
-    // Verify DUC contract access
-    try {
-      const script = `
+        // Verify DUC contract access
+        try {
+            const script = `
         import DapperUtilityCoin from ${this.CONTRACT_ADDRESSES.DapperUtilityCoin}
 
         pub fun main(): Bool {
           return true
         }
       `;
-
-      await fcl.query({
-        cadence: script
-      });
-    } catch (error) {
-      throw new Error('Failed to initialize Market service: Unable to access DapperUtilityCoin contract');
+            await this.walletService.executeScript(script, () => [], true);
+        } catch (error) {
+            throw new Error('Failed to initialize Market service: Unable to access DapperUtilityCoin contract');
+        }
     }
-  }
 
-  async getMarketPrices(setId?: number, playId?: number): Promise<GetMarketPricesResult> {
-    const script = `
+    async getMarketPrices(setId?: number, playId?: number): Promise<GetMarketPricesResult> {
+        const script = `
       import TopShot from 0xTOPSHOTADDRESS
       import TopShotMarketV3 from 0xMARKETADDRESS
 
@@ -118,26 +104,23 @@ export class MarketService {
       }
     `;
 
-    try {
-      const response = await fcl.query({
-        cadence: script,
-        args: (arg: any, t: any) => [
-          arg(setId, t.Optional(t.UInt32)),
-          arg(playId, t.Optional(t.UInt32))
-        ]
-      });
+        try {
+            const response = await this.walletService.executeScript(script, (arg, t) => [
+                arg(setId, t.Optional(t.UInt32)),
+                arg(playId, t.Optional(t.UInt32))
+            ], []);
 
-      return {
-        items: this.transformMarketData(response)
-      };
-    } catch (error) {
-      console.error('Error fetching market prices:', error);
-      throw error;
+            return {
+                items: this.transformMarketData(response)
+            };
+        } catch (error) {
+            console.error('Error fetching market prices:', error);
+            throw error;
+        }
     }
-  }
 
-  async listMoment(momentId: number, price: number): Promise<{ transactionId: string; success: boolean }> {
-    const transaction = `
+    async listMoment(momentId: number, price: number): Promise<TransactionSentResponse> {
+        const transaction = `
       import TopShot from 0xTOPSHOTADDRESS
       import TopShotMarketV3 from 0xMARKETADDRESS
       import FungibleToken from 0xFUNGIBLETOKENADDRESS
@@ -159,30 +142,22 @@ export class MarketService {
       }
     `;
 
-    try {
-      const txId = await fcl.mutate({
-        cadence: transaction,
-        args: (arg: any, t: any) => [
-          arg(momentId, t.UInt64),
-          arg(price.toFixed(8), t.UFix64)
-        ],
-        limit: 1000
-      });
-
-      const sealed = await fcl.tx(txId).onceSealed();
-
-      return {
-        transactionId: txId,
-        success: sealed.status === 4 // 4 means SEALED in FCL
-      };
-    } catch (error) {
-      console.error('Error listing moment for sale:', error);
-      throw error;
+        try {
+            return await this.walletService.sendTransaction(
+                transaction,
+                (arg, t) => [
+                    arg(momentId, t.UInt64),
+                    arg(price.toFixed(8), t.UFix64)
+                ]
+            );
+        } catch (error) {
+            console.error('Error listing moment for sale:', error);
+            throw error;
+        }
     }
-  }
 
-  async purchaseMoment(momentId: number): Promise<{ transactionId: string; success: boolean }> {
-    const transaction = `
+    async purchaseMoment(momentId: number): Promise<TransactionSentResponse> {
+        const transaction = `
       import TopShot from 0xTOPSHOTADDRESS
       import TopShotMarketV3 from 0xMARKETADDRESS
       import FungibleToken from 0xFUNGIBLETOKENADDRESS
@@ -231,27 +206,19 @@ export class MarketService {
       }
     `;
 
-    try {
-      const txId = await fcl.mutate({
-        cadence: transaction,
-        args: (arg: any, t: any) => [arg(momentId, t.UInt64)],
-        limit: 1000
-      });
-
-      const sealed = await fcl.tx(txId).onceSealed();
-
-      return {
-        transactionId: txId,
-        success: sealed.status === 4
-      };
-    } catch (error) {
-      console.error('Error purchasing moment:', error);
-      throw error;
+        try {
+            return await this.walletService.sendTransaction(
+                transaction,
+                (arg, t) => [arg(momentId, t.UInt64)]
+            );
+        } catch (error) {
+            console.error('Error purchasing moment:', error);
+            throw error;
+        }
     }
-  }
 
-  async cancelSale(momentId: number): Promise<{ transactionId: string; success: boolean }> {
-    const transaction = `
+    async cancelSale(momentId: number): Promise<TransactionSentResponse> {
+        const transaction = `
       import TopShotMarketV3 from 0xMARKETADDRESS
 
       transaction(momentId: UInt64) {
@@ -269,35 +236,29 @@ export class MarketService {
       }
     `;
 
-    try {
-      const txId = await fcl.mutate({
-        cadence: transaction,
-        args: (arg: any, t: any) => [arg(momentId, t.UInt64)],
-        limit: 1000
-      });
-
-      const sealed = await fcl.tx(txId).onceSealed();
-
-      return {
-        transactionId: txId,
-        success: sealed.status === 4
-      };
-    } catch (error) {
-      console.error('Error canceling sale:', error);
-      throw error;
+        try {
+            return await this.walletService.sendTransaction(
+                transaction,
+                (arg, t) => [arg(momentId, t.UInt64)]
+            );
+        } catch (error) {
+            console.error('Error canceling sale:', error);
+            throw error;
+        }
     }
-  }
 
-  private transformMarketData(rawItems: any[]): MarketItem[] {
-    return rawItems.map(item => ({
-      momentId: Number(item.momentId),
-      price: Number(item.price),
-      seller: item.seller,
-      metadata: {
-        playerName: item.metadata.PlayerName || '',
-        playType: item.metadata.PlayType || '',
-        serialNumber: Number(item.metadata.SerialNumber) || 0
-      }
-    }));
-  }
+    private transformMarketData(rawItems: any[]): MarketItem[] {
+        return rawItems.map(item => ({
+            momentId: Number(item.momentId),
+            price: Number(item.price),
+            seller: item.seller,
+            metadata: {
+                playerName: item.metadata.PlayerName || '',
+                playType: item.metadata.PlayType || '',
+                serialNumber: Number(item.metadata.SerialNumber) || 0
+            }
+        }));
+    }
 }
+
+globalContainer.bind<MarketService>(MarketService).toSelf();

@@ -16,8 +16,8 @@ export default defineConfig({
     },
     external: [
         "@elizaos/core",
-        "@elizaos/plugin-di",
-        "@fixes-ai/core",
+        "@elizaos-plugins/plugin-di",
+        "@elizaos-plugins/plugin-flow",
         "@onflow/fcl",
         "@onflow/types",
         "inversify",

@@ -8,8 +8,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
+import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { MarketService } from "../services/market.service";
 
 export class ListMomentContent {
@@ -33,15 +33,19 @@ export class ListMomentAction extends BaseFlowInjectableAction<ListMomentContent
         private readonly marketService: MarketService,
     ) {
         super({
-            name: "list-moment",
+            name: "LIST_TOPSHOT_MOMENT",
+            similes: [],
             description: "List an NBA TopShot moment for sale",
             examples: [
-                {
-                    content: {
-                        momentId: 12345,
-                        price: 25.0,
+                [
+                    {
+                        user: "{{user1}}",
+                        content: {
+                            text: "I want to list Topshot moment 12345 to sell for $25",
+                            action: "LIST_TOPSHOT_MOMENT",
+                        },
                     },
-                },
+                ]
             ],
             contentClass: ListMomentContent,
         });
@@ -60,8 +64,9 @@ export class ListMomentAction extends BaseFlowInjectableAction<ListMomentContent
     ) {
         try {
             const result = await this.marketService.listMoment(content.momentId, content.price);
+
+            // TODO: add callback to send message to user
             return {
-                success: result.success,
                 data: result,
             };
         } catch (error) {
@@ -74,18 +79,7 @@ export class ListMomentAction extends BaseFlowInjectableAction<ListMomentContent
     }
 }
 
-// Keep the original function for backward compatibility
-export interface ListMomentParams {
-  momentId: number;
-  price: number;
-}
-
-export interface ListMomentResult {
-  transactionId: string;
-  success: boolean;
-}
-
-export async function listMoment({ momentId, price }: ListMomentParams): Promise<ListMomentResult> {
+export async function listMoment(momentId: number, price: number) {
   try {
     const marketService = globalContainer.get(MarketService);
     return await marketService.listMoment(momentId, price);
@@ -94,3 +88,5 @@ export async function listMoment({ momentId, price }: ListMomentParams): Promise
     throw error;
   }
 }
+
+globalContainer.bind<ListMomentAction>(ListMomentAction).toSelf();

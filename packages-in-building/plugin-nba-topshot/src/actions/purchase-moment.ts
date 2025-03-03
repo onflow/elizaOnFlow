@@ -8,8 +8,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
+import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { MarketService } from "../services/market.service";
 
 export class PurchaseMomentContent {
@@ -27,14 +27,19 @@ export class PurchaseMomentAction extends BaseFlowInjectableAction<PurchaseMomen
         private readonly marketService: MarketService,
     ) {
         super({
-            name: "purchase-moment",
+            name: "BUY_TOPSHOT_MOMENT",
+            similes: [],
             description: "Purchase an NBA TopShot moment from the marketplace",
             examples: [
-                {
-                    content: {
-                        momentId: 12345,
+                [
+                    {
+                        user: "{{user1}}",
+                        content: {
+                            text: "I want to purchase Topshot moment 12345",
+                            action: "BUY_TOPSHOT_MOMENT",
+                        },
                     },
-                },
+                ]
             ],
             contentClass: PurchaseMomentContent,
         });
@@ -53,8 +58,9 @@ export class PurchaseMomentAction extends BaseFlowInjectableAction<PurchaseMomen
     ) {
         try {
             const result = await this.marketService.purchaseMoment(content.momentId);
+
+            // TODO: add callback to send message to user
             return {
-                success: result.success,
                 data: result,
             };
         } catch (error) {
@@ -67,17 +73,9 @@ export class PurchaseMomentAction extends BaseFlowInjectableAction<PurchaseMomen
     }
 }
 
-// Keep the original function for backward compatibility
-export interface PurchaseMomentParams {
-  momentId: number;
-}
+globalContainer.bind<PurchaseMomentAction>(PurchaseMomentAction).toSelf();
 
-export interface PurchaseMomentResult {
-  transactionId: string;
-  success: boolean;
-}
-
-export async function purchaseMoment({ momentId }: PurchaseMomentParams): Promise<PurchaseMomentResult> {
+export async function purchaseMoment(momentId: number) {
   try {
     const marketService = globalContainer.get(MarketService);
     return await marketService.purchaseMoment(momentId);

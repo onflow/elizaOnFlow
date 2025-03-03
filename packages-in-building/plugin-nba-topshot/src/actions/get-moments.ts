@@ -8,10 +8,10 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
+import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { TopShotService } from "../services/topshot.service";
-import { Moment } from "../services/topshot.service";
+import type { Moment } from "../types";
 
 export class GetMomentsContent {
     @property({
@@ -28,14 +28,19 @@ export class GetMomentsAction extends BaseFlowInjectableAction<GetMomentsContent
         private readonly topShotService: TopShotService,
     ) {
         super({
-            name: "get-moments",
+            name: "GET_TOPSHOT_MOMENTS",
+            similes: [],
             description: "Get NBA TopShot moments for a Flow address",
             examples: [
-                {
-                    content: {
-                        address: "0x1234567890abcdef",
+                [
+                    {
+                        user: "{{user1}}",
+                        content: {
+                            text: "Please get TopShot moments from address 0x1234567890abcdef",
+                            action: "GET_TOPSHOT_MOMENTS",
+                        },
                     },
-                },
+                ]
             ],
             contentClass: GetMomentsContent,
         });
@@ -68,41 +73,7 @@ export class GetMomentsAction extends BaseFlowInjectableAction<GetMomentsContent
     }
 }
 
-// Keep the original function for backward compatibility
-export interface GetMomentsParams {
-  address: string;
-}
-
-export interface GetMomentsResult {
-  moments: Moment[];
-}
-
-export async function getMoments({ address }: GetMomentsParams): Promise<GetMomentsResult> {
-  const script = `
-    import TopShot from 0xTOPSHOTADDRESS
-    import MetadataViews from 0xMETADATAVIEWSADDRESS
-
-    pub fun main(address: Address): [TopShot.MomentData] {
-      let account = getAccount(address)
-
-      if let collection = account.getCapability(/public/MomentCollection)
-                          .borrow<&{TopShot.MomentCollectionPublic}>() {
-        let momentIds = collection.getIDs()
-        let moments: [TopShot.MomentData] = []
-
-        for id in momentIds {
-          if let moment = collection.borrowMoment(id: id) {
-            moments.append(moment.data)
-          }
-        }
-
-        return moments
-      }
-
-      return []
-    }
-  `;
-
+export async function getMoments(address: string) {
   try {
     const topShotService = globalContainer.get(TopShotService);
     return await topShotService.getMoments(address);
@@ -110,20 +81,4 @@ export async function getMoments({ address }: GetMomentsParams): Promise<GetMome
     console.error('Error fetching moments:', error);
     throw error;
   }
-}
-
-function transformMomentData(rawMoments: any[]): Moment[] {
-  return rawMoments.map(moment => ({
-    id: Number(moment.id),
-    playId: Number(moment.playID),
-    setId: Number(moment.setID),
-    serialNumber: Number(moment.serialNumber),
-    metadata: {
-      playerName: moment.metadata.PlayerName || '',
-      playType: moment.metadata.PlayType || '',
-      teamAtMoment: moment.metadata.TeamAtMoment || '',
-      dateOfMoment: moment.metadata.DateOfMoment || '',
-      description: moment.metadata.Description || ''
-    }
-  }));
 }

@@ -1,7 +1,7 @@
-export * from "./actions";
-export * from "./plugin";
-export * from "./services";
 export * from "./types";
+export * from "./actions";
+export * from "./services";
+export * from "./plugin";
 
 import { nbaTopShotPlugin } from "./plugin";
 

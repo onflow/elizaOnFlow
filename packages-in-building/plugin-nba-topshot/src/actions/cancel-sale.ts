@@ -8,8 +8,8 @@ import {
     type Memory,
     type State,
 } from "@elizaos/core";
-import { type ActionOptions, globalContainer, property } from "@elizaos/plugin-di";
-import { BaseFlowInjectableAction } from "@fixes-ai/core";
+import { globalContainer, property } from "@elizaos-plugins/plugin-di";
+import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { MarketService } from "../services/market.service";
 
 export class CancelSaleContent {
@@ -27,14 +27,19 @@ export class CancelSaleAction extends BaseFlowInjectableAction<CancelSaleContent
         private readonly marketService: MarketService,
     ) {
         super({
-            name: "cancel-sale",
+            name: "CANCEL_TOPSHOT_SALE",
+            similes: [],
             description: "Cancel a sale listing for an NBA TopShot moment",
             examples: [
-                {
-                    content: {
-                        momentId: 12345,
+                [
+                    {
+                        user: "{{user1}}",
+                        content: {
+                            text: "I want to cancel the sale for Topshot moment 12345",
+                            action: "CANCEL_TOPSHOT_SALE",
+                        },
                     },
-                },
+                ]
             ],
             contentClass: CancelSaleContent,
         });
@@ -53,8 +58,9 @@ export class CancelSaleAction extends BaseFlowInjectableAction<CancelSaleContent
     ) {
         try {
             const result = await this.marketService.cancelSale(content.momentId);
+
+            // TODO: add callback to send message to user
             return {
-                success: result.success,
                 data: result,
             };
         } catch (error) {
@@ -77,7 +83,7 @@ export interface CancelSaleResult {
   success: boolean;
 }
 
-export async function cancelSale({ momentId }: CancelSaleParams): Promise<CancelSaleResult> {
+export async function cancelSale(momentId: number) {
   try {
     const marketService = globalContainer.get(MarketService);
     return await marketService.cancelSale(momentId);
