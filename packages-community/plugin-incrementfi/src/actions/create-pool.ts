@@ -13,7 +13,6 @@ import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
 import { formatTransationSent } from "../formater";
 import { isFlowAddress } from "@elizaos-plugins/plugin-flow";
 import { IncrementService } from "../services/increment.service";
-import { TESTNET_TOKENS } from "../constants/tokens";
 
 export class CreatePoolContent {
     @property({

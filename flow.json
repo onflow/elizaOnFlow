@@ -76,7 +76,7 @@
         },
         "EVM": {
             "source": "mainnet://e467b9dd11fa00df.EVM",
-            "hash": "5c69921fa06088b477e2758e122636b39d3d3eb5316807c206c5680d9ac74c7e",
+            "hash": "68e203784a1fde2a491ddcf522417bf43403efe1795f3b88e76a8ee961e5940b",
             "aliases": {
                 "emulator": "f8d6e0586b0a20c7",
                 "mainnet": "e467b9dd11fa00df",
@@ -391,6 +391,14 @@
             "aliases": {
                 "mainnet": "ecbda466e7f191c7",
                 "testnet": "c20df20fabe06457"
+            }
+        },
+        "SwapRouter": {
+            "source": "mainnet://a6850776a94e6551.SwapRouter",
+            "hash": "2ae9ecd237b7ea36b4fcc87f415d181b437543722a64f18094e026252607932c",
+            "aliases": {
+                "mainnet": "a6850776a94e6551",
+                "testnet": "2f8af5ed05bbde0d"
             }
         },
         "TokenList": {

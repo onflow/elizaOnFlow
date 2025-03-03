@@ -1,4 +1,4 @@
-import SwapFactory from 0x6ca93d49c45a249f
+import "SwapFactory"
 
 access(all) fun main(): [Address] {
   let len = SwapFactory.getAllPairsLength()

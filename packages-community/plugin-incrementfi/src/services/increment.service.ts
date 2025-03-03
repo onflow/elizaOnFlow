@@ -255,11 +255,10 @@ export class IncrementService extends Service {
             const txResponse = await this.walletService.sendTransaction(
                 transactions.swapflowtoken,
                 (arg, t) => [
+                    arg(formattedPath, t.Array(t.String)),
                     arg(exactAmount, t.UFix64),
                     arg(minAmount, t.UFix64),
-                    arg(formattedPath, t.Array(t.String)),
-                    arg(params.to, t.Address),
-                    arg(deadline, t.UFix64)
+                    arg(deadline, t.UFix64),
                 ]
             );
 
