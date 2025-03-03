@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "sourceMap": true,
+        "inlineSources": true,
+        "sourceRoot": "/",
+        "composite": true
+    }
+}
