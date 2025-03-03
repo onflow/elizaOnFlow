@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { Service } from '@elizaos/core';
+import { Service, type ServiceType } from '@elizaos/core';
 import type { GetMarketPricesResult, MarketItem } from '../types';
-import { FlowWalletService, TransactionSentResponse } from '@elizaos-plugins/plugin-flow';
+import { FlowWalletService, type TransactionSentResponse } from '@elizaos-plugins/plugin-flow';
 import { globalContainer } from '@elizaos-plugins/plugin-di';
 
 @injectable()
@@ -16,6 +16,10 @@ export class MarketService extends Service {
         DapperUtilityCoin: '0x82ec283f88a62e65',
         FungibleToken: '0xf233dcee88fe0abe'
     };
+
+    static get serviceType(): ServiceType {
+        return "market" as ServiceType;
+    }
 
     async initialize(): Promise<void> {
         // Configure contract addresses based on network

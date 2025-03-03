@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Service } from '@elizaos/core';
+import { Service, type ServiceType } from '@elizaos/core';
 import type { GetMomentsResult, Moment } from '../types';
 import { FlowWalletService } from '@elizaos-plugins/plugin-flow';
 import { globalContainer } from '@elizaos-plugins/plugin-di';
@@ -14,6 +14,10 @@ export class TopShotService extends Service {
         TopShot: '0x0b2a3299cc857e29',
         MetadataViews: '0x1d7e57aa55817448'
     };
+
+    static get serviceType(): ServiceType {
+        return "topshot" as ServiceType;
+    }
 
   async initialize(): Promise<void> {
     // Configure contract addresses based on network

@@ -9,7 +9,7 @@ import {
     type State,
 } from "@elizaos/core";
 import { type ActionOptions, globalContainer, property } from "@elizaos-plugins/plugin-di";
-import { BaseFlowInjectableAction } from "@elizaos-plugins/plugin-flow";
+import { BaseFlowInjectableAction, type FlowWalletService } from "@elizaos-plugins/plugin-flow";
 import { BridgeService } from "../services/bridge.service";
 import { CHAIN_CONFIGS, TOKENS, DEFAULT_SLIPPAGE } from "../constants";
 
@@ -79,7 +79,7 @@ export class SwapTokenAction extends BaseFlowInjectableAction<SwapTokenContent> 
         @inject(BridgeService)
         private readonly bridgeService: BridgeService,
         @inject("FlowWalletService")
-        private readonly walletService: any
+        private readonly walletService: FlowWalletService
     ) {
         super(actionOpts);
     }

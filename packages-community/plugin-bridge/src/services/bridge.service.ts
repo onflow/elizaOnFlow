@@ -3,7 +3,7 @@ import { injectable, inject } from "inversify";
 import { elizaLogger, Service, type ServiceType, type IAgentRuntime } from "@elizaos/core";
 import { FlowWalletService } from "@elizaos-plugins/plugin-flow";
 import axios from "axios";
-import {
+import type {
     BridgeParams,
     SwapParams,
     BridgeResult,
