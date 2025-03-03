@@ -1,26 +1,36 @@
 {
-    "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "outDir": "dist",
-        "rootDir": "src",
-        "baseUrl": ".",
+        "target": "ESNext",
+        "module": "ESNext",
+        "lib": [
+            "ESNext",
+            "dom"
+        ],
+        "moduleResolution": "Bundler",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "strict": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": false,
+        "allowImportingTsExtensions": true,
+        "declaration": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "paths": {
-            "@/*": [
-                "src/*"
-            ]
-        }
+        "emitDeclarationOnly": true,
+        "resolveJsonModule": true,
+        "noImplicitAny": false,
+        "allowJs": true,
+        "checkJs": false,
+        "noEmitOnError": false,
+        "moduleDetection": "force",
+        "allowArbitraryExtensions": true
     },
     "include": [
-        "src/**/*"
+        "src/**/*.ts"
     ],
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../core"
-        }
+    "exclude": [
+        "node_modules",
+        "dist",
     ]
 }

@@ -1,33 +1,68 @@
 {
-    "name": "@eliza/plugin-nba-topshot",
+    "name": "@elizaos-plugins/plugin-nba-topshot",
     "version": "0.1.0",
     "description": "NBA TopShot trading plugin for Eliza",
+    "type": "module",
     "main": "dist/index.js",
+    "module": "dist/index.js",
     "types": "dist/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "import": {
+                "@elizaos/source": "./src/index.ts",
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
     "scripts": {
-        "build": "tsup",
-        "dev": "tsup --watch",
-        "typecheck": "tsc --noEmit",
+        "build": "tsup --format esm --dts",
+        "dev": "tsup --format esm --dts --watch",
         "test": "vitest run",
-        "test:watch": "vitest watch"
+        "clean": "rm -rf dist",
+        "lint": "biome lint .",
+        "lint:fix": "biome check --apply .",
+        "format": "biome format .",
+        "format:fix": "biome format --write ."
     },
-    "dependencies": {
-        "@elizaos/core": "^1.0.0",
-        "@elizaos/plugin-di": "^1.0.0",
-        "@fixes-ai/core": "^1.0.0",
-        "@onflow/fcl": "^1.9.0",
-        "@onflow/types": "^1.2.1",
-        "inversify": "^6.0.1",
-        "zod": "^3.22.4"
-    },
+    "dependencies": {},
     "devDependencies": {
-        "typescript": "^5.0.0",
-        "tsup": "^7.2.0",
-        "vitest": "^0.34.6"
+        "@biomejs/biome": "1.9.4",
+        "tsup": "8.3.5",
+        "vitest": "2.1.4"
     },
     "peerDependencies": {
-        "@elizaos/core": "^1.0.0",
-        "@elizaos/plugin-di": "^1.0.0",
-        "@fixes-ai/core": "^1.0.0"
+        "@elizaos/core": "workspace:*",
+        "@elizaos-plugins/plugin-di": "workspace:*",
+        "@elizaos-plugins/plugin-flow": "workspace:*",
+        "axios": "*",
+        "inversify": "6.2.1",
+        "reflect-metadata": "0.2.2",
+        "uuid": "11.0.3",
+        "zod": "3.24.1"
+    },
+    "agentConfig": {
+        "pluginType": "elizaos:client:1.0.0",
+        "pluginParameters": {
+            "FLOW_ADDRESS": {
+                "type": "string",
+                "description": "Flow native address is required and must start with 0x"
+            },
+            "FLOW_PRIVATE_KEY": {
+                "type": "string",
+                "description": "Flow private key for the address is required and must start with 0x"
+            },
+            "FLOW_NETWORK": {
+                "type": "string",
+                "default": "mainnet",
+                "description": "Optional network specification"
+            },
+            "FLOW_ENDPOINT_URL": {
+                "type": "string",
+                "default": "https://rest-mainnet.onflow.org",
+                "description": "Optional Flow RPC endpoint URL"
+            }
+        }
     }
 }

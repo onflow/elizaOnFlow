@@ -13,7 +13,7 @@ This plugin enables trading NBA TopShot moments through the Eliza platform. It p
 ## Installation
 
 ```bash
-pnpm install @elizaos/plugin-nba-topshot
+pnpm install @elizaos-plugins/plugin-nba-topshot
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ pnpm install @elizaos/plugin-nba-topshot
 The plugin follows the standard Eliza plugin structure and can be registered in your Eliza application:
 
 ```typescript
-import { nbaTopShotPlugin } from '@elizaos/plugin-nba-topshot';
+import { nbaTopShotPlugin } from '@elizaos-plugins/plugin-nba-topshot';
 import { registerPlugin } from '@elizaos/plugin-di';
 
 // Register the plugin
@@ -37,7 +37,7 @@ The plugin provides several actions that can be used in your Eliza application:
 #### Get Moments
 
 ```typescript
-import { GetMomentsAction } from '@elizaos/plugin-nba-topshot';
+import { GetMomentsAction } from '@elizaos-plugins/plugin-nba-topshot';
 
 // In your agent runtime context
 const result = await runtime.executeAction(GetMomentsAction, {
@@ -51,7 +51,7 @@ const moments = result.data.moments;
 #### List a Moment for Sale
 
 ```typescript
-import { ListMomentAction } from '@elizaos/plugin-nba-topshot';
+import { ListMomentAction } from '@elizaos-plugins/plugin-nba-topshot';
 
 const result = await runtime.executeAction(ListMomentAction, {
   momentId: 12345,
@@ -62,7 +62,7 @@ const result = await runtime.executeAction(ListMomentAction, {
 #### Purchase a Moment
 
 ```typescript
-import { PurchaseMomentAction } from '@elizaos/plugin-nba-topshot';
+import { PurchaseMomentAction } from '@elizaos-plugins/plugin-nba-topshot';
 
 const result = await runtime.executeAction(PurchaseMomentAction, {
   momentId: 12345
@@ -72,7 +72,7 @@ const result = await runtime.executeAction(PurchaseMomentAction, {
 #### Cancel a Sale
 
 ```typescript
-import { CancelSaleAction } from '@elizaos/plugin-nba-topshot';
+import { CancelSaleAction } from '@elizaos-plugins/plugin-nba-topshot';
 
 const result = await runtime.executeAction(CancelSaleAction, {
   momentId: 12345
@@ -82,7 +82,7 @@ const result = await runtime.executeAction(CancelSaleAction, {
 #### Get Market Prices
 
 ```typescript
-import { GetMarketPricesAction } from '@elizaos/plugin-nba-topshot';
+import { GetMarketPricesAction } from '@elizaos-plugins/plugin-nba-topshot';
 
 // Get all listings
 const result = await runtime.executeAction(GetMarketPricesAction, {});
@@ -99,7 +99,7 @@ const filteredResult = await runtime.executeAction(GetMarketPricesAction, {
 For more advanced usage, you can also use the services directly:
 
 ```typescript
-import { TopShotService, MarketService } from '@elizaos/plugin-nba-topshot';
+import { TopShotService, MarketService } from '@elizaos-plugins/plugin-nba-topshot';
 import { globalContainer } from '@elizaos/plugin-di';
 
 // Get service instances
@@ -116,7 +116,7 @@ const listings = await marketService.getMarketPrices();
 The plugin also provides backward-compatible functions for simpler usage:
 
 ```typescript
-import { getMoments, listMoment, purchaseMoment, cancelSale, getMarketPrices } from '@elizaos/plugin-nba-topshot';
+import { getMoments, listMoment, purchaseMoment, cancelSale, getMarketPrices } from '@elizaos-plugins/plugin-nba-topshot';
 
 // Use the functions
 const { moments } = await getMoments({ address: '0x1234...' });
