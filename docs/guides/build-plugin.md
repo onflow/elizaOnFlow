@@ -18,7 +18,7 @@ Before getting started with Eliza, ensure you have:
 
 ## Quickstart
 
-Please follow the [Quickstart Guide](/docs/guides/quickstart) to set up your development environment.
+Please follow the [Quickstart Guide](./quickstart.md) to set up your development environment.
 
 ## Plugin Development
 
