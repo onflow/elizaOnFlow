@@ -18,29 +18,43 @@ Before getting started with Eliza, ensure you have:
 
 ## Installation
 
-ElizaOnFlow is a Flow-dedicated Eliza extension, so:
+ElizaOnFlow is a Flow-dedicated Eliza wrapper, so:
 
 - The plugins from this repository are also compatible with the origin [Eliza](https://github.com/elizaOs/eliza).
 - You can also use any plugins from origin Eliza in this repository.
 
+Clone the repository
+
 ```bash
-# Clone the repository, with origin Eliza as submodule
+# The ElizaOnFlow is a wrapper with origin Eliza as submodule
 git clone --recurse-submodules https://github.com/fixes-world/elizaOnFlow.git
 
 # Enter directory
 cd elizaOnFlow
 
-# If you already cloned without submodules, please run:
-git submodule update --init --recursive
+# Please checkout the main branch which is using the latest release of origin Eliza
+git checkout main
 ```
 
-<!--
-> **Note:** This project iterates fast, so we recommend checking out the latest release.
+Or, If you want to use the origin Eliza, please run:
 
 ```bash
+# Eliza's characters folder is a submodule
+git clone --recurse-submodules https://github.com/elizaOs/eliza.git
+
+# Enter directory
+cd eliza
+
 # Checkout the latest release
 git checkout $(git describe --tags --abbrev=0)
-``` -->
+```
+
+If you already cloned without submodules, please run:
+
+```bash
+# Fetch submodules
+git submodule update --init --recursive
+```
 
 Install dependencies
 
@@ -50,13 +64,14 @@ pnpm install --no-frozen-lockfile
 
 > **Note:** Please only use the `--no-frozen-lockfile` option when you're initially instantiating the repo or are bumping the version of a package or adding a new package to your package.json. This practice helps maintain consistency in your project's dependencies and prevents unintended changes to the lockfile.
 
-Install Flow Cadence contracts dependencies
+If you are using ElizaOnFlow, you need to install Flow Cadence contracts dependencies to ensure `*.cdc` be correctly linted by Cadence extension.
+Install Flow Cadence contracts dependencies:
 
 ```bash
 flow deps install
 ```
 
-Build the local libraries
+Build all packages
 
 ```bash
 pnpm build
@@ -146,13 +161,13 @@ You can load multiple characters with a comma-separated list:
 pnpm start --characters="characters/deep-thought.character.json, deps/eliza/characters/sbf.character.json"
 ```
 
-### Add more plugins
+### Add / Develop plugins
 
 run `npx elizaos plugins list` to get a list of available plugins or visit <https://elizaos.github.io/registry/>
 
 run `npx elizaos plugins add @elizaos-plugins/plugin-NAME` to install the plugin into your instance
 
-To create a new plugin for your own business, you can refer to the [plugin development guide](build-plugin.md).
+To create a new plugin **for your own business**, you can refer to the [plugin development guide](build-plugin.md).
 
 #### Additional Requirements
 
