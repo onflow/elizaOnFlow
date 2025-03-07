@@ -94,7 +94,7 @@ Suggested models:
 
 ### Setup Agent's Flow Account
 
-Create a new Flow account for the Agent, [doc](https://developers.flow.com/tools/flow-cli/accounts/create-accounts)
+Create a new Flow account for the Agent. Learn more: [doc](https://developers.flow.com/tools/flow-cli/accounts/create-accounts)
 
 ```bash
 flow accounts create
@@ -108,6 +108,8 @@ FLOW_PRIVATE_KEY=
 FLOW_NETWORK=       # Default: mainnet
 FLOW_ENDPOINT_URL=  # Default: <https://mainnet.onflow.org>
 ```
+
+For testnet, please check Flow's [Networks](https://developers.flow.com/networks/flow-networks) for more information.
 
 ## Create Your First Agent
 
@@ -149,6 +151,8 @@ pnpm start --characters="characters/deep-thought.character.json, deps/eliza/char
 run `npx elizaos plugins list` to get a list of available plugins or visit <https://elizaos.github.io/registry/>
 
 run `npx elizaos plugins add @elizaos-plugins/plugin-NAME` to install the plugin into your instance
+
+To create a new plugin for your own business, you can refer to the [plugin development guide](build-plugin.md).
 
 #### Additional Requirements
 
