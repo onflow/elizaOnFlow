@@ -10,3 +10,6 @@
 [submodule "packages/plugin-flow-advanced"]
 	path = packages/plugin-flow-advanced
 	url = https://github.com/fixes-world/plugin-flow-advanced.git
+[submodule "packages/plugin-flow-template"]
+	path = packages/plugin-flow-template
+	url = https://github.com/onflow/eliza-plugin-template.git
