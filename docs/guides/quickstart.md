@@ -136,7 +136,7 @@ Additionally you can override Eliza's `defaultCharacter` by editting [charactor.
 Copy one of the example character files and make it your own
 
 ```bash
-cp deps/eliza/characters/sbf.character.json characters/deep-thought.character.json
+cp characters/scooby.character.json characters/sample.character.json
 ```
 
 📝 [Character Documentation](https://elizaos.github.io/eliza/docs/core/characterfile/)
@@ -146,19 +146,19 @@ cp deps/eliza/characters/sbf.character.json characters/deep-thought.character.js
 Inform it which character you want to run:
 
 ```bash
-pnpm start --character="characters/deep-thought.character.json"
+pnpm start --character="characters/sample.character.json"
 ```
 
 Or you can use `pnpm start:debug` for more debugging logs.
 
 ```bash
-pnpm start:debug --character="characters/deep-thought.character.json"
+pnpm start:debug --character="characters/sample.character.json"
 ```
 
 You can load multiple characters with a comma-separated list:
 
 ```bash
-pnpm start --characters="characters/deep-thought.character.json, deps/eliza/characters/sbf.character.json"
+pnpm start --characters="characters/sample.character.json, characters/scooby.character.json"
 ```
 
 ### Add / Develop plugins

@@ -182,6 +182,7 @@ eliza.sig
 
 characters/**/secrets.json
 characters/*.character.json
+!characters/scooby.character.json
 
 lit-config.json
 
