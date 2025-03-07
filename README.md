@@ -29,9 +29,10 @@ Check out the [Eliza's README](https://github.com/elizaOS/eliza/tree/main?tab=re
 - Both Flow EVM and Flow Cadence projects will be supported.
 - Fully compatible with origin Eliza plugins.
 
-## 🚀 Quick Start
+## 📚 Documentation
 
-Please follow the [Quick Start Guide](./docs/guides/quickstart.md) to create your first Agent on Flow.
+- 🚀 Quick Start: Please follow the [Quick Start Guide](./docs/guides/quickstart.md) to create your first Agent on Flow.
+- 📖 Plugin: Please follow the [Plugin Development Guide](./docs//guides//build-plugin.md) to create your Plugin for Eliza On Flow.
 
 ## 🌊 Flow Cadence
 
