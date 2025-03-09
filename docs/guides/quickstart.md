@@ -115,6 +115,8 @@ Create a new Flow account for the Agent. Learn more: [doc](https://developers.fl
 flow accounts create
 ```
 
+> If you are using Testnet, you can get free tokens from [Flow Faucet](https://testnet-faucet.onflow.org/)
+
 Set Flow blockchain configuration in `.env` with new generated Flow account.
 
 ```bash
