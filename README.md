@@ -65,3 +65,12 @@ flow deps add mainnet://0xAddress.ContractName
 - [Fixes Telegram](https://t.me/fixes_world). Best for: sharing your applications and hanging out with the Fixes community.
 - [Eliza Discord](https://discord.gg/ai16z)
 - [Flow Discord](https://discord.gg/flow)
+
+## About Flow
+
+This repo is part of the [Flow network](https://flow.com), a Layer 1 blockchain built for consumer applications, AI Agents, and DeFi at scale.
+
+- Developer docs: https://developers.flow.com
+- Cadence language: https://cadence-lang.org
+- Community: [Flow Discord](https://discord.gg/flow) · [Flow Forum](https://forum.flow.com)
+- Governance: [Flow Improvement Proposals](https://github.com/onflow/flips)
